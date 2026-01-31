@@ -6,6 +6,23 @@ body[data-lock-scrolling] {
   overflow: auto hidden;
 }
 
+:root,
+.p-theme-light {
+  --p-color-bg: rgba(255, 255, 255, 1);
+  --p-color-bg-surface: rgba(255, 255, 255, 0);
+  --p-color-bg-surface-secondary: rgba(255, 255, 255, 0);
+  --p-color-bg-surface-tertiary: rgba(255, 255, 255, 0);
+  --p-color-nav-bg: rgba(255, 255, 255, 0);
+  --p-color-nav-bg-surface: rgba(255, 255, 255, 0);
+  --p-color-bg-fill: rgba(255, 255, 255, 0);
+}
+
+body,
+.Polaris-Frame,
+.Avada-Frame {
+  background-color: rgba(255, 255, 255, 1);
+}
+
 .Avada-Frame {
   display: flex;
   height: calc(100vh - 5.6rem);
@@ -28,4 +45,20 @@ body[data-lock-scrolling] {
       margin-left: 1rem;
     }
   }
+}
+
+.Avada-Button--positive.Polaris-Button {
+  background-color: #008060;
+  border-color: #008060;
+  color: #ffffff;
+}
+
+.Avada-Button--positive.Polaris-Button:hover {
+  background-color: #006e52;
+  border-color: #006e52;
+}
+
+.Avada-Button--positive.Polaris-Button:active {
+  background-color: #005e46;
+  border-color: #005e46;
 }

@@ -1,19 +1,15 @@
 export const navigationLinks = [
   {
-    label: 'Samples',
-    destination: '/samples'
+    label: 'Home',
+    destination: '/'
   },
   {
     label: 'Settings',
     destination: '/settings'
   },
   {
-    label: 'Tables',
-    destination: '/tables'
-  },
-  {
-    label: 'Optional Scopes',
-    destination: '/optional-scopes'
+    label: 'Notifications',
+    destination: '/notifications'
   }
 ].map(item => ({
   ...item,

@@ -3,9 +3,9 @@
   "version": "0.0.1",
   "scripts": {
     "production:embed": "cross-env NODE_ENV=production ENVIRONMENT=production IS_EMBEDDED_APP=yes vite build",
-    "watch:embed": "echo 'frontend build running...' && cross-env NODE_ENV=development ENVIRONMENT=development IS_EMBEDDED_APP=yes vite",
+    "watch:embed": "echo 'frontend build running...' && cross-env NODE_ENV=development ENVIRONMENT=development IS_EMBEDDED_APP=yes BACKEND_PORT=5000 vite",
     "production:standalone": "cross-env NODE_ENV=production ENVIRONMENT=production IS_EMBEDDED_APP=no vite build",
-    "watch:standalone": "echo 'frontend build running...' && cross-env NODE_ENV=development ENVIRONMENT=development IS_EMBEDDED_APP=no vite",
+    "watch:standalone": "echo 'frontend build running...' && cross-env NODE_ENV=development ENVIRONMENT=development IS_EMBEDDED_APP=no BACKEND_PORT=5000 vite",
     "production": "npm run production:embed && npm run production:standalone",
     "development": "npm run development:embed && npm run development:standalone",
     "eslint-fix": "./node_modules/.bin/eslint --fix ."
@@ -48,7 +48,7 @@
     "babel-jest": "^24.9.0",
     "babel-loader": "^9.1.3",
     "babel-plugin-module-resolver": "^4.1.0",
-    "cross-env": "^5.2.1",
+    "cross-env": "^7.0.3",
     "css-loader": "^3.6.0",
     "dotenv": "^8.6.0",
     "eslint": "^6.8.0",

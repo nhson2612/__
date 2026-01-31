@@ -1,11 +1,11 @@
 import App from './App';
 import React from 'react';
-import './styles/app.scss';
 import {api} from './helpers';
 import {StoreProvider} from '@assets/reducers/storeReducer';
 import {collectActiveShopData} from '@assets/services/shopService';
 import {createRoot} from 'react-dom/client';
 import '@shopify/polaris/build/esm/styles.css';
+import './styles/app.scss';
 
 (async () => {
   const {shop, shopInfo} = await api('/shops');

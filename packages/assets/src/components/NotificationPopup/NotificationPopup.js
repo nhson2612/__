@@ -1,5 +1,7 @@
 import React from 'react';
 import './NoticationPopup.scss';
+import {Button} from '@shopify/polaris';
+import {XIcon} from '@shopify/polaris-icons';
 
 const NotificationPopup = ({
   firstName = 'John Doe',
@@ -7,12 +9,25 @@ const NotificationPopup = ({
   country = 'United States',
   productName = 'Puffer Jacket With Hidden Hood',
   timestamp = 'a day ago',
-  productImage = 'http://paris.mageplaza.com/images/shop/single/big-1.jpg'
+  productImage = 'http://paris.mageplaza.com/images/shop/single/big-1.jpg',
+  onClose = () => {}
 }) => {
   return (
     <div className="Avava-SP__Wrapper fadeInUp animated">
       <div className="Avava-SP__Inner">
         <div className="Avava-SP__Container">
+          <div className="Avada-SP__CloseButton">
+            <Button
+              icon={XIcon}
+              variant="tertiary"
+              size="slim"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                onClose();
+              }}
+            />
+          </div>
           <a href="#" className={'Avava-SP__LinkWrapper'}>
             <div
               className="Avava-SP__Image"
