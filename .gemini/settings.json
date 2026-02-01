@@ -8,12 +8,6 @@
     "shopify-dev-server": {
       "command": "npx",
       "args": ["-y", "@shopify/dev-mcp@latest"]
-    },
-    "stitch": {
-      "serverUrl": "https://stitch.googleapis.com/mcp",
-      "headers": {
-        "X-Goog-Api-Key": "YOUR-API-KEY"
-      }
     }
-  },
+  }
 }

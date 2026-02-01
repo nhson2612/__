@@ -17,20 +17,10 @@ export default class ApiManager {
    * Get widget data from API
    * Falls back to window data if available (set by Liquid)
    */
-  async getWidgetData() {
-    // Option 1: Use data embedded in page by Liquid (faster, no API call)
-    if (window.__avadaWidgetData) {
-      return window.__avadaWidgetData;
-    }
-
-    // Option 2: Fetch from API (when data can't be embedded)
-    if (!this.shopDomain) {
-      console.warn('[Avada] Shop domain not found');
-      return null;
-    }
-
+  async getNotifications() {
+    if (!this.shopDomain) return null;
     try {
-      const url = `${this.apiUrl}/clientApi/widget?shopifyDomain=${this.shopDomain}`;
+      const url = `${this.apiUrl}/clientApi/notifications?shopifyDomain=${this.shopDomain}`;
       const response = await makeRequest(url);
       return response;
     } catch (error) {

@@ -8,5 +8,6 @@ const router = new Router({
 // Add your client API routes here
 // Example: router.get('/data', clientApiController.getData);
 router.get('/health', clientApiController.health);
+router.get('/notifications', clientApiController.getNotifications);
 
 export default router;

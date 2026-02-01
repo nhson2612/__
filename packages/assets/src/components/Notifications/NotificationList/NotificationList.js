@@ -9,7 +9,7 @@ import NotificationPopup from '@assets/components/NotificationPopup/Notification
  * @return {JSX.Element}
  * @constructor
  */
-export default function NotificationList({items = []}) {
+export default function NotificationList({items = [], settings = {}}) {
   const [selectedItems, setSelectedItems] = useState([]);
   const [sortValue, setSortValue] = useState('DATE_MODIFIED_DESC');
 
@@ -33,7 +33,7 @@ export default function NotificationList({items = []}) {
   ];
 
   const renderItem = (item) => {
-    return <Notification {...item} />;
+    return <Notification {...item} settings={settings} />;
   };
 
   return (

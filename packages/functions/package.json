@@ -9,7 +9,9 @@
     "production": "node esbuild.config.js --production",
     "development": "node esbuild.config.js",
     "watch": "node esbuild.config.js --watch",
-    "eslint-fix": "./node_modules/.bin/eslint --fix ."
+    "eslint-fix": "./node_modules/.bin/eslint --fix .",
+    "seed-notifications": "NODE_ENV=development FUNCTIONS_EMULATOR=true node -e \"require('./lib/seeds/notificationSeed.js').seedNotifications();\"",
+    "seed-notifications-local": "FIRESTORE_EMULATOR_HOST=localhost:8080 NODE_ENV=development node -e \"require('./lib/seeds/notificationSeed.js').seedNotifications();\""
   },
   "dependencies": {
     "@avada/core": "4.6.0",

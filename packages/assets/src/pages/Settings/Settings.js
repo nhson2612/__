@@ -43,8 +43,8 @@ export default function Settings() {
       }
       if (triggers) {
         setPageRestriction(triggers.pageRestriction || 'all');
-        setSpecificPages(triggers.specificPages || '');
-        setExcludedPages(triggers.excludedPages || '');
+        setSpecificPages(Array.isArray(triggers.specificPages) ? triggers.specificPages.join('\n') : '');
+        setExcludedPages(Array.isArray(triggers.excludedPages) ? triggers.excludedPages.join('\n') : '');
       }
     }
   }, [settingsData]);
@@ -64,8 +64,8 @@ export default function Settings() {
       },
       triggers: {
         pageRestriction,
-        specificPages,
-        excludedPages
+        specificPages: specificPages.split('\n').filter(x => x.trim()),
+        excludedPages: excludedPages.split('\n').filter(x => x.trim())
       }
     };
     await handleEdit(settings);

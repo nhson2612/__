@@ -1,13 +1,56 @@
+import {getShopByShopifyDomain} from '../../repositories/shopRepository';
+import {getSettings} from '../../repositories/settingRepository';
+import {getList} from '../../repositories/notificationRepository';
+
 /**
- * Health check endpoint for client API
+ * Health check endpoint
  * @param ctx
- * @returns {Promise<{success: boolean, timestamp: string}>}
  */
 export async function health(ctx) {
-  return (ctx.body = {
+  ctx.body = {
     success: true,
-    timestamp: new Date().toISOString()
-  });
+    message: 'Client API is healthy'
+  };
+}
+
+/**
+ * Get notifications and settings for storefront
+ * @param ctx
+ */
+export async function getNotifications(ctx) {
+  try {
+    const {shopifyDomain} = ctx.query;
+
+    if (!shopifyDomain) {
+      ctx.status = 400;
+      ctx.body = {success: false, error: 'Missing shopifyDomain'};
+      return;
+    }
+
+    const shop = await getShopByShopifyDomain(shopifyDomain);
+    if (!shop) {
+      ctx.status = 404;
+      ctx.body = {success: false, error: 'Shop not found'};
+      return;
+    }
+
+    const [settings, notificationsResult] = await Promise.all([
+      getSettings(shop.id),
+      getList(shop.id, {limit: 20, sort: 'timestamp', direction: 'desc'})
+    ]);
+
+    ctx.body = {
+      success: true,
+      data: {
+        settings: settings || {},
+        notifications: notificationsResult.data || []
+      }
+    };
+  } catch (e) {
+    console.error('getNotifications error:', e);
+    ctx.status = 500;
+    ctx.body = {success: false, error: e.message};
+  }
 }
 
 // Add more client API handlers here

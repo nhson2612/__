@@ -1,44 +1,46 @@
 import React from 'react';
 import {Page, Layout} from '@shopify/polaris';
 import NotificationList from '../../components/Notifications/NotificationList/NotificationList';
+import useFetchApi from '@assets/hooks/api/useFetchApi';
+import SettingsSkeleton from '@assets/components/SettingsSkeleton/SettingsSkeleton';
 
 /**
  * @return {React.JSX.Element}
  * @constructor
  */
 export default function Notifications() {
-  const notifications = [
-    {
-      id: '1',
-      message: 'Someone in New York, United States',
-      action: 'Purchased Sport Snaker',
-      date: '2026-01-31 10:00 AM',
-      status: 'unread',
-      imageUrl: 'https://cdn.shopify.com/s/files/1/0757/9955/files/empty-state.svg',
-    },
-    {
-      id: '2',
-      message: 'Someone in New York, United States',
-      action: 'Purchased Sport Snaker',
-      date: '2026-01-30 02:30 PM',
-      status: 'read',
-      imageUrl: 'https://cdn.shopify.com/s/files/1/0757/9955/files/empty-state.svg',
-    },
-    {
-      id: '3',
-      message: 'Someone in New York, United States',
-      action: 'Purchased Sport Snaker',
-      date: '2026-01-30 09:15 AM',
-      status: 'unread',
-      imageUrl: 'https://cdn.shopify.com/s/files/1/0757/9955/files/empty-state.svg',
-    }
-  ];
+  const {data: notifications, loading, fetchApi: refresh} = useFetchApi({
+    url: '/notifications',
+    defaultData: []
+  });
+
+  const {data: settings} = useFetchApi({url: '/settings'});
+
+  const {fetchApi: sync, loading: syncing} = useFetchApi({
+    url: '/notifications/sync',
+    manual: true
+  });
+
+  const handleSync = async () => {
+    await sync();
+    await refresh();
+  };
+
+  if (loading) return <SettingsSkeleton />;
 
   return (
-    <Page title="Notifications" subtitle="View and manage all system and store notifications">
+    <Page
+      title="Notifications"
+      subtitle="View and manage all system and store notifications"
+      primaryAction={{
+        content: 'Sync from Orders',
+        onAction: handleSync,
+        loading: syncing
+      }}
+    >
       <Layout>
         <Layout.Section>
-          <NotificationList items={notifications} />
+          <NotificationList items={notifications} settings={settings} />
         </Layout.Section>
       </Layout>
     </Page>

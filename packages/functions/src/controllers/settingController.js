@@ -1,5 +1,5 @@
 import * as settingRepository from '../repositories/settingRepository';
-import { getCurrentShop } from '../helpers/auth';
+import {getCurrentShop} from '../helpers/auth';
 
 const defaultSettings = {
   display: {

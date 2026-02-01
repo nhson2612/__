@@ -12,8 +12,8 @@ const settingsSchema = yup.object().shape({
   }).required(),
   triggers: yup.object().shape({
     pageRestriction: yup.string().oneOf(['all', 'specific']),
-    specificPages: yup.string(),
-    excludedPages: yup.string()
+    specificPages: yup.array().of(yup.string()),
+    excludedPages: yup.array().of(yup.string())
   }).required()
 });
 

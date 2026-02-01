@@ -1,6 +1,6 @@
 import React from 'react';
 import {InlineStack, ResourceItem, Text, Box} from '@shopify/polaris';
-import {relativeTime} from '@assets/utils/app';
+import moment from 'moment';
 import NotificationPopup from '@assets/components/NotificationPopup/NotificationPopup';
 import '../../../pages/Notifications/style.css';
 
@@ -9,41 +9,42 @@ import '../../../pages/Notifications/style.css';
  * @return {React.JSX.Element}
  * @constructor
  */
-export default function Notification({id, message, action, date, imageUrl, onClose = () => {}}) {
-  const timeLabel = relativeTime(date);
-  const fromDate = formatDateOnly(date);
+export default function Notification({
+  id,
+  firstName,
+  city,
+  country,
+  productName,
+  timestamp,
+  productImage,
+  settings
+}) {
+  const hideTimeAgo = settings?.display?.hideTimeAgo;
+  const truncateContent = settings?.display?.truncateContent;
+  const timeLabel = hideTimeAgo ? '' : moment(timestamp).fromNow();
+  const fromDate = moment(timestamp).format('MMM DD, YYYY');
 
   return (
-    <ResourceItem id={id} persistActions>
+    <ResourceItem id={id}>
       <InlineStack align="space-between" blockAlign="start" gap="400">
         <Box>
           <NotificationPopup
-            productName={message}
+            firstName={firstName}
+            city={city}
+            country={country}
+            productName={productName}
             timestamp={timeLabel}
-            productImage={imageUrl}
-            onClose={onClose}
+            productImage={productImage}
+            displayCloseBtn={false}
+            truncateContent={truncateContent}
           />
         </Box>
         <Box paddingBlockStart="200">
           <Text variant="bodySm" tone="subdued">
-            From {fromDate}
+            {fromDate}
           </Text>
         </Box>
       </InlineStack>
     </ResourceItem>
   );
-}
-
-/**
- * @param {string|Date} value
- * @return {string}
- */
-function formatDateOnly(value) {
-  const parsed = value instanceof Date ? value : new Date(value);
-  if (Number.isNaN(parsed.getTime())) return '';
-  return parsed.toLocaleDateString(undefined, {
-    day: 'numeric',
-    month: 'short',
-    year: 'numeric'
-  });
 }
