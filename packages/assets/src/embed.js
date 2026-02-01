@@ -11,7 +11,7 @@ import './styles/app.scss';
   const {shop, shopInfo} = await api('/shops');
   const [activeShop, user] = [
     collectActiveShopData({shop, shopInfo}),
-    {email: shop.email, displayName: shopInfo.shopOwner}
+    {email: shop?.email, displayName: shopInfo?.shopOwner}
   ];
   // if (activeShop) {
   //   loadCrisp('WEBSITE_ID', shop.crispSessionToken);

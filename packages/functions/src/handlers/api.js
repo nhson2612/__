@@ -1,15 +1,16 @@
 import App from 'koa';
+import bodyParser from 'koa-bodyparser';
 import createErrorHandler from '@functions/middleware/errorHandler';
 import * as errorService from '@functions/services/errorService';
 import apiRouter from '@functions/routes/api';
 import render from 'koa-ejs';
 import path from 'path';
-import {verifyEmbedRequest} from '@avada/core';
+import { verifyEmbedRequest } from '@avada/core';
 import shopifyConfig from '@functions/config/shopify';
 import appConfig from '@functions/config/app';
 import shopifyOptionalScopes from '@functions/config/shopifyOptionalScopes';
-import {publishTopicAsync} from '@functions/helpers/pubsub/publishTopic';
-import {getShopByField, getShopByShopifyDomain} from '@functions/repositories/shopRepository';
+import { publishTopicAsync } from '@functions/helpers/pubsub/publishTopic';
+import { getShopByField, getShopByShopifyDomain } from '@functions/repositories/shopRepository';
 
 // Initialize all demand configuration for an application
 const api = new App();
@@ -22,6 +23,7 @@ render(api, {
   root: path.resolve(__dirname, '../../views'),
   viewExt: 'html'
 });
+api.use(bodyParser());
 api.use(createErrorHandler());
 api.use(
   verifyEmbedRequest({
@@ -36,11 +38,11 @@ api.use(
     afterLogin: async ctx => {
       try {
         // const shopifyDomain = ctx.state.shopify.shop;
-      } catch (e) {}
+      } catch (e) { }
     },
     afterInstall: async ctx => {
       try {
-        const {shopifyDomain} = ctx.state.shopify.shop;
+        const { shopifyDomain } = ctx.state.shopify.shop;
         const shop = await getShopByShopifyDomain(shopifyDomain);
         publishTopicAsync('backgroundHandling', {
           type: 'afterInstall',

@@ -1,5 +1,5 @@
 (function() {
-  const BASE_URL = 'https://par-salt-jaguar-merchants.trycloudflare.com/scripttag';
+  const BASE_URL = 'https://fever-supplier-runs-reel.trycloudflare.com/scripttag';
 
   const scriptElement = document.createElement('script');
   scriptElement.type = 'text/javascript';

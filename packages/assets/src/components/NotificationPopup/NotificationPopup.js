@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import './NoticationPopup.scss';
 import {Button} from '@shopify/polaris';
 import {XIcon} from '@shopify/polaris-icons';
@@ -10,18 +11,28 @@ const NotificationPopup = ({
   productName = 'Puffer Jacket With Hidden Hood',
   timestamp = 'a day ago',
   productImage = 'http://paris.mageplaza.com/images/shop/single/big-1.jpg',
-  onClose = () => {}
+  onClose = () => {},
+  displayCloseBtn = true,
+  truncateContent = false
 }) => {
+  const displayProductName =
+    truncateContent && productName.length > 16
+      ? `${productName.substring(0, 16)}...`
+      : productName;
+
   return (
     <div className="Avava-SP__Wrapper fadeInUp animated">
       <div className="Avava-SP__Inner">
         <div className="Avava-SP__Container">
-          <div className="Avada-SP__CloseButton">
+          <div
+            className="Avada-SP__CloseButton"
+            style={{display: displayCloseBtn ? 'block' : 'none'}}
+          >
             <Button
               icon={XIcon}
               variant="tertiary"
               size="slim"
-              onClick={(e) => {
+              onClick={e => {
                 e.preventDefault();
                 e.stopPropagation();
                 onClose();
@@ -39,7 +50,7 @@ const NotificationPopup = ({
               <div className={'Avada-SP__Title'}>
                 {firstName} in {city}, {country}
               </div>
-              <div className={'Avada-SP__Subtitle'}>purchased {productName}</div>
+              <div className={'Avada-SP__Subtitle'}>purchased {displayProductName}</div>
               <div className={'Avada-SP__Footer'}>
                 {timestamp}{' '}
                 <span className="uni-blue">
@@ -54,6 +65,16 @@ const NotificationPopup = ({
   );
 };
 
-NotificationPopup.propTypes = {};
+NotificationPopup.propTypes = {
+  firstName: PropTypes.string,
+  city: PropTypes.string,
+  country: PropTypes.string,
+  productName: PropTypes.string,
+  timestamp: PropTypes.string,
+  productImage: PropTypes.string,
+  onClose: PropTypes.func,
+  displayCloseBtn: PropTypes.bool,
+  truncateContent: PropTypes.bool
+};
 
 export default NotificationPopup;

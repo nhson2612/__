@@ -1,4 +1,4 @@
-import {formatDateFields} from '@avada/firestore-utils';
+import { formatDateFields } from '@avada/firestore-utils';
 
 /**
  * Get current shop id from Koa context
@@ -8,7 +8,7 @@ import {formatDateFields} from '@avada/firestore-utils';
  * @return {string}
  */
 export function getCurrentShop(ctx) {
-  return ctx.state.user.shopID;
+  return ctx.state?.user?.shopID;
 }
 
 /**
@@ -28,10 +28,10 @@ export function getCurrentUserInstance(ctx) {
  * @returns {*}
  */
 export function getCurrentShopData(ctx) {
-  const shopData = ctx.state.user.shopData;
+  const shopData = ctx.state?.user?.shopData;
   if (!shopData) return null;
 
-  return formatDateFields(ctx.state.user.shopData);
+  return formatDateFields(shopData);
 }
 
 /**

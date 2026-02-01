@@ -1,9 +1,9 @@
 import axios from 'axios';
 import createApp from '@shopify/app-bridge';
-import {Redirect} from '@shopify/app-bridge/actions';
-import {initializeApp} from 'firebase/app';
-import {getAuth} from 'firebase/auth';
-import {getApiPrefix} from '@functions/const/app';
+import { Redirect } from '@shopify/app-bridge/actions';
+import { initializeApp } from 'firebase/app';
+import { getAuth } from 'firebase/auth';
+import { getApiPrefix } from '@functions/const/app';
 import isEmbeddedAppEnv from '@assets/helpers/isEmbeddedAppEnv';
 
 /**
@@ -40,7 +40,7 @@ export const embedApp = createEmbedApp();
  * Used for standalone mode API requests with Firebase auth.
  * @type {import('axios').AxiosInstance}
  */
-export const client = axios.create({timeout: 60000});
+export const client = axios.create({ timeout: 60000 });
 
 /**
  * Universal API client that works in both embedded and standalone modes.
@@ -116,9 +116,16 @@ function createApi() {
   if (isEmbeddedAppEnv) {
     const fetchFunction = fetch;
     return async (uri, options = {}) => {
+      const { getSessionToken } = await import('@shopify/app-bridge-utils');
+      const token = await getSessionToken(embedApp);
+
+      options.headers = {
+        ...options.headers,
+        Authorization: `Bearer ${token}`
+      };
+
       if (options.body) {
         options.body = JSON.stringify(options.body);
-        options.headers = options.headers || {};
         options.headers['Content-Type'] = 'application/json';
       }
       const response = await fetchFunction(prefix + uri, options);

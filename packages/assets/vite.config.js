@@ -109,11 +109,26 @@ function updateEnvFile(file, data) {
 }
 
 /** @type {ProxyOptions} */
+const apiProxyOptions = {
+  target: `http://${localhost}:${bePort}`,
+  changeOrigin: true,
+  secure: false,
+  ws: false,
+  rewrite: (path) => `/todo-app-frontend-7ff2/us-central1/api${path}`
+};
+
+const authProxyOptions = {
+  target: `http://${localhost}:${bePort}`,
+  changeOrigin: true,
+  secure: false,
+  ws: false,
+  rewrite: (path) => `/todo-app-frontend-7ff2/us-central1/auth${path}`
+};
+
 const proxyConfig = {
-  '^/api(/|(\\?.*)?$)': proxyOptions,
-  '^/embed(/|(\\?.*)?$)': proxyOptions,
+  '^/api(/|(\\?.*)?$)': apiProxyOptions,
   '^/authSa(/|(\\?.*)?$)': proxyOptions,
-  '^/auth(/|(\\?.*)?$)': proxyOptions,
+  '^/auth(/|(\\?.*)?$)': authProxyOptions,
   '^/apiSa(/|(\\?.*)?$)': proxyOptions,
   '^/scripttag(/|(\\?.*)?$)': proxyOptions,
   '^/clientApi(/|(\\?.*)?$)': proxyOptions,
@@ -148,19 +163,17 @@ export default defineConfig({
     'process.env.NODE_ENV': process.env.NODE_ENV
   },
   plugins: [
-    // Redirect root to /embed for embedded app mode
     {
-      name: 'redirect-root-to-embed',
+      name: 'serve-embed-html',
       configureServer(server) {
         server.middlewares.use((req, res, next) => {
-          // Redirect root path with embed params to /embed
+          if (req.url && (req.url === '/embed' || req.url.startsWith('/embed?') || req.url.startsWith('/embed/'))) {
+            req.url = '/embed-template.html';
+          }
           if (req.url && (req.url === '/' || req.url.startsWith('/?'))) {
             const hasEmbedParam = req.url.includes('embedded=') || req.url.includes('shop=');
             if (hasEmbedParam) {
-              const newUrl = '/embed' + (req.url === '/' ? '' : req.url.slice(1));
-              res.writeHead(302, { Location: newUrl });
-              res.end();
-              return;
+              req.url = '/embed-template.html';
             }
           }
           next();

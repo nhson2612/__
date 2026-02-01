@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title><!DOCTYPE html>
+    <html lang="en"><head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Popup Display Settings</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+  <link href="https://fonts.googleapis.com" rel="preconnect"/>
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary: "#5c6ac4",
+            "background-light": "#ffffff",
+            "background-dark": "#0f172a",
+            "surface-light": "#f8fafc",
+            "surface-dark": "#1e293b",
+          },
+          fontFamily: {
+            display: ["Inter", "sans-serif"],
+          },
+          borderRadius: {
+            DEFAULT: "8px",
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+      body { font-family: 'Inter', sans-serif; }
+      input[type="range"] {
+          -webkit-appearance: none;
+          width: 100%;
+          height: 6px;
+          background: #e2e8f0;
+          border-radius: 5px;
+          outline: none;
+      }
+      .dark input[type="range"] {
+          background: #334155;
+      }
+      input[type="range"]::-webkit-slider-thumb {
+          -webkit-appearance: none;
+          appearance: none;
+          width: 20px;
+          height: 20px;
+          background: #ffffff;
+          border: 2px solid #5c6ac4;
+          border-radius: 50%;
+          cursor: pointer;
+          box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      }
+      .dark input[type="range"]::-webkit-slider-thumb {
+          background: #1e293b;
+      }
+  </style>
+</head>
+<body class="bg-slate-50 dark:bg-background-dark min-h-screen transition-colors duration-200">
+<header class="bg-background-light dark:bg-surface-dark border-b border-slate-200 dark:border-slate-800">
+  <div class="max-w-5xl mx-auto px-6">
+    <nav class="flex space-x-8">
+      <button class="py-4 text-sm font-semibold border-b-2 border-primary text-primary transition-all">
+        Display
+      </button>
+      <button class="py-4 text-sm font-medium text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 transition-all">
+        Triggers
+      </button>
+    </nav>
+  </div>
+</header>
+<main class="max-w-5xl mx-auto px-6 py-10">
+  <section class="mb-12">
+    <h2 class="text-xs font-bold tracking-widest text-slate-500 dark:text-slate-400 uppercase mb-6">Appearance</h2>
+    <div class="mb-8">
+      <label class="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-4">Desktop Position</label>
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-3xl">
+        <div class="cursor-pointer group">
+          <div class="relative w-full h-24 bg-white dark:bg-surface-dark border-2 border-primary rounded-xl overflow-hidden transition-all shadow-sm ring-4 ring-primary/10">
+            <div class="absolute bottom-3 left-3 w-10 h-5 bg-primary rounded-sm opacity-80"></div>
+            <div class="absolute inset-0 border border-black/5 rounded-xl"></div>
+          </div>
+          <p class="mt-2 text-xs text-center font-medium text-primary">Bottom Left</p>
+        </div>
+        <div class="cursor-pointer group">
+          <div class="relative w-full h-24 bg-white dark:bg-surface-dark border border-slate-200 dark:border-slate-700 rounded-xl overflow-hidden hover:border-slate-300 dark:hover:border-slate-600 transition-all">
+            <div class="absolute bottom-3 right-3 w-10 h-5 bg-slate-200 dark:bg-slate-700 rounded-sm"></div>
+          </div>
+          <p class="mt-2 text-xs text-center font-medium text-slate-500 dark:text-slate-400">Bottom Right</p>
+        </div>
+        <div class="cursor-pointer group">
+          <div class="relative w-full h-24 bg-white dark:bg-surface-dark border border-slate-200 dark:border-slate-700 rounded-xl overflow-hidden hover:border-slate-300 dark:hover:border-slate-600 transition-all">
+            <div class="absolute top-3 left-3 w-10 h-5 bg-slate-200 dark:bg-slate-700 rounded-sm"></div>
+          </div>
+          <p class="mt-2 text-xs text-center font-medium text-slate-500 dark:text-slate-400">Top Left</p>
+        </div>
+        <div class="cursor-pointer group">
+          <div class="relative w-full h-24 bg-white dark:bg-surface-dark border border-slate-200 dark:border-slate-700 rounded-xl overflow-hidden hover:border-slate-300 dark:hover:border-slate-600 transition-all">
+            <div class="absolute top-3 right-3 w-10 h-5 bg-slate-200 dark:bg-slate-700 rounded-sm"></div>
+          </div>
+          <p class="mt-2 text-xs text-center font-medium text-slate-500 dark:text-slate-400">Top Right</p>
+        </div>
+      </div>
+      <p class="mt-3 text-xs text-slate-400 dark:text-slate-500">The display position of the pop on your website.</p>
+    </div>
+    <div class="space-y-4">
+      <label class="flex items-center space-x-3 cursor-pointer group">
+        <input class="w-5 h-5 rounded border-slate-300 dark:border-slate-700 text-primary focus:ring-primary dark:bg-surface-dark" type="checkbox"/>
+        <span class="text-sm font-medium text-slate-700 dark:text-slate-200">Hide time ago</span>
+      </label>
+      <div class="space-y-1">
+        <label class="flex items-center space-x-3 cursor-pointer group">
+          <input checked="" class="w-5 h-5 rounded border-slate-300 dark:border-slate-700 text-primary focus:ring-primary dark:bg-surface-dark" type="checkbox"/>
+          <span class="text-sm font-medium text-slate-700 dark:text-slate-200">Truncate content text</span>
+        </label>
+        <p class="ml-8 text-xs text-slate-400 dark:text-slate-500">If your product name is long for one line, it will be truncated to 'Product na...'</p>
+      </div>
+    </div>
+  </section>
+  <section>
+    <h2 class="text-xs font-bold tracking-widest text-slate-500 dark:text-slate-400 uppercase mb-6">Timing</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10">
+      <div class="space-y-4">
+        <label class="block text-sm font-medium text-slate-700 dark:text-slate-200">Display duration</label>
+        <div class="flex items-center gap-6">
+          <input class="flex-grow" max="60" min="1" type="range" value="5"/>
+          <div class="flex items-center bg-white dark:bg-surface-dark border border-slate-200 dark:border-slate-700 rounded px-3 py-2 shadow-sm min-w-[120px]">
+            <input class="w-full text-sm border-0 focus:ring-0 p-0 bg-transparent text-slate-700 dark:text-slate-200 font-medium" type="number" value="5"/>
+            <span class="text-xs text-slate-400 dark:text-slate-500 whitespace-nowrap">second(s)</span>
+          </div>
+        </div>
+        <p class="text-xs text-slate-400 dark:text-slate-500">How long each pop will display on your page.</p>
+      </div>
+      <div class="space-y-4">
+        <label class="block text-sm font-medium text-slate-700 dark:text-slate-200">Time before the first pop</label>
+        <div class="flex items-center gap-6">
+          <input class="flex-grow" max="60" min="1" type="range" value="10"/>
+          <div class="flex items-center bg-white dark:bg-surface-dark border border-slate-200 dark:border-slate-700 rounded px-3 py-2 shadow-sm min-w-[120px]">
+            <input class="w-full text-sm border-0 focus:ring-0 p-0 bg-transparent text-slate-700 dark:text-slate-200 font-medium" type="number" value="10"/>
+            <span class="text-xs text-slate-400 dark:text-slate-500 whitespace-nowrap">second(s)</span>
+          </div>
+        </div>
+        <p class="text-xs text-slate-400 dark:text-slate-500">The delay time before the first notification.</p>
+      </div>
+      <div class="space-y-4">
+        <label class="block text-sm font-medium text-slate-700 dark:text-slate-200">Gap time between two pops</label>
+        <div class="flex items-center gap-6">
+          <input class="flex-grow" max="60" min="0" type="range" value="2"/>
+          <div class="flex items-center bg-white dark:bg-surface-dark border border-slate-200 dark:border-slate-700 rounded px-3 py-2 shadow-sm min-w-[120px]">
+            <input class="w-full text-sm border-0 focus:ring-0 p-0 bg-transparent text-slate-700 dark:text-slate-200 font-medium" type="number" value="2"/>
+            <span class="text-xs text-slate-400 dark:text-slate-500 whitespace-nowrap">second(s)</span>
+          </div>
+        </div>
+        <p class="text-xs text-slate-400 dark:text-slate-500">The time interval between two popup notifications.</p>
+      </div>
+      <div class="space-y-4">
+        <label class="block text-sm font-medium text-slate-700 dark:text-slate-200">Maximum of popups</label>
+        <div class="flex items-center gap-6">
+          <input class="flex-grow" max="80" min="1" type="range" value="20"/>
+          <div class="flex items-center bg-white dark:bg-surface-dark border border-slate-200 dark:border-slate-700 rounded px-3 py-2 shadow-sm min-w-[120px]">
+            <input class="w-full text-sm border-0 focus:ring-0 p-0 bg-transparent text-slate-700 dark:text-slate-200 font-medium" type="number" value="20"/>
+            <span class="text-xs text-slate-400 dark:text-slate-500 whitespace-nowrap pl-1">pop(s)</span>
+          </div>
+        </div>
+        <p class="text-xs text-slate-400 dark:text-slate-500">The maximum number of popups allowed to show after page loading. Maximum number is 80.</p>
+      </div>
+    </div>
+  </section>
+  <div class="mt-16 pt-8 border-t border-slate-200 dark:border-slate-800 flex justify-end space-x-4">
+    <button class="px-6 py-2.5 text-sm font-medium text-slate-700 dark:text-slate-300 bg-white dark:bg-surface-dark border border-slate-200 dark:border-slate-700 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+      Cancel
+    </button>
+    <button class="px-8 py-2.5 text-sm font-semibold text-white bg-primary rounded-lg hover:opacity-90 shadow-lg shadow-primary/20 transition-all">
+      Save Changes
+    </button>
+  </div>
+</main>
+<button class="fixed bottom-6 right-6 p-3 bg-white dark:bg-surface-dark border border-slate-200 dark:border-slate-700 rounded-full shadow-xl text-slate-600 dark:text-slate-300 hover:scale-110 transition-transform" onclick="document.documentElement.classList.toggle('dark')">
+  <span class="material-symbols-outlined block dark:hidden">dark_mode</span>
+  <span class="material-symbols-outlined hidden dark:block">light_mode</span>
+</button>
+
+</body></html></title>
+</head>
+<body>
+
+</body>
+</html>
