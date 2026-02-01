@@ -1,5 +1,5 @@
-(function() {
-  const BASE_URL = 'https://petite-consequence-skating-amsterdam.trycloudflare.com/scripttag';
+(function () {
+  const BASE_URL = 'https://surgeon-toys-airfare-watches.trycloudflare.com/scripttag';
 
   const scriptElement = document.createElement('script');
   scriptElement.type = 'text/javascript';

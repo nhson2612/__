@@ -24,15 +24,11 @@ const collection = firestore.collection('notifications');
  * @param {string} params.prevCursor
  * @returns {Promise<{data: any[], pageInfo: {hasNext: boolean, hasPrev: boolean, nextCursor: string, prevCursor: string}}>}
  */
-export async function getList(
-  shopId,
-  { limit = 10, sort = 'timestamp', direction = 'desc', nextCursor, prevCursor }
-) {
+export async function getList(shopId, {limit = 10, sort = 'timestamp', direction = 'desc', nextCursor, prevCursor}) {
   let query = collection.where('shopId', '==', shopId);
 
   // Sorting
   query = query.orderBy(sort, direction);
-  // Add secondary sort for stable pagination
   query = query.orderBy('__name__', direction);
 
   // Pagination logic
@@ -54,7 +50,7 @@ export async function getList(
   }
 
   const snapshot = await query.get();
-  const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  const data = snapshot.docs.map(doc => ({id: doc.id, ...doc.data()}));
 
   // Pagination meta
   let hasNext = false;
@@ -69,35 +65,25 @@ export async function getList(
     newPrevCursor = firstDoc.id;
     newNextCursor = lastDoc.id;
 
-    // Check if there are more items
-    if (!prevCursor) {
-      // Forward direction check
-      const nextQuery = collection
-        .where('shopId', '==', shopId)
-        .orderBy(sort, direction)
-        .orderBy('__name__', direction)
-        .startAfter(lastDoc)
-        .limit(1);
-      const nextSnapshot = await nextQuery.get();
-      hasNext = !nextSnapshot.empty;
+    // 1. Check hasNext (Is there a document AFTER the last one?)
+    const nextCheck = collection
+      .where('shopId', '==', shopId)
+      .orderBy(sort, direction)
+      .orderBy('__name__', direction)
+      .startAfter(lastDoc)
+      .limit(1);
+    const nextSnap = await nextCheck.get();
+    hasNext = !nextSnap.empty;
 
-      // Check if there are previous items (if not on first page)
-      if (nextCursor) {
-        // This is simplified, strictly usually we track page number or specific cursor logic
-        hasPrev = true;
-      }
-    } else {
-      // Backward direction check
-      hasNext = true; // We came from a next page
-      const prevQuery = collection
-        .where('shopId', '==', shopId)
-        .orderBy(sort, direction)
-        .orderBy('__name__', direction)
-        .endBefore(firstDoc)
-        .limitToLast(1);
-      const prevSnapshot = await prevQuery.get();
-      hasPrev = !prevSnapshot.empty;
-    }
+    // 2. Check hasPrev (Is there a document BEFORE the first one?)
+    const prevCheck = collection
+      .where('shopId', '==', shopId)
+      .orderBy(sort, direction)
+      .orderBy('__name__', direction)
+      .endBefore(firstDoc)
+      .limitToLast(1);
+    const prevSnap = await prevCheck.get();
+    hasPrev = !prevSnap.empty;
   }
 
   return {

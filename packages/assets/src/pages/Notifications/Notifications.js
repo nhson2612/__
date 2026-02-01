@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useCallback} from 'react';
 import {Page, Layout} from '@shopify/polaris';
 import NotificationList from '../../components/Notifications/NotificationList/NotificationList';
 import useFetchApi from '@assets/hooks/api/useFetchApi';
@@ -9,9 +9,28 @@ import SettingsSkeleton from '@assets/components/SettingsSkeleton/SettingsSkelet
  * @constructor
  */
 export default function Notifications() {
-  const {data: notifications, loading, fetchApi: refresh} = useFetchApi({
-    url: '/notifications',
-    defaultData: []
+  const [sortValue, setSortValue] = useState('DATE_MODIFIED_DESC');
+  const [cursor, setCursor] = useState({next: null, prev: null});
+
+  const getSortParams = () => {
+    switch (sortValue) {
+      case 'DATE_MODIFIED_ASC':
+        return {sort: 'timestamp', direction: 'asc'};
+      case 'DATE_MODIFIED_DESC':
+      default:
+        return {sort: 'timestamp', direction: 'desc'};
+    }
+  };
+
+  const {sort, direction} = getSortParams();
+  let query = `limit=5&sort=${sort}&direction=${direction}`;
+  if (cursor.next) query += `&nextCursor=${cursor.next}`;
+  if (cursor.prev) query += `&prevCursor=${cursor.prev}`;
+
+  const {data: notifications, pageInfo, loading, fetchApi: refresh} = useFetchApi({
+    url: `/notifications?${query}`,
+    defaultData: [],
+    initLoad: false // Disable auto-init, we control it via useEffect
   });
 
   const {data: settings} = useFetchApi({url: '/settings'});
@@ -21,26 +40,51 @@ export default function Notifications() {
     manual: true
   });
 
+  // Fetch data when query parameters change
+  React.useEffect(() => {
+    refresh(`/notifications?${query}`);
+  }, [cursor, sortValue]); // Dependency on state that drives the query
+
   const handleSync = async () => {
     await sync();
     await refresh();
   };
 
-  if (loading) return <SettingsSkeleton />;
+  const handleSortChange = useCallback(newSortValue => {
+    setSortValue(newSortValue);
+    setCursor({next: null, prev: null}); // Reset pagination on sort change
+  }, []);
+
+  const handleNextPage = useCallback(() => {
+    if (pageInfo.hasNext) {
+      setCursor({next: pageInfo.nextCursor, prev: null});
+    }
+  }, [pageInfo]);
+
+  const handlePrevPage = useCallback(() => {
+    if (pageInfo.hasPrev) {
+      setCursor({next: null, prev: pageInfo.prevCursor});
+    }
+  }, [pageInfo]);
+
+  if (loading && !notifications.length) return <SettingsSkeleton />;
 
   return (
-    <Page
-      title="Notifications"
-      subtitle="View and manage all system and store notifications"
-      primaryAction={{
-        content: 'Sync from Orders',
-        onAction: handleSync,
-        loading: syncing
-      }}
-    >
+    <Page title="Notifications" subtitle="View and manage all system and store notifications">
       <Layout>
         <Layout.Section>
-          <NotificationList items={notifications} settings={settings} />
+          <NotificationList
+            items={notifications}
+            settings={settings}
+            sortValue={sortValue}
+            onSortChange={handleSortChange}
+            pagination={{
+              hasNext: pageInfo.hasNext,
+              hasPrev: pageInfo.hasPrev,
+              onNext: handleNextPage,
+              onPrevious: handlePrevPage
+            }}
+          />
         </Layout.Section>
       </Layout>
     </Page>

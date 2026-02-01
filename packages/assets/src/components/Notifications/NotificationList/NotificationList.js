@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import {Card, ResourceList} from '@shopify/polaris';
 import Notification from '../Notification/Notification';
-import NotificationPopup from '@assets/components/NotificationPopup/NotificationPopup';
 
 /**
  * @param {Object} props
@@ -9,9 +8,14 @@ import NotificationPopup from '@assets/components/NotificationPopup/Notification
  * @return {JSX.Element}
  * @constructor
  */
-export default function NotificationList({items = [], settings = {}}) {
+export default function NotificationList({
+  items = [],
+  settings = {},
+  sortValue = 'DATE_MODIFIED_DESC',
+  onSortChange,
+  pagination
+}) {
   const [selectedItems, setSelectedItems] = useState([]);
-  const [sortValue, setSortValue] = useState('DATE_MODIFIED_DESC');
 
   const resourceName = {
     singular: 'notification',
@@ -36,6 +40,8 @@ export default function NotificationList({items = [], settings = {}}) {
     return <Notification {...item} settings={settings} />;
   };
 
+  console.log('NotificationList items:', items);
+
   return (
     <Card padding="0">
       <ResourceList
@@ -51,14 +57,8 @@ export default function NotificationList({items = [], settings = {}}) {
           {label: 'Newest Update', value: 'DATE_MODIFIED_DESC'},
           {label: 'Oldest Update', value: 'DATE_MODIFIED_ASC'}
         ]}
-        onSortChange={selected => {
-          setSortValue(selected);
-          console.log(`Sort option changed to ${selected}.`);
-        }}
-        pagination={{
-          hasNext: true,
-          onNext: () => {}
-        }}
+        onSortChange={onSortChange}
+        pagination={pagination}
       />
     </Card>
   );

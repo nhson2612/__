@@ -125,14 +125,37 @@ const authProxyOptions = {
   rewrite: (path) => `/todo-app-frontend-7ff2/us-central1/auth${path}`
 };
 
+const webhookProxyOptions = {
+  target: `http://${localhost}:${bePort}`,
+  changeOrigin: true,
+  secure: false,
+  ws: false,
+  rewrite: (path) => `/todo-app-frontend-7ff2/us-central1/webhook${path}`
+};
+
+const scripttagProxyOptions = {
+  target: `http://${localhost}:5050`,
+  changeOrigin: true,
+  secure: false,
+  ws: false
+};
+
+const clientApiProxyOptions = {
+  target: `http://${localhost}:${bePort}`,
+  changeOrigin: true,
+  secure: false,
+  ws: false,
+  rewrite: (path) => `/todo-app-frontend-7ff2/us-central1/clientApi${path}`
+};
+
 const proxyConfig = {
   '^/api(/|(\\?.*)?$)': apiProxyOptions,
   '^/authSa(/|(\\?.*)?$)': proxyOptions,
   '^/auth(/|(\\?.*)?$)': authProxyOptions,
   '^/apiSa(/|(\\?.*)?$)': proxyOptions,
-  '^/scripttag(/|(\\?.*)?$)': proxyOptions,
-  '^/clientApi(/|(\\?.*)?$)': proxyOptions,
-  '^/webhook(/|(\\?.*)?$)': proxyOptions
+  '^/scripttag(/|(\\?.*)?$)': scripttagProxyOptions,
+  '^/clientApi(/|(\\?.*)?$)': clientApiProxyOptions,
+  '^/webhook(/|(\\?.*)?$)': webhookProxyOptions
 };
 
 /** @type {ServerOptions} */
