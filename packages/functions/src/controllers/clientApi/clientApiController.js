@@ -1,6 +1,6 @@
 import {getShopByShopifyDomain} from '../../repositories/shopRepository';
 import {getSettings} from '../../repositories/settingRepository';
-import {getList} from '../../repositories/notificationRepository';
+import {getLatestByShopId, getList} from '../../repositories/notificationRepository';
 
 /**
  * Health check endpoint
@@ -9,7 +9,7 @@ import {getList} from '../../repositories/notificationRepository';
 export async function health(ctx) {
   ctx.body = {
     success: true,
-    message: 'Client API is healthy'
+    message: "I'm fine"
   };
 }
 
@@ -20,7 +20,7 @@ export async function health(ctx) {
 export async function getNotifications(ctx) {
   try {
     const {shopifyDomain} = ctx.query;
-
+    console.log('>>>>>>>>>>> GETTING NOTIFICATIONS FOR SHOP: ', shopifyDomain, ' <<<<<<<<<<<<');
     if (!shopifyDomain) {
       ctx.status = 400;
       ctx.body = {success: false, error: 'Missing shopifyDomain'};
@@ -34,16 +34,21 @@ export async function getNotifications(ctx) {
       return;
     }
 
-    const [settings, notificationsResult] = await Promise.all([
-      getSettings(shop.id),
-      getList(shop.id, {limit: 20, sort: 'timestamp', direction: 'desc'})
-    ]);
-
+    const settings = await getSettings(shop.id);
+    const notifications = await getLatestByShopId(shopifyDomain, 20);
+    console.log('>>>>>>>>>>>>> NOTIFICATIONS', notifications);
+    console.log('>>>>>>>>>>>>> EXPECTED RESPONSE', {
+      success: true,
+      data: {
+        settings: settings || {},
+        notifications: notifications || []
+      }
+    });
     ctx.body = {
       success: true,
       data: {
         settings: settings || {},
-        notifications: notificationsResult.data || []
+        notifications: notifications || []
       }
     };
   } catch (e) {
@@ -52,21 +57,3 @@ export async function getNotifications(ctx) {
     ctx.body = {success: false, error: e.message};
   }
 }
-
-// Add more client API handlers here
-// Example:
-// export async function getData(ctx) {
-//   try {
-//     const { shopifyDomain } = ctx.query;
-//     // Fetch and return data for the storefront
-//     return (ctx.body = {
-//       data: [],
-//       success: true
-//     });
-//   } catch (e) {
-//     return (ctx.body = {
-//       data: [],
-//       error: e.message
-//     });
-//   }
-// }

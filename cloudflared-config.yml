@@ -1,0 +1,7 @@
+tunnel: 7c5bd44f-21a7-4f92-96f2-dc8af12e7c25
+credentials-file: /home/nhson2612/.cloudflared/7c5bd44f-21a7-4f92-96f2-dc8af12e7c25.json
+
+ingress:
+  - hostname: shopify.nhson2612.space
+    service: http://localhost:3000
+  - service: http_status:404

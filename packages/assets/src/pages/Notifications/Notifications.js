@@ -70,7 +70,7 @@ export default function Notifications() {
   if (loading && !notifications.length) return <SettingsSkeleton />;
 
   return (
-    <Page title="Notifications" subtitle="View and manage all system and store notifications">
+    <Page title="Notifications" subtitle="List of sales notification from Shopify">
       <Layout>
         <Layout.Section>
           <NotificationList

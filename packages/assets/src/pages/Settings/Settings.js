@@ -8,7 +8,13 @@ import useEditApi from '@assets/hooks/api/useEditApi';
 import SettingsSkeleton from '@assets/components/SettingsSkeleton/SettingsSkeleton';
 
 /**
- * @return {JSX.Element}
+ * Settings component for managing popup notification configuration.
+ *
+ * This component provides a comprehensive settings interface for configuring
+ * popup notifications, including display settings and trigger restrictions.
+ * It handles API communication for fetching and saving settings data.
+ *
+ * @return {JSX.Element} The Settings component with display and triggers tabs
  */
 export default function Settings() {
   const [selectedTab, setSelectedTab] = useState(0);
@@ -43,14 +49,32 @@ export default function Settings() {
       }
       if (triggers) {
         setPageRestriction(triggers.pageRestriction || 'all');
-        setSpecificPages(Array.isArray(triggers.specificPages) ? triggers.specificPages.join('\n') : '');
-        setExcludedPages(Array.isArray(triggers.excludedPages) ? triggers.excludedPages.join('\n') : '');
+        setSpecificPages(
+          Array.isArray(triggers.specificPages) ? triggers.specificPages.join('\n') : ''
+        );
+        setExcludedPages(
+          Array.isArray(triggers.excludedPages) ? triggers.excludedPages.join('\n') : ''
+        );
       }
     }
   }, [settingsData]);
 
+  /**
+   * Handles tab selection changes in the settings interface.
+   * 
+   * @param {number} selectedTabIndex - Index of the selected tab (0 for Display, 1 for Triggers)
+   */
   const handleTabChange = useCallback(selectedTabIndex => setSelectedTab(selectedTabIndex), []);
 
+  /**
+   * Handles saving the current settings configuration.
+   * 
+   * Collects all display and trigger settings, formats them appropriately,
+   * sends them to the API, and refreshes the data to ensure synchronization.
+   * 
+   * @async
+   * @return {Promise<void>} Resolves when settings are successfully saved
+   */
   const handleSave = useCallback(async () => {
     const settings = {
       display: {

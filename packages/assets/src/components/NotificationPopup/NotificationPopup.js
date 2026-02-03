@@ -10,15 +10,13 @@ const NotificationPopup = ({
   country = 'United States',
   productName = 'Puffer Jacket With Hidden Hood',
   timestamp = 'a day ago',
-  productImage = 'http://paris.mageplaza.com/images/shop/single/big-1.jpg',
+  productImage = 'https://product.hstatic.net/200000410665/product/giay-the-thao-l82201-5_8cedfe64846b4bc6bef0f09105c8db3d.jpg',
   onClose = () => {},
   displayCloseBtn = true,
   truncateContent = false
 }) => {
   const displayProductName =
-    truncateContent && productName.length > 16
-      ? `${productName.substring(0, 16)}...`
-      : productName;
+    truncateContent && productName.length > 16 ? `${productName.substring(0, 16)}...` : productName;
 
   return (
     <div className="Avava-SP__Wrapper fadeInUp animated">
@@ -54,7 +52,7 @@ const NotificationPopup = ({
               <div className={'Avada-SP__Footer'}>
                 {timestamp}{' '}
                 <span className="uni-blue">
-                  <i className="fa fa-check" aria-hidden="true" /> by Avada
+                  <i className="fa fa-check" aria-hidden="true" />✔ by Avada
                 </span>
               </div>
             </div>

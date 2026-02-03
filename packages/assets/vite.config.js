@@ -6,7 +6,7 @@ import os from 'os';
 import EnvironmentPlugin from 'vite-plugin-environment';
 import { nodePolyfills } from 'vite-plugin-node-polyfills';
 
-const APP_PORT = 0;
+const APP_PORT = 1;
 
 const localhost = '127.0.0.1';
 const isProduction = process.env.NODE_ENV === 'production';
@@ -16,7 +16,7 @@ const host = process.env.HOST ? process.env.HOST.replace(/https?:\/\//, '') : lo
 const isEmbed = process.env.IS_EMBEDDED_APP === 'yes';
 const templateOutFile = isEmbed ? 'embed-template.html' : 'standalone.html';
 const fePort = process.env.FRONTEND_PORT || 3000 + APP_PORT; // vite server port
-const bePort = process.env.BACKEND_PORT || 5000 + APP_PORT; // hosting/API port
+const bePort = process.env.BACKEND_PORT || 5000; // hosting/API port
 
 const [sslKey, sslCert] = ['ssl.key', 'ssl.crt'].map(file => {
   try {
@@ -52,7 +52,6 @@ if (!isProduction && shopifyApiKey) {
   try {
     const baseUrl = process.env.HOST.replace('https://', '');
 
-    // Update functions .env file
     updateEnvFile('../functions/.env', {
       APP_BASE_URL: baseUrl,
       SHOPIFY_API_KEY: shopifyApiKey,
@@ -114,7 +113,7 @@ const apiProxyOptions = {
   changeOrigin: true,
   secure: false,
   ws: false,
-  rewrite: (path) => `/todo-app-frontend-7ff2/us-central1/api${path}`
+  rewrite: path => `/todo-app-frontend-7ff2/us-central1/api${path}`
 };
 
 const authProxyOptions = {
@@ -122,7 +121,7 @@ const authProxyOptions = {
   changeOrigin: true,
   secure: false,
   ws: false,
-  rewrite: (path) => `/todo-app-frontend-7ff2/us-central1/auth${path}`
+  rewrite: path => `/todo-app-frontend-7ff2/us-central1/auth${path}`
 };
 
 const webhookProxyOptions = {
@@ -130,7 +129,7 @@ const webhookProxyOptions = {
   changeOrigin: true,
   secure: false,
   ws: false,
-  rewrite: (path) => `/todo-app-frontend-7ff2/us-central1/webhook${path}`
+  rewrite: path => `/todo-app-frontend-7ff2/us-central1/webhook${path}`
 };
 
 const scripttagProxyOptions = {
@@ -145,7 +144,7 @@ const clientApiProxyOptions = {
   changeOrigin: true,
   secure: false,
   ws: false,
-  rewrite: (path) => `/todo-app-frontend-7ff2/us-central1/clientApi${path}`
+  rewrite: path => `/todo-app-frontend-7ff2/us-central1/clientApi${path}`
 };
 
 const proxyConfig = {
@@ -154,6 +153,7 @@ const proxyConfig = {
   '^/auth(/|(\\?.*)?$)': authProxyOptions,
   '^/apiSa(/|(\\?.*)?$)': proxyOptions,
   '^/scripttag(/|(\\?.*)?$)': scripttagProxyOptions,
+  // '^/clientApi(/|(\\?.*)?$)': proxyOptions,
   '^/clientApi(/|(\\?.*)?$)': clientApiProxyOptions,
   '^/webhook(/|(\\?.*)?$)': webhookProxyOptions
 };

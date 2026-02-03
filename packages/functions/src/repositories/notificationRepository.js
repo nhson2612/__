@@ -3,7 +3,7 @@ import { presentDataAndFormatDate } from '../presenters/notificationPresenter';
 
 // Configure Firestore with emulator if environment variable is set
 const firestoreSettings = {
-  projectId: 'todo-app-frontend-7ff2', // Force correct project ID
+  projectId: 'todo-app-frontend-7ff2'
 };
 if (process.env.FIRESTORE_EMULATOR_HOST) {
   firestoreSettings.host = process.env.FIRESTORE_EMULATOR_HOST;
@@ -14,7 +14,7 @@ const firestore = new Firestore(firestoreSettings);
 const collection = firestore.collection('notifications');
 
 /**
- * Get list of notifications with pagination
+ * Get a list of notifications with pagination
  * @param {string} shopId
  * @param {Object} params
  * @param {number} params.limit
@@ -24,27 +24,46 @@ const collection = firestore.collection('notifications');
  * @param {string} params.prevCursor
  * @returns {Promise<{data: any[], pageInfo: {hasNext: boolean, hasPrev: boolean, nextCursor: string, prevCursor: string}}>}
  */
-export async function getList(shopId, {limit = 10, sort = 'timestamp', direction = 'desc', nextCursor, prevCursor}) {
+export async function getList(
+  shopId,
+  {limit = 10, sort = 'timestamp', direction = 'desc', nextCursor, prevCursor}
+) {
+  const allowedSorts = new Set(['timestamp', 'createdAt']);
+  const safeSort = allowedSorts.has(sort) ? sort : 'timestamp';
   let query = collection.where('shopId', '==', shopId);
 
-  // Sorting
-  query = query.orderBy(sort, direction);
+  query = query.orderBy(safeSort, direction);
   query = query.orderBy('__name__', direction);
-
-  // Pagination logic
   if (nextCursor) {
     const cursorDoc = await collection.doc(nextCursor).get();
-    if (cursorDoc.exists) {
-      query = query.startAfter(cursorDoc);
+    if (!cursorDoc.exists) {
+      return {
+        data: [],
+        pageInfo: {
+          hasNext: false,
+          hasPrev: false,
+          nextCursor: null,
+          prevCursor: null
+        }
+      };
     }
+    query = query.startAfter(cursorDoc);
   } else if (prevCursor) {
     const cursorDoc = await collection.doc(prevCursor).get();
-    if (cursorDoc.exists) {
-      query = query.endBefore(cursorDoc).limitToLast(limit);
+    if (!cursorDoc.exists) {
+      return {
+        data: [],
+        pageInfo: {
+          hasNext: false,
+          hasPrev: false,
+          nextCursor: null,
+          prevCursor: null
+        }
+      };
     }
+    query = query.endBefore(cursorDoc).limitToLast(limit);
   }
 
-  // If not using prevCursor (reverse query), use standard limit
   if (!prevCursor) {
     query = query.limit(limit);
   }
@@ -65,20 +84,18 @@ export async function getList(shopId, {limit = 10, sort = 'timestamp', direction
     newPrevCursor = firstDoc.id;
     newNextCursor = lastDoc.id;
 
-    // 1. Check hasNext (Is there a document AFTER the last one?)
     const nextCheck = collection
       .where('shopId', '==', shopId)
-      .orderBy(sort, direction)
+      .orderBy(safeSort, direction)
       .orderBy('__name__', direction)
       .startAfter(lastDoc)
       .limit(1);
     const nextSnap = await nextCheck.get();
     hasNext = !nextSnap.empty;
 
-    // 2. Check hasPrev (Is there a document BEFORE the first one?)
     const prevCheck = collection
       .where('shopId', '==', shopId)
-      .orderBy(sort, direction)
+      .orderBy(safeSort, direction)
       .orderBy('__name__', direction)
       .endBefore(firstDoc)
       .limitToLast(1);
@@ -115,4 +132,22 @@ export async function create(data) {
  */
 export async function createWithId(id, data) {
   await collection.doc(id).set(data);
+}
+
+/**
+ * Get latest notifications by shopId without pagination
+ * @param {string} shopId
+ * @param {number} limit
+ * @returns {Promise<any[]>}
+ */
+export async function getLatestByShopId(shopId, limit = 10) {
+  console.log(">>>>>>>>>>>>>>> GETTING LATEST NOTIFICATIONS FOR SHOP: ", shopId, " WITH LIMIT: ", limit, " >>>>>>>>>>>>>>>>>>");
+  const snapshot = await collection
+    .where('shopId', '==', shopId)
+    .orderBy('timestamp', 'desc')
+    .limit(limit)
+    .get();
+
+  const data = snapshot.docs.map(doc => ({id: doc.id, ...doc.data()}));
+  return data.map(presentDataAndFormatDate);
 }

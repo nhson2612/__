@@ -1,9 +1,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {BlockStack, Select, TextField} from '@shopify/polaris';
+import './TriggersSettings.css';
 
 /**
- * @return {React.JSX.Element}
+ * TriggersSettings component for configuring page trigger restrictions.
+ *
+ * This component allows users to control on which pages popup notifications
+ * should appear by setting page restrictions, including specific pages,
+ * and excluding certain pages.
+ *
+ * @param {string} pageRestriction - Current page restriction setting ('all' or 'specific')
+ * @param {function} onPageRestrictionChange - Callback for page restriction changes
+ * @param {string} specificPages - Comma-separated list of specific pages to include
+ * @param {function} onSpecificPagesChange - Callback for specific pages changes
+ * @param {string} excludedPages - Newline-separated list of pages to exclude
+ * @param {function} onExcludedPagesChange - Callback for excluded pages changes
+ * @return {React.JSX.Element} The TriggersSettings component
  */
 export default function TriggersSettings({
   pageRestriction,

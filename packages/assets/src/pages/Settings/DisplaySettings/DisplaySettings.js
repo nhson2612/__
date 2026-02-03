@@ -1,9 +1,36 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {BlockStack, Box, Checkbox, RangeSlider, Text, InlineGrid, Divider} from '@shopify/polaris';
+import {
+  BlockStack,
+  Box,
+  Checkbox,
+  RangeSlider,
+  Text,
+  InlineGrid,
+  Divider,
+  LegacyCard,
+  InlineStack
+} from '@shopify/polaris';
+import './DisplaySettings.css';
 
 /**
- * @return {React.JSX.Element}
+ * DisplaySettings component for configuring popup display options.
+ *
+ * @param {string} position - Current position of popups (e.g., 'bottom-left')
+ * @param {function} onPositionChange - Callback for position changes
+ * @param {boolean} hideTimeAgo - Whether to hide time ago display
+ * @param {function} onHideTimeAgoChange - Callback for hideTimeAgo changes
+ * @param {boolean} truncateContent - Whether to truncate content text
+ * @param {function} onTruncateContentChange - Callback for truncateContent changes
+ * @param {number} displayDuration - Duration to display each popup in seconds
+ * @param {function} onDisplayDurationChange - Callback for displayDuration changes
+ * @param {number} firstPopDelay - Delay before first popup appears in seconds
+ * @param {function} onFirstPopDelayChange - Callback for firstPopDelay changes
+ * @param {number} gapTime - Time between popups in seconds
+ * @param {function} onGapTimeChange - Callback for gapTime changes
+ * @param {number} maxPopups - Maximum number of popups to show
+ * @param {function} onMaxPopupsChange - Callback for maxPopups changes
+ * @return {React.JSX.Element} The DisplaySettings component
  */
 export default function DisplaySettings({
   position,
@@ -35,7 +62,6 @@ export default function DisplaySettings({
             </Text>
             <InlineGrid columns={{xs: 2, sm: 4}} gap="400">
               <PositionOption
-                label="Bottom Left"
                 value="bottom-left"
                 selected={position === 'bottom-left'}
                 onClick={onPositionChange}
@@ -43,7 +69,6 @@ export default function DisplaySettings({
                 positionClass="bottom-3 left-3"
               />
               <PositionOption
-                label="Bottom Right"
                 value="bottom-right"
                 selected={position === 'bottom-right'}
                 onClick={onPositionChange}
@@ -51,7 +76,6 @@ export default function DisplaySettings({
                 positionClass="bottom-3 right-3"
               />
               <PositionOption
-                label="Top Left"
                 value="top-left"
                 selected={position === 'top-left'}
                 onClick={onPositionChange}
@@ -59,7 +83,6 @@ export default function DisplaySettings({
                 positionClass="top-3 left-3"
               />
               <PositionOption
-                label="Top Right"
                 value="top-right"
                 selected={position === 'top-right'}
                 onClick={onPositionChange}
@@ -74,11 +97,7 @@ export default function DisplaySettings({
         </Box>
 
         <BlockStack gap="200">
-          <Checkbox
-            label="Hide time ago"
-            checked={hideTimeAgo}
-            onChange={onHideTimeAgoChange}
-          />
+          <Checkbox label="Hide time ago" checked={hideTimeAgo} onChange={onHideTimeAgoChange} />
           <Checkbox
             label="Truncate content text"
             checked={truncateContent}
@@ -104,8 +123,17 @@ export default function DisplaySettings({
             min={1}
             max={60}
             output
-            suffix="second(s)"
             helpText="How long each pop will display on your page."
+            suffix={
+              <LegacyCard>
+                <Box padding="200" borderRadius="0">
+                  <InlineStack gap="200" blockAlign="center">
+                    <Text as={'h5'}>{displayDuration}</Text>
+                    <Text as={'p'}>second(s)</Text>
+                  </InlineStack>
+                </Box>
+              </LegacyCard>
+            }
           />
           <RangeSlider
             label="Time before the first pop"
@@ -114,7 +142,16 @@ export default function DisplaySettings({
             min={1}
             max={60}
             output
-            suffix="second(s)"
+            suffix={
+              <LegacyCard>
+                <Box padding="200" borderRadius="0">
+                  <InlineStack gap="200" blockAlign="center">
+                    <Text as={'h5'}>{firstPopDelay}</Text>
+                    <Text as={'p'}>second(s)</Text>
+                  </InlineStack>
+                </Box>
+              </LegacyCard>
+            }
             helpText="The delay time before the first notification."
           />
           <RangeSlider
@@ -124,7 +161,16 @@ export default function DisplaySettings({
             min={0}
             max={60}
             output
-            suffix="second(s)"
+            suffix={
+              <LegacyCard>
+                <Box padding="200" borderRadius="0">
+                  <InlineStack gap="200" blockAlign="center">
+                    <Text as={'h5'}>{gapTime}</Text>
+                    <Text as={'p'}>second(s)</Text>
+                  </InlineStack>
+                </Box>
+              </LegacyCard>
+            }
             helpText="The time interval between two popup notifications."
           />
           <RangeSlider
@@ -134,7 +180,16 @@ export default function DisplaySettings({
             min={1}
             max={80}
             output
-            suffix="pop(s)"
+            suffix={
+              <LegacyCard>
+                <Box padding="200" borderRadius="0">
+                  <InlineStack gap="200" blockAlign="center">
+                    <Text as={'h5'}>{maxPopups}</Text>
+                    <Text as={'p'}>pop(s)</Text>
+                  </InlineStack>
+                </Box>
+              </LegacyCard>
+            }
             helpText="The maximum number of popups allowed to show after page loading. Maximum number is 80."
           />
         </InlineGrid>
@@ -161,14 +216,14 @@ DisplaySettings.propTypes = {
 };
 
 /**
+ * PositionOption component for selecting popup positions.
  *
- * @param label
- * @param value
- * @param selected
- * @param onClick
- * @param positionClass
- * @returns {React.JSX.Element}
- * @constructor
+ * @param {string} value - The position value (e.g., 'bottom-left')
+ * @param {boolean} selected - Whether this position is currently selected
+ * @param {function} onClick - Callback when this position is clicked
+ * @param {string} color - CSS color class for the position indicator
+ * @param {string} positionClass - CSS class for positioning the indicator
+ * @return {React.JSX.Element} The PositionOption component
  */
 function PositionOption({label, value, selected, onClick, positionClass}) {
   const borderColor = selected ? '2px solid #5c6ac4' : '1px solid #e1e3e5';
@@ -222,9 +277,10 @@ PositionOption.propTypes = {
 };
 
 /**
+ * Parses position class strings into CSS style objects.
  *
- * @param className
- * @returns {{}}
+ * @param {string} className - Position class string (e.g., 'bottom-3 left-3')
+ * @return {Object} CSS style object with position properties
  */
 function parsePositionClass(className) {
   const style = {};

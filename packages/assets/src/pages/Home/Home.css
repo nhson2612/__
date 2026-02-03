@@ -1,0 +1,13 @@
+.Polaris-Box .Polaris-Button--sizeLarge {
+    --pc-button-padding-block: 0.5rem;
+    --pc-button-padding-inline: 1.25rem;
+    background-color: #008060;
+    color: #ffffff;
+    border: none;
+    --pc-button-box-shadow: none;
+}
+
+.Polaris-Box .Polaris-Button--sizeLarge:hover {
+    background-color: #00664d;
+    color: #ffffff;
+}

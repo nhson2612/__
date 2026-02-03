@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import PropTypes from 'prop-types';
 import {Card, ResourceList} from '@shopify/polaris';
 import Notification from '../Notification/Notification';
 
@@ -22,21 +23,14 @@ export default function NotificationList({
     plural: 'notifications'
   };
 
-  const promotedBulkActions = [
-    {
-      content: 'Mark as read',
-      onAction: () => console.log('Todo: implement bulk mark read')
-    }
-  ];
-
   const bulkActions = [
     {
-      content: 'Delete',
-      onAction: () => console.log('Todo: implement bulk delete')
+      content: 'Read All',
+      onAction: () => alert('mark all as read')
     }
   ];
 
-  const renderItem = (item) => {
+  const renderItem = item => {
     return <Notification {...item} settings={settings} />;
   };
 
@@ -50,7 +44,6 @@ export default function NotificationList({
         renderItem={renderItem}
         selectedItems={selectedItems}
         onSelectionChange={setSelectedItems}
-        promotedBulkActions={promotedBulkActions}
         bulkActions={bulkActions}
         sortValue={sortValue}
         sortOptions={[
@@ -63,3 +56,19 @@ export default function NotificationList({
     </Card>
   );
 }
+
+NotificationList.propTypes = {
+  items: PropTypes.array.isRequired,
+  settings: PropTypes.object,
+  sortValue: PropTypes.string,
+  onSortChange: PropTypes.func,
+  pagination: PropTypes.object
+};
+
+NotificationList.defaultProps = {
+  items: [],
+  settings: {},
+  sortValue: 'DATE_MODIFIED_DESC',
+  onSortChange: undefined,
+  pagination: undefined
+};

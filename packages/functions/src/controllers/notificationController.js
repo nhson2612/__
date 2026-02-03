@@ -8,8 +8,9 @@ import {getCurrentShop} from '../helpers/auth';
 export async function getList(ctx) {
   try {
     const shopId = getCurrentShop(ctx);
+    console.log('getList called for shopId:', shopId);
     const {limit, sort, direction, nextCursor, prevCursor} = ctx.query;
-    
+
     const result = await notificationRepository.getList(shopId, {
       limit: limit ? parseInt(limit) : 10,
       sort,
@@ -17,7 +18,7 @@ export async function getList(ctx) {
       nextCursor,
       prevCursor
     });
-    
+
     ctx.body = result;
   } catch (e) {
     console.error('getNotifications Error:', e);

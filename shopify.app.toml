@@ -2,7 +2,7 @@
 
 client_id = "26b38db3da5235f34604ef2a02220f31"
 name = "final"
-application_url = "https://petite-consequence-skating-amsterdam.trycloudflare.com"
+application_url = "https://medicare-optics-recipe-intelligent.trycloudflare.com"
 embedded = true
 
 [build]
@@ -22,4 +22,4 @@ optional_scopes = [ ]
 use_legacy_install_flow = false
 
 [auth]
-redirect_urls = [ "https://petite-consequence-skating-amsterdam.trycloudflare.com/auth/shopify/callback" ]
+redirect_urls = [ "https://medicare-optics-recipe-intelligent.trycloudflare.com/callback" ]

@@ -18,6 +18,7 @@
     "start-dev-embed": "concurrently \"yarn workspace @avada/functions run watch\" \"npm --prefix packages/scripttag/ run watch\"",
     "start-dev": "concurrently \"yarn workspace @avada/assets run watch\" \"yarn workspace @avada/functions run watch\"",
     "dev": "shopify app dev --skip-dependencies-installation",
+    "dev:custom": "shopify app dev --tunnel-url=https://shopify.nhson2612.space:3000",
     "dev:local": "shopify app dev --use-localhost",
     "dev:no-theme": "shopify app dev --skip-dependencies-installation --theme=",
     "dev-reset": "shopify app dev --skip-dependencies-installation --reset --theme=",

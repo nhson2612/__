@@ -1,0 +1,26 @@
+.Polaris-Checkbox__Input:checked + .Polaris-Checkbox__Backdrop {
+  border-color: var(--p-color-border-brand, #1983ff) !important;
+  background-color: transparent !important;
+}
+
+.Polaris-Checkbox__Input:checked + .Polaris-Checkbox__Backdrop + .Polaris-Checkbox__Icon {
+  color: var(--p-color-icon-brand, #1983ff) !important;
+}
+
+.Polaris-Checkbox__Input:checked + .Polaris-Checkbox__Backdrop + .Polaris-Checkbox__Icon svg {
+  stroke: var(--p-color-icon-brand, #1983ff) !important;
+}
+
+.Polaris-Button {
+    --pc-button-padding-block: 0.5rem;
+    --pc-button-padding-inline: 1.25rem;
+    background-color: #008060;
+    color: #ffffff;
+    border: none;
+    --pc-button-box-shadow: none;
+}
+
+.Polaris-Button:hover {
+    background-color: #00664d;
+    color: #ffffff;
+}

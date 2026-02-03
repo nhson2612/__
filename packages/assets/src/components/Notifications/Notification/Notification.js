@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {InlineStack, ResourceItem, Text, Box} from '@shopify/polaris';
 import moment from 'moment';
 import NotificationPopup from '@assets/components/NotificationPopup/NotificationPopup';
@@ -35,7 +36,7 @@ export default function Notification({
             productName={productName}
             timestamp={timeLabel}
             productImage={productImage}
-            displayCloseBtn={false}
+            displayCloseBtn={true}
             truncateContent={truncateContent}
           />
         </Box>
@@ -48,3 +49,24 @@ export default function Notification({
     </ResourceItem>
   );
 }
+
+Notification.propTypes = {
+  id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  firstName: PropTypes.string.isRequired,
+  city: PropTypes.string.isRequired,
+  country: PropTypes.string.isRequired,
+  productName: PropTypes.string.isRequired,
+  timestamp: PropTypes.string.isRequired,
+  productImage: PropTypes.string,
+  settings: PropTypes.shape({
+    display: PropTypes.shape({
+      hideTimeAgo: PropTypes.bool,
+      truncateContent: PropTypes.bool
+    })
+  })
+};
+
+Notification.defaultProps = {
+  productImage: '',
+  settings: {}
+};

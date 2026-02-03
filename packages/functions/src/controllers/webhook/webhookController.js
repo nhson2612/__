@@ -30,13 +30,13 @@ export async function appUninstalled(ctx) {
  * @returns {Promise<{success: boolean}>}
  */
 export async function listenNewOrder(ctx) {
+  console.log('>>>>>>>>>>>>>> HANDLE NEW ORDER WEBHOOK <<<<<<<<<<<<<<<<');
   try {
     const shopifyDomain = ctx.get('X-Shopify-Shop-Domain');
     const order = ctx.request.body;
 
-    // Basic validation
     if (!order || !order.id) {
-      return (ctx.body = {success: true}); // Acknowledge anyway
+      return (ctx.body = {success: true});
     }
 
     const firstItem = order.line_items && order.line_items.length > 0 ? order.line_items[0] : null;
@@ -54,13 +54,15 @@ export async function listenNewOrder(ctx) {
     };
 
     await create(notificationData);
-    console.log(`Saved notification for order ${order.id} in shop ${shopifyDomain}`);
+    console.log(
+      `>>>>>>>>>> Saved notification for order ${order.id} in shop ${shopifyDomain} <<<<<<<<<<`
+    );
 
     return (ctx.body = {
       success: true
     });
   } catch (e) {
-    console.error('Error handling new order webhook:', e);
+    console.error('>>>>>>>>>>>> Error handling new order webhook:', e);
     return (ctx.body = {
       success: false,
       error: e.message

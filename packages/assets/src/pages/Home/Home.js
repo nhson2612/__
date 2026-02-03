@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import {Button, Card, InlineStack, Text, Page, Layout, BlockStack} from '@shopify/polaris';
+import './Home.css';
 
 /**
  * Render a home page for overview

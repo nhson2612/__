@@ -1,5 +1,5 @@
 (function () {
-  const BASE_URL = 'https://searched-flood-hanging-stanford.trycloudflare.com/scripttag';
+  const BASE_URL = 'https://shopify.nhson2612.space/scripttag';
 
   const scriptElement = document.createElement('script');
   scriptElement.type = 'text/javascript';
@@ -8,3 +8,4 @@
   const firstScript = document.getElementsByTagName('script')[0];
   firstScript.parentNode.insertBefore(scriptElement, firstScript);
 })();
+
