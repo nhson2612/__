@@ -1,16 +1,8 @@
-import { Firestore } from '@google-cloud/firestore';
-import { presentDataAndFormatDate } from '@avada/firestore-utils';
+import {Firestore} from '@google-cloud/firestore';
 
 const firestore = new Firestore();
-/** @type CollectionReference */
 const shopInfosRef = firestore.collection('shopInfos');
 
-/**
- * Get shop info by given shop ID
- *
- * @param {string} id
- * @return {Promise<FirebaseFirestore.DocumentData>}
- */
 export async function getShopInfoByShopId(id) {
   const docs = await shopInfosRef
     .where('shopId', '==', id)
@@ -19,6 +11,5 @@ export async function getShopInfoByShopId(id) {
   if (docs.empty) {
     return null;
   }
-  const [doc] = docs.docs;
-  return presentDataAndFormatDate(doc);
+  return docs.docs.map(doc => ({id: doc.id, ...doc.data()}));
 }

@@ -10,7 +10,8 @@ import shopifyConfig from '@functions/config/shopify';
 import appConfig from '@functions/config/app';
 import shopifyOptionalScopes from '@functions/config/shopifyOptionalScopes';
 import {publishTopicAsync} from '@functions/helpers/pubsub/publishTopic';
-import {getShopByField, getShopByShopifyDomain} from '@functions/repositories/shopRepository';
+import {getShopByShopifyDomain} from '@functions/services/shopService';
+import afterInstallService from '@functions/services/afterInstallService';
 
 // Initialize all demand configuration for an application
 const api = new App();
@@ -56,6 +57,7 @@ api.use(
       try {
         const {shopifyDomain} = ctx.state.shopify.shop;
         const shop = await getShopByShopifyDomain(shopifyDomain);
+        await afterInstallService(ctx);
         publishTopicAsync('backgroundHandling', {
           type: 'afterInstall',
           shopId: shop.id,

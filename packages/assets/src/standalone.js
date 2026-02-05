@@ -3,7 +3,7 @@ import React from 'react';
 import {createRoot} from 'react-dom/client';
 import * as serviceWorker from './serviceWorker';
 import {api, auth} from './helpers';
-import {StoreProvider} from '@assets/reducers/storeReducer';
+import StoreProvider from '@assets/reducers/storeReducer';
 import {collectActiveShopData} from '@assets/services/shopService';
 import '@shopify/polaris/build/esm/styles.css';
 import './styles/app.scss';

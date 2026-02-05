@@ -18,7 +18,8 @@ export default function Notification({
   productName,
   timestamp,
   productImage,
-  settings
+  settings,
+  onClose
 }) {
   const hideTimeAgo = settings?.display?.hideTimeAgo;
   const truncateContent = settings?.display?.truncateContent;
@@ -38,6 +39,7 @@ export default function Notification({
             productImage={productImage}
             displayCloseBtn={true}
             truncateContent={truncateContent}
+            onClose={() => onClose(id)}
           />
         </Box>
         <Box paddingBlockStart="200">
@@ -63,10 +65,12 @@ Notification.propTypes = {
       hideTimeAgo: PropTypes.bool,
       truncateContent: PropTypes.bool
     })
-  })
+  }),
+  onClose: PropTypes.func
 };
 
 Notification.defaultProps = {
   productImage: '',
-  settings: {}
+  settings: {},
+  onClose: () => {}
 };

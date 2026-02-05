@@ -1,5 +1,5 @@
-import * as notificationRepository from '../repositories/notificationRepository';
 import {getCurrentShop} from '../helpers/auth';
+import notificationService from '@functions/services/notificationService';
 
 /**
  * Get list of notifications
@@ -8,18 +8,16 @@ import {getCurrentShop} from '../helpers/auth';
 export async function getList(ctx) {
   try {
     const shopId = getCurrentShop(ctx);
-    console.log('getList called for shopId:', shopId);
     const {limit, sort, direction, nextCursor, prevCursor} = ctx.query;
+    const parsedLimit = limit ? parseInt(limit, 10) : 10;
 
-    const result = await notificationRepository.getList(shopId, {
-      limit: limit ? parseInt(limit) : 10,
+    ctx.body = await notificationService.getList(shopId, {
+      limit: parsedLimit,
       sort,
       direction,
       nextCursor,
       prevCursor
     });
-
-    ctx.body = result;
   } catch (e) {
     console.error('getNotifications Error:', e);
     ctx.status = 500;
@@ -28,17 +26,4 @@ export async function getList(ctx) {
       error: e.message
     };
   }
-}
-
-/**
- * Manual sync trigger (placeholder for now)
- * @param {Context} ctx
- */
-export async function sync(ctx) {
-  // This would typically trigger a background job to fetch old orders
-  // For now we just return success
-  ctx.body = {
-    success: true,
-    message: 'Sync started'
-  };
 }

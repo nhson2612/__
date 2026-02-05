@@ -1,7 +1,8 @@
+import React from 'react';
+// eslint-disable-next-line no-unused-vars
 import {render, h} from 'preact';
 import NotificationPopup from './components/NotificationPopup/NotificationPopup';
 import ApiManager from './managers/ApiManager';
-import {insertAfter, findTargetElement} from './helpers/dom';
 
 // Simple time ago formatter (since Moment.js is heavy)
 function timeAgo(dateParam) {
@@ -38,7 +39,7 @@ async function init() {
       const allowed = (triggers.specificPages || []).some(p => currentPath.includes(p.trim()));
       if (!allowed) return;
     }
-    
+
     if (triggers?.excludedPages && triggers.excludedPages.length > 0) {
       const excluded = (triggers.excludedPages || []).some(p => currentPath.includes(p.trim()));
       if (excluded) return;
@@ -60,10 +61,10 @@ async function init() {
     document.body.appendChild(container);
 
     let currentIndex = 0;
-    
+
     const showNextNotification = () => {
       const notification = notifications[currentIndex];
-      
+
       // Render
       render(
         <NotificationPopup
@@ -75,7 +76,7 @@ async function init() {
           timestamp={display?.hideTimeAgo ? '' : timeAgo(notification.timestamp)}
           truncateContent={display?.truncateContent}
           onClose={() => {
-            render(null, container); // Unmount
+            render(null, container);
           }}
         />,
         container
@@ -84,18 +85,18 @@ async function init() {
       // Schedule Hide
       setTimeout(() => {
         render(null, container); // Hide
-        
+
         // Schedule Next Show
         currentIndex = (currentIndex + 1) % notifications.length;
-        if (currentIndex < display?.maxPopups) { // Simple limit check
-             setTimeout(showNextNotification, (display?.gapTime || 2) * 1000);
+        if (currentIndex < display?.maxPopups) {
+          // Simple limit check
+          setTimeout(showNextNotification, (display?.gapTime || 2) * 1000);
         }
       }, (display?.displayDuration || 5) * 1000);
     };
 
     // Start loop after initial delay
     setTimeout(showNextNotification, (display?.firstPopDelay || 0) * 1000);
-
   } catch (error) {
     console.error('[Avada] Init failed:', error);
   }

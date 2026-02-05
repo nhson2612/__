@@ -1,30 +1,23 @@
 import crypto from 'crypto';
-import shopifyConfig from '@functions/config/shopify';
 
-const APP_SECRET = shopifyConfig.secret;
-const TEST_KEY = '8994018398f0f2199f3fe9805211f40f1938c0c5f47e134d668ee7504c8cf06a';
+const APP_SECRET = '7ee83a63ff342270e6187f7f32faac82fd0948160c200811472617fd4891da81';
 
-/**
- * Verify Shopify webhook HMAC signature
- * @param ctx
- * @param next
- * @returns {Promise<*>}
- */
 export default async function verifyWebhook(ctx, next) {
+  console.log('>>>>>>>>>>>>>>> VERIFYING WEBHOOK <<<<<<<<<<<<<<<<');
+  console.log('>>>>>>>>>>>>>>> CTX HEADERS: ', ctx.headers, ' <<<<<<<<<<<<<<<<');
   const rawBody = ctx.req.rawBody;
-  const secret = await getSecret(ctx);
   const hmac = getHmac(ctx);
 
-  const generatedHash = crypto
-    .createHmac('sha256', secret)
+  const hmac2 = crypto
+    .createHmac('sha256', APP_SECRET)
     .update(rawBody)
     .digest('base64');
 
-  if (hmac !== generatedHash) {
-    console.error('Cannot verify webhook because of wrong shared secret');
+  if (hmac !== hmac2) {
+    console.error('>>>>>>>>>>>>>>> Cannot verify webhook');
     ctx.body = {
       success: false,
-      message: 'Cannot verify webhook because of wrong shared secret'
+      message: 'Cannot verify webhook'
     };
     return;
   }
@@ -32,21 +25,6 @@ export default async function verifyWebhook(ctx, next) {
   return next();
 }
 
-/**
- * Get the secret key for verification
- * @param ctx
- * @returns {Promise<string>}
- */
-async function getSecret(ctx) {
-  const isTest = ctx.get('x-shopify-test') && ctx.get('user-agent') !== 'Shopify-Captain-Hook';
-  return isTest ? TEST_KEY : APP_SECRET;
-}
-
-/**
- * Get HMAC from request header
- * @param ctx
- * @returns {string}
- */
 function getHmac(ctx) {
   return ctx.get('X-Shopify-Hmac-Sha256');
 }

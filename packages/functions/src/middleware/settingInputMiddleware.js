@@ -1,20 +1,26 @@
 import * as yup from 'yup';
 
 const settingsSchema = yup.object().shape({
-  display: yup.object().shape({
-    position: yup.string().oneOf(['bottom-left', 'bottom-right', 'top-left', 'top-right']),
-    hideTimeAgo: yup.boolean(),
-    truncateContent: yup.boolean(),
-    displayDuration: yup.number().min(0),
-    firstPopDelay: yup.number().min(0),
-    gapTime: yup.number().min(0),
-    maxPopups: yup.number().min(0)
-  }).required(),
-  triggers: yup.object().shape({
-    pageRestriction: yup.string().oneOf(['all', 'specific']),
-    specificPages: yup.array().of(yup.string()),
-    excludedPages: yup.array().of(yup.string())
-  }).required()
+  display: yup
+    .object()
+    .shape({
+      position: yup.string().oneOf(['bottom-left', 'bottom-right', 'top-left', 'top-right']),
+      hideTimeAgo: yup.boolean(),
+      truncateContent: yup.boolean(),
+      displayDuration: yup.number().min(0),
+      firstPopDelay: yup.number().min(0),
+      gapTime: yup.number().min(0),
+      maxPopups: yup.number().min(0)
+    })
+    .required(),
+  triggers: yup
+    .object()
+    .shape({
+      pageRestriction: yup.string().oneOf(['all', 'specific']),
+      specificPages: yup.array().of(yup.string()),
+      excludedPages: yup.array().of(yup.string())
+    })
+    .required()
 });
 
 /**

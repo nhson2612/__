@@ -5,11 +5,6 @@ import './TriggersSettings.css';
 
 /**
  * TriggersSettings component for configuring page trigger restrictions.
- *
- * This component allows users to control on which pages popup notifications
- * should appear by setting page restrictions, including specific pages,
- * and excluding certain pages.
- *
  * @param {string} pageRestriction - Current page restriction setting ('all' or 'specific')
  * @param {function} onPageRestrictionChange - Callback for page restriction changes
  * @param {string} specificPages - Comma-separated list of specific pages to include

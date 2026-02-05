@@ -14,7 +14,8 @@ export default function NotificationList({
   settings = {},
   sortValue = 'DATE_MODIFIED_DESC',
   onSortChange,
-  pagination
+  pagination,
+  onDismiss
 }) {
   const [selectedItems, setSelectedItems] = useState([]);
 
@@ -31,7 +32,7 @@ export default function NotificationList({
   ];
 
   const renderItem = item => {
-    return <Notification {...item} settings={settings} />;
+    return <Notification {...item} settings={settings} onClose={() => onDismiss(item.id)} />;
   };
 
   console.log('NotificationList items:', items);
@@ -62,7 +63,8 @@ NotificationList.propTypes = {
   settings: PropTypes.object,
   sortValue: PropTypes.string,
   onSortChange: PropTypes.func,
-  pagination: PropTypes.object
+  pagination: PropTypes.object,
+  onDismiss: PropTypes.func
 };
 
 NotificationList.defaultProps = {
@@ -70,5 +72,6 @@ NotificationList.defaultProps = {
   settings: {},
   sortValue: 'DATE_MODIFIED_DESC',
   onSortChange: undefined,
-  pagination: undefined
+  pagination: undefined,
+  onDismiss: () => {}
 };

@@ -1,7 +1,7 @@
 import React from 'react';
 import {Modal, TitleBar} from '@shopify/app-bridge-react';
 import PropTypes from 'prop-types';
-import {useHistory} from 'react-router-dom';
+import {history} from '@assets/history';
 
 /**
  * @returns {JSX.Element}
@@ -15,8 +15,6 @@ const FullscreenModal = ({
   setOpenMaxModal,
   fullscreenBackUrl
 }) => {
-  const history = useHistory();
-
   if (!modalSrc) return null;
 
   return (

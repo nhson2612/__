@@ -27,7 +27,7 @@ export default function Notifications() {
   if (cursor.next) query += `&nextCursor=${cursor.next}`;
   if (cursor.prev) query += `&prevCursor=${cursor.prev}`;
 
-  const {data: notifications, pageInfo, loading, fetchApi: refresh} = useFetchApi({
+  const {data: notifications, pageInfo, loading, fetchApi: refresh, setData: setNotifications} = useFetchApi({
     url: `/notifications?${query}`,
     defaultData: [],
     initLoad: false // Disable auto-init, we control it via useEffect
@@ -67,6 +67,13 @@ export default function Notifications() {
     }
   }, [pageInfo]);
 
+  const handleDismiss = useCallback(
+    id => {
+      setNotifications(prev => prev.filter(item => item.id !== id));
+    },
+    [setNotifications]
+  );
+
   if (loading && !notifications.length) return <SettingsSkeleton />;
 
   return (
@@ -84,6 +91,7 @@ export default function Notifications() {
               onNext: handleNextPage,
               onPrevious: handlePrevPage
             }}
+            onDismiss={handleDismiss}
           />
         </Layout.Section>
       </Layout>

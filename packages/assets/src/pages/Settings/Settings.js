@@ -10,10 +10,6 @@ import SettingsSkeleton from '@assets/components/SettingsSkeleton/SettingsSkelet
 /**
  * Settings component for managing popup notification configuration.
  *
- * This component provides a comprehensive settings interface for configuring
- * popup notifications, including display settings and trigger restrictions.
- * It handles API communication for fetching and saving settings data.
- *
  * @return {JSX.Element} The Settings component with display and triggers tabs
  */
 export default function Settings() {
@@ -21,7 +17,6 @@ export default function Settings() {
   const {data: settingsData, loading, fetchApi} = useFetchApi({url: '/settings'});
   const {editing, handleEdit} = useEditApi({url: '/settings'});
 
-  // Display Settings State
   const [position, setPosition] = useState('bottom-left');
   const [hideTimeAgo, setHideTimeAgo] = useState(false);
   const [truncateContent, setTruncateContent] = useState(true);
@@ -30,7 +25,6 @@ export default function Settings() {
   const [gapTime, setGapTime] = useState(2);
   const [maxPopups, setMaxPopups] = useState(20);
 
-  // Triggers Settings State
   const [pageRestriction, setPageRestriction] = useState('all');
   const [specificPages, setSpecificPages] = useState('');
   const [excludedPages, setExcludedPages] = useState('');
@@ -58,24 +52,8 @@ export default function Settings() {
       }
     }
   }, [settingsData]);
-
-  /**
-   * Handles tab selection changes in the settings interface.
-   * 
-   * @param {number} selectedTabIndex - Index of the selected tab (0 for Display, 1 for Triggers)
-   */
-  const handleTabChange = useCallback(selectedTabIndex => setSelectedTab(selectedTabIndex), []);
-
-  /**
-   * Handles saving the current settings configuration.
-   * 
-   * Collects all display and trigger settings, formats them appropriately,
-   * sends them to the API, and refreshes the data to ensure synchronization.
-   * 
-   * @async
-   * @return {Promise<void>} Resolves when settings are successfully saved
-   */
-  const handleSave = useCallback(async () => {
+  const handleTabChange = selectedTabIndex => setSelectedTab(selectedTabIndex);
+  const handleSave = async () => {
     const settings = {
       display: {
         position,
@@ -93,23 +71,8 @@ export default function Settings() {
       }
     };
     await handleEdit(settings);
-    // Refresh data after save to ensure sync
     await fetchApi();
-  }, [
-    position,
-    hideTimeAgo,
-    truncateContent,
-    displayDuration,
-    firstPopDelay,
-    gapTime,
-    maxPopups,
-    pageRestriction,
-    specificPages,
-    excludedPages,
-    handleEdit,
-    fetchApi
-  ]);
-
+  };
   const tabs = [
     {
       id: 'display-tab',

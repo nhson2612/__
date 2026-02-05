@@ -26,7 +26,7 @@ Project Structure:
       - const/ (shared constants, default settings used across packages)
       - commands/ (CLI commands)
       - routes/
-        - api.js (centralized admin API endpoint definitions)
+        - makeRequest.js (centralized admin API endpoint definitions)
   - assets/
     - src/
       - components/ (reusable React components)
@@ -542,7 +542,7 @@ Additional Technical Guidelines:
     - Support keyboard navigation
 
 11. API and Backend Communication:
-- All admin API endpoints should be defined in functions/src/routes/api.js
+- All admin API endpoints should be defined in functions/src/routes/makeRequest.js
 - Frontend services should use these centralized endpoints for API calls
 - Use RESTful route naming conventions
 - Group related endpoints together

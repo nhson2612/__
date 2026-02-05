@@ -1,153 +1,91 @@
-import { Firestore } from '@google-cloud/firestore';
-import { presentDataAndFormatDate } from '../presenters/notificationPresenter';
+import {Firestore} from '@google-cloud/firestore';
 
-// Configure Firestore with emulator if environment variable is set
-const firestoreSettings = {
+const firestoreConfig = {
   projectId: 'todo-app-frontend-7ff2'
 };
+
 if (process.env.FIRESTORE_EMULATOR_HOST) {
-  firestoreSettings.host = process.env.FIRESTORE_EMULATOR_HOST;
-  firestoreSettings.ssl = false;
+  firestoreConfig.host = process.env.FIREBASE_EMULATOR_HOST;
+  firestoreConfig.ssl = false;
 }
 
-const firestore = new Firestore(firestoreSettings);
+const firestore = new Firestore(firestoreConfig);
 const collection = firestore.collection('notifications');
 
-/**
- * Get a list of notifications with pagination
- * @param {string} shopId
- * @param {Object} params
- * @param {number} params.limit
- * @param {string} params.sort
- * @param {string} params.direction
- * @param {string} params.nextCursor
- * @param {string} params.prevCursor
- * @returns {Promise<{data: any[], pageInfo: {hasNext: boolean, hasPrev: boolean, nextCursor: string, prevCursor: string}}>}
- */
 export async function getList(
-  shopId,
-  {limit = 10, sort = 'timestamp', direction = 'desc', nextCursor, prevCursor}
+  shopDomain,
+  {limit = 30, sort = 'timestamp', direction = 'desc', firstElement, lastElement} = {}
 ) {
-  const allowedSorts = new Set(['timestamp', 'createdAt']);
-  const safeSort = allowedSorts.has(sort) ? sort : 'timestamp';
-  let query = collection.where('shopId', '==', shopId);
+  const query = collection.where('shopId', '==', shopDomain);
+  query.sort(sort, direction);
 
-  query = query.orderBy(safeSort, direction);
-  query = query.orderBy('__name__', direction);
-  if (nextCursor) {
-    const cursorDoc = await collection.doc(nextCursor).get();
-    if (!cursorDoc.exists) {
-      return {
-        data: [],
-        pageInfo: {
-          hasNext: false,
-          hasPrev: false,
-          nextCursor: null,
-          prevCursor: null
-        }
-      };
+  if (firstElement) {
+    const e = await collection.doc(firstElement).get();
+    if (!e.exists) {
+      console.log('>>>>>>>>>>>> RETURN EMPTY LIST CUZ FIRST ELEMENT DOES NOT EXIST');
+      return {data: [], total: 0, pageInfo: {hasNext: false, hasPre: false}};
     }
-    query = query.startAfter(cursorDoc);
-  } else if (prevCursor) {
-    const cursorDoc = await collection.doc(prevCursor).get();
-    if (!cursorDoc.exists) {
-      return {
-        data: [],
-        pageInfo: {
-          hasNext: false,
-          hasPrev: false,
-          nextCursor: null,
-          prevCursor: null
-        }
-      };
+    query.startAfter(e);
+  } else if (lastElement) {
+    const e = await collection.doc(lastElement).get();
+    if (!e.exists) {
+      console.log('>>>>>>>>>>>> RETURN EMPTY LIST CUZ LAST ELEMENT DOES NOT EXIST');
     }
-    query = query.endBefore(cursorDoc).limitToLast(limit);
+    query.endBefore(e).limitToLast(limit);
   }
 
-  if (!prevCursor) {
-    query = query.limit(limit);
+  if (!firstElement) {
+    query.limit(limit);
   }
 
-  const snapshot = await query.get();
-  const data = snapshot.docs.map(doc => ({id: doc.id, ...doc.data()}));
-
-  // Pagination meta
+  const docs = query.get();
+  const data = docs.docs.map(doc => ({id: doc.id, ...doc.data()}));
+  console.log('>>>>>>>>>>>>> NOTIFICATIONS DATA : ', data);
   let hasNext = false;
   let hasPrev = false;
-  let newNextCursor = null;
-  let newPrevCursor = null;
+  let newFirstElement = null;
+  let newLastElement = null;
 
   if (data.length > 0) {
-    const firstDoc = snapshot.docs[0];
-    const lastDoc = snapshot.docs[snapshot.docs.length - 1];
+    const first = docs.docs[0];
+    const last = docs.docs[docs.docs.length - 1];
 
-    newPrevCursor = firstDoc.id;
-    newNextCursor = lastDoc.id;
+    newFirstElement = first.id;
+    newLastElement = last.id;
 
-    const nextCheck = collection
-      .where('shopId', '==', shopId)
-      .orderBy(safeSort, direction)
-      .orderBy('__name__', direction)
-      .startAfter(lastDoc)
-      .limit(1);
-    const nextSnap = await nextCheck.get();
-    hasNext = !nextSnap.empty;
-
-    const prevCheck = collection
-      .where('shopId', '==', shopId)
-      .orderBy(safeSort, direction)
-      .orderBy('__name__', direction)
-      .endBefore(firstDoc)
-      .limitToLast(1);
-    const prevSnap = await prevCheck.get();
-    hasPrev = !prevSnap.empty;
+    const nextCheck = await collection
+      .where('shopId', '==', shopDomain)
+      .orderBy(sort, direction)
+      .startAfter(last)
+      .limit(1)
+      .get();
+    const prevCheck = await collection
+      .where('shopId', '==', shopDomain)
+      .orderBy(sort, direction)
+      .endBefore(first)
+      .limit(1)
+      .get();
+    hasPrev = hasPrev && prevCheck.empty;
+    hasNext = !nextCheck.empty;
   }
 
   return {
-    data: data.map(presentDataAndFormatDate),
-    pageInfo: {
-      hasNext,
-      hasPrev,
-      nextCursor: newNextCursor,
-      prevCursor: newPrevCursor
-    }
+    data,
+    total: docs.size,
+    pageInfo: {hasNext, hasPre: hasPrev, newFirstElement, newLastElement}
   };
 }
 
-/**
- * Create a new notification
- * @param {Object} data
- * @returns {Promise<string>}
- */
-export async function create(data) {
-  const docRef = await collection.add(data);
-  return docRef.id;
+export async function create(notification) {
+  const doc = await collection.add(notification);
+  return doc.id;
 }
 
-/**
- * Create a new notification with a specific ID
- * @param {string} id
- * @param {Object} data
- * @returns {Promise<void>}
- */
-export async function createWithId(id, data) {
-  await collection.doc(id).set(data);
-}
-
-/**
- * Get latest notifications by shopId without pagination
- * @param {string} shopId
- * @param {number} limit
- * @returns {Promise<any[]>}
- */
-export async function getLatestByShopId(shopId, limit = 10) {
-  console.log(">>>>>>>>>>>>>>> GETTING LATEST NOTIFICATIONS FOR SHOP: ", shopId, " WITH LIMIT: ", limit, " >>>>>>>>>>>>>>>>>>");
-  const snapshot = await collection
+export async function getLatestByShopId(shopId, limit = 30) {
+  const docs = await collection
     .where('shopId', '==', shopId)
     .orderBy('timestamp', 'desc')
-    .limit(limit)
+    .limit(1)
     .get();
-
-  const data = snapshot.docs.map(doc => ({id: doc.id, ...doc.data()}));
-  return data.map(presentDataAndFormatDate);
+  return docs.docs.map(doc => ({id: doc.id, ...doc.data()}));
 }

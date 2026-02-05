@@ -3,14 +3,13 @@ import PropTypes from 'prop-types';
 import {getUrl} from '@assets/helpers/getUrl';
 import isEmbeddedAppEnv from '@assets/helpers/isEmbeddedAppEnv';
 import FullscreenModal from '@assets/components/Molecules/FullscreenModal';
-import {useHistory} from 'react-router-dom';
+import {history} from '@assets/history';
 
 /** @type {{isFullscreen: boolean, openFullscreen, setOpenMaxModal, setActions, setFullscreenBackUrl}} */
 const props = {};
 export const MaxModalContext = createContext(props);
 
 export const MaxModalProvider = ({children}) => {
-  const history = useHistory();
   const [modalSrc, setModalSrc] = useState('');
   const [openMaxModal, setOpenMaxModal] = useState(false);
   const [actions, setActions] = useState([]);

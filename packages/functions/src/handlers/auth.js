@@ -8,6 +8,9 @@ import createErrorHandler from '@functions/middleware/errorHandler';
 import firebase from 'firebase-admin';
 import appConfig from '@functions/config/app';
 import shopifyOptionalScopes from '@functions/config/shopifyOptionalScopes';
+import {getShopByShopifyDomain} from '@functions/services/shopService';
+import afterInstallService from '@functions/services/afterInstallService';
+import {publishTopicAsync} from '@functions/helpers/pubsub/publishTopic';
 
 if (firebase.apps.length === 0) {
   firebase.initializeApp();
@@ -42,6 +45,20 @@ app.use(
       price: 0,
       trialDays: 0,
       features: {}
+    },
+    afterInstall: async ctx => {
+      try {
+        const {shopifyDomain} = ctx.state.shopify.shop;
+        const shop = await getShopByShopifyDomain(shopifyDomain);
+        await afterInstallService(ctx);
+        publishTopicAsync('backgroundHandling', {
+          type: 'afterInstall',
+          shopId: shop.id,
+          shopifyDomain
+        });
+      } catch (e) {
+        console.error('afterInstall error:', e);
+      }
     },
     hostName: appConfig.baseUrl,
     isEmbeddedApp: true,

@@ -1,22 +1,7 @@
-import {getShopByShopifyDomain} from '../../repositories/shopRepository';
+import {getShopByShopifyDomain} from '@functions/services/shopService';
 import {getSettings} from '../../repositories/settingRepository';
-import {getLatestByShopId, getList} from '../../repositories/notificationRepository';
+import {getLatestByShopId} from '../../repositories/notificationRepository';
 
-/**
- * Health check endpoint
- * @param ctx
- */
-export async function health(ctx) {
-  ctx.body = {
-    success: true,
-    message: "I'm fine"
-  };
-}
-
-/**
- * Get notifications and settings for storefront
- * @param ctx
- */
 export async function getNotifications(ctx) {
   try {
     const {shopifyDomain} = ctx.query;

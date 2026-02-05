@@ -1,0 +1,33 @@
+query LatestOrders($first: Int! = 10) {
+  orders(first: $first, sortKey: CREATED_AT, reverse: true) {
+    edges {
+      node {
+        id
+        name
+        createdAt
+        billingAddress {
+          firstName
+          city
+          country
+        }
+        lineItems(first: 1) {
+          nodes {
+            name
+            product {
+              featuredImage {
+                url
+              }
+            }
+          }
+        }
+        displayFinancialStatus
+        totalPriceSet {
+          shopMoney {
+            amount
+            currencyCode
+          }
+        }
+      }
+    }
+  }
+}

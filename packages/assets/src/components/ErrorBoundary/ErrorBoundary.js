@@ -2,14 +2,12 @@
 import React, {Component} from 'react';
 import NotFound from '@assets/pages/NotFound/NotFound';
 import * as PropTypes from 'prop-types';
-import {withRouter} from 'react-router-dom';
+import {history} from '@assets/history';
 
 class ErrorBoundary extends Component {
   constructor(props) {
     super(props);
     this.state = {eventId: null};
-    const {history} = this.props;
-
     history.listen(() => {
       if (this.state.hasError) {
         this.setState({hasError: false});
@@ -35,8 +33,7 @@ class ErrorBoundary extends Component {
 }
 
 ErrorBoundary.propTypes = {
-  children: PropTypes.node.isRequired,
-  history: PropTypes.object.isRequired
+  children: PropTypes.node.isRequired
 };
 
-export default withRouter(ErrorBoundary);
+export default ErrorBoundary;

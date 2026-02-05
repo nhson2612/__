@@ -1,5 +1,5 @@
 import {getCurrentShop} from '@functions/helpers/auth';
-import {getShopById} from '@functions/repositories/shopRepository';
+import {getShopById} from '@functions/services/shopService';
 import {
   addSubscription,
   deleteSubscription,

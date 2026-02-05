@@ -11,8 +11,8 @@ packages/functions/serviceAccount.development.json
 packages/functions/todo-app-frontend-7ff2-firebase-adminsdk-fbsvc-f976c74b08.json
 static/
 
-firebase-debug.log
-firebase-debug.log.*
+# firebase-debug.log
+# firebase-debug.log.*
 ngrok.log
 pubsub-debug.log
 *.log
@@ -21,5 +21,5 @@ pubsub-debug.log
 .DS_Store
 
 STRUCTURE.md
-docs/
+#docs/
 

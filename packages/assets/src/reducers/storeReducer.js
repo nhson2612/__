@@ -9,13 +9,13 @@ const StoreReducer = createContext({});
 export const useStore = () => useContext(StoreReducer);
 
 /**
- * @param children
- * @param user
- * @param {Shop} shop
+ * @param {object} props
+ * @param props.children
+ * @param props.user
+ * @param {Shop} props.activeShop
  * @return {JSX.Element}
- * @constructor
  */
-export const StoreProvider = ({children, user, activeShop: shop}) => {
+function StoreProvider({children, user, activeShop: shop}) {
   const initState = {user, shop};
   const [state, dispatch] = useReducer(reducer, initState);
   const handleDispatch = (type, payload = undefined) => dispatch({type, payload});
@@ -33,7 +33,9 @@ export const StoreProvider = ({children, user, activeShop: shop}) => {
       {children}
     </StoreReducer.Provider>
   );
-};
+}
+export {StoreProvider};
+export default StoreProvider;
 
 StoreProvider.propTypes = {
   children: PropTypes.node,

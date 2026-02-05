@@ -1,0 +1,32 @@
+query OrderLineItemsImagesWithVariant($orderId: ID!, $firstLineItems: Int! = 10) {
+  order(id: $orderId) {
+    id
+    name
+    lineItems(first: $firstLineItems) {
+      edges {
+        node {
+          id
+          name
+          image {
+            url
+            altText
+          }
+          variant {
+            id
+            image {
+              url
+              altText
+            }
+          }
+          product {
+            id
+            featuredImage {
+              url
+              altText
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -4,14 +4,14 @@ import * as path from 'path';
 import fs from 'fs';
 import os from 'os';
 import EnvironmentPlugin from 'vite-plugin-environment';
-import { nodePolyfills } from 'vite-plugin-node-polyfills';
+import {nodePolyfills} from 'vite-plugin-node-polyfills';
 
 const APP_PORT = 1;
 
 const localhost = '127.0.0.1';
 const isProduction = process.env.NODE_ENV === 'production';
 const environmentPath = !process.env.ENVIRONMENT ? '.env' : `.env.${process.env.ENVIRONMENT}`;
-require('dotenv').config({ path: path.resolve(__dirname, environmentPath) }); // read file .env.development
+require('dotenv').config({path: path.resolve(__dirname, environmentPath)}); // read file .env.development
 const host = process.env.HOST ? process.env.HOST.replace(/https?:\/\//, '') : localhost;
 const isEmbed = process.env.IS_EMBEDDED_APP === 'yes';
 const templateOutFile = isEmbed ? 'embed-template.html' : 'standalone.html';

@@ -430,7 +430,7 @@ UI improvements, edge cases, optimizations.
 #### 1.4 Routes
 | Action | File | Description |
 |--------|------|-------------|
-| Add route | `packages/functions/src/routes/api.js` | [endpoint] |
+| Add route | `packages/functions/src/routes/makeRequest.js` | [endpoint] |
 
 ### Phase 2: Minimal UI
 

@@ -5,7 +5,7 @@
  * Uses XMLHttpRequest for maximum browser compatibility.
  */
 
-import {makeRequest} from '../helpers/api';
+import {makeRequest} from '../helpers/api/makeRequest';
 
 export default class ApiManager {
   constructor() {

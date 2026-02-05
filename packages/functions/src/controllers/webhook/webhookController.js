@@ -1,4 +1,10 @@
 import {create} from '../../repositories/notificationRepository';
+import {initShopify} from '@functions/services/shopifyService';
+import {getShopByShopifyDomain} from '@functions/services/shopService';
+import {
+  buildNotificationFromWebhookOrder,
+  getOrderLineItemImage
+} from '@functions/helpers/notification/notificationMapper';
 
 /**
  * Handle app/uninstalled webhook
@@ -34,24 +40,40 @@ export async function listenNewOrder(ctx) {
   try {
     const shopifyDomain = ctx.get('X-Shopify-Shop-Domain');
     const order = ctx.request.body;
-
+    console.log(
+      '>>>>>>>>>>>>>>> ORDER FROM WEBHOOK: ',
+      JSON.stringify(order, null, 2),
+      ' <<<<<<<<<<<<<<<<'
+    );
     if (!order || !order.id) {
       return (ctx.body = {success: true});
     }
 
-    const firstItem = order.line_items && order.line_items.length > 0 ? order.line_items[0] : null;
-    const billingAddress = order.billing_address || {};
+    const shop = await getShopByShopifyDomain(shopifyDomain);
+    if (!shop) {
+      console.error('Shop not found for domain:', shopifyDomain);
+      return (ctx.body = {success: true});
+    }
 
-    const notificationData = {
-      shopId: shopifyDomain,
-      orderId: String(order.id),
-      firstName: billingAddress.first_name || 'Someone',
-      city: billingAddress.city || '',
-      country: billingAddress.country || '',
-      productName: firstItem ? firstItem.name : 'Product',
-      productImage: '', // Webhook payload usually doesn't include image URL directly on line item
-      timestamp: new Date(order.created_at || Date.now())
-    };
+    const firstItem = order.line_items && order.line_items.length > 0 ? order.line_items[0] : null;
+    let productImageUrl = '';
+    let productName = firstItem ? firstItem.name : '';
+    try {
+      const shopify = await initShopify(shop);
+      const orderId = `gid://shopify/Order/${order.id}`;
+      const imageResult = await getOrderLineItemImage(shopify, orderId, 10);
+      productImageUrl = imageResult.productImageUrl;
+      productName = imageResult.productName || productName;
+    } catch (error) {
+      console.error('Failed to load order line item images:', error);
+    }
+
+    const notificationData = buildNotificationFromWebhookOrder({
+      shopifyDomain,
+      order,
+      productName,
+      productImageUrl
+    });
 
     await create(notificationData);
     console.log(

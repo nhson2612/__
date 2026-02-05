@@ -1,4 +1,7 @@
+import React from 'react';
+// eslint-disable-next-line no-unused-vars
 import {h} from 'preact';
+import PropTypes from 'prop-types';
 import './NotificationPopup.scss';
 
 const NotificationPopup = ({
@@ -12,9 +15,7 @@ const NotificationPopup = ({
   truncateContent = false
 }) => {
   const displayProductName =
-    truncateContent && productName.length > 16
-      ? `${productName.substring(0, 16)}...`
-      : productName;
+    truncateContent && productName.length > 16 ? `${productName.substring(0, 16)}...` : productName;
 
   return (
     <div className="Avava-SP__Wrapper fadeInUp animated">
@@ -63,6 +64,17 @@ const NotificationPopup = ({
       </div>
     </div>
   );
+};
+
+NotificationPopup.propTypes = {
+  firstName: PropTypes.string,
+  city: PropTypes.string,
+  country: PropTypes.string,
+  productName: PropTypes.string,
+  timestamp: PropTypes.string,
+  productImage: PropTypes.string,
+  onClose: PropTypes.func,
+  truncateContent: PropTypes.bool
 };
 
 export default NotificationPopup;

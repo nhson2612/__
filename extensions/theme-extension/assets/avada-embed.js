@@ -1,4 +1,4 @@
-(function () {
+(function() {
   const BASE_URL = 'https://shopify.nhson2612.space/scripttag';
 
   const scriptElement = document.createElement('script');
@@ -8,4 +8,3 @@
   const firstScript = document.getElementsByTagName('script')[0];
   firstScript.parentNode.insertBefore(scriptElement, firstScript);
 })();
-
