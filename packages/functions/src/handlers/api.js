@@ -5,12 +5,12 @@ import * as errorService from '@functions/services/errorService';
 import apiRouter from '@functions/routes/api';
 import render from 'koa-ejs';
 import path from 'path';
-import {verifyEmbedRequest} from '@avada/core';
+import { verifyEmbedRequest } from '@avada/core';
 import shopifyConfig from '@functions/config/shopify';
 import appConfig from '@functions/config/app';
 import shopifyOptionalScopes from '@functions/config/shopifyOptionalScopes';
-import {publishTopicAsync} from '@functions/helpers/pubsub/publishTopic';
-import {getShopByShopifyDomain} from '@functions/services/shopService';
+import { publishTopicAsync } from '@functions/helpers/pubsub/publishTopic';
+import { getShopByShopifyDomain } from '@functions/services/shopService';
 import afterInstallService from '@functions/services/afterInstallService';
 
 // Initialize all demand configuration for an application
@@ -51,11 +51,12 @@ api.use(
     afterLogin: async ctx => {
       try {
         // const shopifyDomain = ctx.state.shopify.shop;
-      } catch (e) {}
+      } catch (e) { }
     },
     afterInstall: async ctx => {
       try {
-        const {shopifyDomain} = ctx.state.shopify.shop;
+        const shopifyDomain = ctx.state.shopify.shop;
+        console.log('>>>>>>>>>>>>> [API] shopifyDomain:', shopifyDomain);
         const shop = await getShopByShopifyDomain(shopifyDomain);
         await afterInstallService(ctx);
         publishTopicAsync('backgroundHandling', {

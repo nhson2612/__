@@ -16,8 +16,8 @@ export async function getList(
   shopDomain,
   {limit = 30, sort = 'timestamp', direction = 'desc', firstElement, lastElement} = {}
 ) {
-  const query = collection.where('shopId', '==', shopDomain);
-  query.sort(sort, direction);
+  let query = collection.where('shopId', '==', shopDomain);
+  query = query.orderBy(sort, direction);
 
   if (firstElement) {
     const e = await collection.doc(firstElement).get();
@@ -31,15 +31,15 @@ export async function getList(
     if (!e.exists) {
       console.log('>>>>>>>>>>>> RETURN EMPTY LIST CUZ LAST ELEMENT DOES NOT EXIST');
     }
-    query.endBefore(e).limitToLast(limit);
+    query = query.endBefore(e).limitToLast(limit);
   }
 
-  if (!firstElement) {
-    query.limit(limit);
+  if (!lastElement) {
+    query = query.limit(limit);
   }
 
-  const docs = query.get();
-  const data = docs.docs.map(doc => ({id: doc.id, ...doc.data()}));
+  const snapshot = await query.get();
+  const data = snapshot.docs.map(doc => ({id: doc.id, ...doc.data()}));
   console.log('>>>>>>>>>>>>> NOTIFICATIONS DATA : ', data);
   let hasNext = false;
   let hasPrev = false;
@@ -47,8 +47,8 @@ export async function getList(
   let newLastElement = null;
 
   if (data.length > 0) {
-    const first = docs.docs[0];
-    const last = docs.docs[docs.docs.length - 1];
+    const first = snapshot.docs[0];
+    const last = snapshot.docs[snapshot.docs.length - 1];
 
     newFirstElement = first.id;
     newLastElement = last.id;
@@ -65,13 +65,13 @@ export async function getList(
       .endBefore(first)
       .limit(1)
       .get();
-    hasPrev = hasPrev && prevCheck.empty;
+    hasPrev = !prevCheck.empty;
     hasNext = !nextCheck.empty;
   }
 
   return {
     data,
-    total: docs.size,
+    total: snapshot.size,
     pageInfo: {hasNext, hasPre: hasPrev, newFirstElement, newLastElement}
   };
 }
@@ -88,4 +88,12 @@ export async function getLatestByShopId(shopId, limit = 30) {
     .limit(1)
     .get();
   return docs.docs.map(doc => ({id: doc.id, ...doc.data()}));
+}
+
+export async function deleteOne(notificationId, shopDomain) {
+  const notification = collection
+    .where('id', '==', notificationId)
+    .where('shopId', '==', shopDomain)
+    .get();
+  collection.delete(notification);
 }

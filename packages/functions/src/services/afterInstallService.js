@@ -1,9 +1,9 @@
 import * as orderService from '@functions/services/orderService';
-import {getShopByShopifyDomain} from '@functions/services/shopService';
-import {initializeShopSettings} from '@functions/services/settingService';
-import {initShopify} from '@functions/services/shopifyService';
+import { getShopByShopifyDomain } from '@functions/services/shopService';
+import { initializeShopSettings } from '@functions/services/settingService';
+import { initShopify } from '@functions/services/shopifyService';
 import isWebhookExists from '@functions/helpers/webhook/webhookChecker';
-import {create as createNotification} from '@functions/repositories/notificationRepository';
+import { create as createNotification } from '@functions/repositories/notificationRepository';
 
 const necessaryWebhooks = ['orders/create'];
 
@@ -13,7 +13,7 @@ export default async function afterInstallService(ctx) {
     '>>>>>>>>>>>>> [AFTER INSTALL] ctx.state.shopify.shop.shopifyDomain:',
     ctx?.state?.shopify?.shop?.shopifyDomain
   );
-  const shopDomain = ctx?.query?.shop;
+  const shopDomain = ctx?.state?.shopify?.shop || ctx?.query?.shop;
   const shop = await getShopByShopifyDomain(shopDomain);
 
   try {
@@ -28,6 +28,7 @@ export default async function afterInstallService(ctx) {
     const orderResponse = await orderService.getLatestOrders(shop, maxPopups);
     const orderEdges = orderResponse?.orders?.edges || [];
 
+    // Skip webhook check in development - webhooks registered by @avada/core
     for (const webhook of necessaryWebhooks) {
       const exists = await isWebhookExists(shopify, webhook);
       if (!exists) {

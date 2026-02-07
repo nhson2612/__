@@ -1,8 +1,8 @@
-import React, {useState, useCallback} from 'react';
+import React, {useState, useCallback, useEffect} from 'react';
 import {Page, Layout} from '@shopify/polaris';
 import NotificationList from '../../components/Notifications/NotificationList/NotificationList';
 import useFetchApi from '@assets/hooks/api/useFetchApi';
-import SettingsSkeleton from '@assets/components/SettingsSkeleton/SettingsSkeleton';
+import NotificationsSkeleton from '@assets/components/NotificationsSkeleton/NotificationsSkeleton';
 
 /**
  * @return {React.JSX.Element}
@@ -27,32 +27,27 @@ export default function Notifications() {
   if (cursor.next) query += `&nextCursor=${cursor.next}`;
   if (cursor.prev) query += `&prevCursor=${cursor.prev}`;
 
-  const {data: notifications, pageInfo, loading, fetchApi: refresh, setData: setNotifications} = useFetchApi({
+  const {
+    data: notifications,
+    pageInfo,
+    loading,
+    fetchApi: refresh,
+    setData: setNotifications
+  } = useFetchApi({
     url: `/notifications?${query}`,
     defaultData: [],
-    initLoad: false // Disable auto-init, we control it via useEffect
+    initLoad: false
   });
 
   const {data: settings} = useFetchApi({url: '/settings'});
 
-  const {fetchApi: sync, loading: syncing} = useFetchApi({
-    url: '/notifications/sync',
-    manual: true
-  });
-
-  // Fetch data when query parameters change
-  React.useEffect(() => {
+  useEffect(() => {
     refresh(`/notifications?${query}`);
-  }, [cursor, sortValue]); // Dependency on state that drives the query
-
-  const handleSync = async () => {
-    await sync();
-    await refresh();
-  };
+  }, [cursor, sortValue]);
 
   const handleSortChange = useCallback(newSortValue => {
     setSortValue(newSortValue);
-    setCursor({next: null, prev: null}); // Reset pagination on sort change
+    setCursor({next: null, prev: null});
   }, []);
 
   const handleNextPage = useCallback(() => {
@@ -74,7 +69,7 @@ export default function Notifications() {
     [setNotifications]
   );
 
-  if (loading && !notifications.length) return <SettingsSkeleton />;
+  if (loading && !notifications.length) return <NotificationsSkeleton />;
 
   return (
     <Page title="Notifications" subtitle="List of sales notification from Shopify">

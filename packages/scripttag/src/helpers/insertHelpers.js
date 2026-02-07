@@ -7,5 +7,5 @@ export const insertBefore = (el, referenceNode) => {
 };
 
 export const insertInside = (el, referenceNode) => {
-  referenceNode.parentNode.appendChild(el);
+  referenceNode.appendChild(el);
 };

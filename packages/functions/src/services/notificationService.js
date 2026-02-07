@@ -21,6 +21,13 @@ const getList = async (shopId, params = {}) => {
   });
 };
 
+const deleteOne = async (id, shopId) => {
+  const shopDomain = (await shopService.getShopById(shopId)).shopifyDomain;
+  await notificationRepository.deleteOne(id, shopDomain);
+  return true;
+};
+
 export default {
-  getList
+  getList,
+  deleteOne
 };

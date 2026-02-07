@@ -27,3 +27,16 @@ export async function getList(ctx) {
     };
   }
 }
+
+export async function deleteNotification(ctx) {
+  try {
+    const {id} = ctx.params;
+    const shopId = getCurrentShop(ctx);
+    const success = await notificationService.deleteOne(id, shopId);
+    ctx.body = {success};
+  } catch (e) {
+    console.error('Fail to delete notification:', e);
+    ctx.status = 500;
+    ctx.body = {success: false, error: e.message};
+  }
+}

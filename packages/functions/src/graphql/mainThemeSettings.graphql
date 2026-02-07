@@ -1,0 +1,23 @@
+query GetMainThemeSettingsFile {
+  themes(first: 1, roles: [MAIN]) {
+    edges {
+      node {
+        id
+        name
+        files(filenames: ["config/settings_data.json"], first: 1) {
+          edges {
+            node {
+              filename
+              body {
+                __typename
+                ... on OnlineStoreThemeFileBodyText {
+                  content
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

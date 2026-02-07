@@ -1,7 +1,4 @@
-import React from 'react';
-// eslint-disable-next-line no-unused-vars
 import {h} from 'preact';
-import PropTypes from 'prop-types';
 import './NotificationPopup.scss';
 
 const NotificationPopup = ({
@@ -18,10 +15,10 @@ const NotificationPopup = ({
     truncateContent && productName.length > 16 ? `${productName.substring(0, 16)}...` : productName;
 
   return (
-    <div className="Avava-SP__Wrapper fadeInUp animated">
-      <div className="Avava-SP__Inner">
-        <div className="Avava-SP__Container">
-          <div className="Avada-SP__CloseButton">
+    <div class="Avava-SP__Wrapper fadeInUp animated">
+      <div class="Avava-SP__Inner">
+        <div class="Avava-SP__Container">
+          <div class="Avada-SP__CloseButton">
             <button
               onClick={e => {
                 e.preventDefault();
@@ -40,21 +37,21 @@ const NotificationPopup = ({
               </svg>
             </button>
           </div>
-          <a href="#" className={'Avava-SP__LinkWrapper'}>
+          <a href="#" class="Avava-SP__LinkWrapper">
             <div
-              className="Avava-SP__Image"
+              class="Avava-SP__Image"
               style={{
                 backgroundImage: `url(${productImage || 'https://via.placeholder.com/150'})`
               }}
             ></div>
-            <div className="Avada-SP__Content">
-              <div className={'Avada-SP__Title'}>
+            <div class="Avada-SP__Content">
+              <div class="Avada-SP__Title">
                 {firstName} in {city}, {country}
               </div>
-              <div className={'Avada-SP__Subtitle'}>purchased {displayProductName}</div>
-              <div className={'Avada-SP__Footer'}>
+              <div class="Avada-SP__Subtitle">purchased {displayProductName}</div>
+              <div class="Avada-SP__Footer">
                 {timestamp}{' '}
-                <span className="uni-blue">
+                <span class="uni-blue">
                   <span style={{marginRight: '4px'}}>✓</span> by Avada
                 </span>
               </div>
@@ -64,17 +61,6 @@ const NotificationPopup = ({
       </div>
     </div>
   );
-};
-
-NotificationPopup.propTypes = {
-  firstName: PropTypes.string,
-  city: PropTypes.string,
-  country: PropTypes.string,
-  productName: PropTypes.string,
-  timestamp: PropTypes.string,
-  productImage: PropTypes.string,
-  onClose: PropTypes.func,
-  truncateContent: PropTypes.bool
 };
 
 export default NotificationPopup;
