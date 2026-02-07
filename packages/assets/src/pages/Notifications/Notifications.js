@@ -3,6 +3,7 @@ import {Page, Layout} from '@shopify/polaris';
 import NotificationList from '../../components/Notifications/NotificationList/NotificationList';
 import useFetchApi from '@assets/hooks/api/useFetchApi';
 import NotificationsSkeleton from '@assets/components/NotificationsSkeleton/NotificationsSkeleton';
+import styles from './style.module.css';
 
 /**
  * @return {React.JSX.Element}
@@ -72,24 +73,26 @@ export default function Notifications() {
   if (loading && !notifications.length) return <NotificationsSkeleton />;
 
   return (
-    <Page title="Notifications" subtitle="List of sales notification from Shopify">
-      <Layout>
-        <Layout.Section>
-          <NotificationList
-            items={notifications}
-            settings={settings}
-            sortValue={sortValue}
-            onSortChange={handleSortChange}
-            pagination={{
-              hasNext: pageInfo.hasNext,
-              hasPrev: pageInfo.hasPrev,
-              onNext: handleNextPage,
-              onPrevious: handlePrevPage
-            }}
-            onDismiss={handleDismiss}
-          />
-        </Layout.Section>
-      </Layout>
-    </Page>
+    <div className={styles.notifications}>
+      <Page title="Notifications" subtitle="List of sales notification from Shopify">
+        <Layout>
+          <Layout.Section>
+            <NotificationList
+              items={notifications}
+              settings={settings}
+              sortValue={sortValue}
+              onSortChange={handleSortChange}
+              pagination={{
+                hasNext: pageInfo.hasNext,
+                hasPrevious: pageInfo.hasPrev,
+                onNext: handleNextPage,
+                onPrevious: handlePrevPage
+              }}
+              onDismiss={handleDismiss}
+            />
+          </Layout.Section>
+        </Layout>
+      </Page>
+    </div>
   );
 }

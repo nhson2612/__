@@ -1,0 +1,34 @@
+.notificationList :global(.Polaris-ResourceList__ResourceListWrapper) {
+  position: relative;
+}
+
+.notificationList :global(.Polaris-ResourceList__PaginationWrapper) {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 3px;
+  border: 0.1rem solid #adadad;
+  overflow: hidden;
+  background: #ffffff;
+}
+
+.notificationList :global(.Polaris-Pagination__TablePaginationActions button) {
+    background-color: #ffffff !important;
+}
+
+.notificationList :global(.Polaris-Pagination__TablePaginationActions > *) {
+    padding: 4px 8px;
+}
+
+.notificationList :global(.Polaris-Pagination__TablePaginationActions > *:hover) {
+    cursor: pointer;
+}
+
+.notificationList :global(.Polaris-Pagination__TablePaginationActions > * + *) {
+    border-left: 1px solid #adadad;
+}
+
+.notificationList :global(nav.Polaris-Pagination > .Polaris-Box ) {
+    padding: 0;
+}

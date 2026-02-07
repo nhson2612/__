@@ -4,6 +4,7 @@ import {Card, ResourceList} from '@shopify/polaris';
 import Notification from '../Notification/Notification';
 import ConfirmationDialog from '@assets/components/ConfirmationDialog/ConfirmationDialog';
 import useDeleteApi from '@assets/hooks/api/useDeleteApi';
+import styles from './style.module.css';
 
 /**
  * @param {Object} props
@@ -27,7 +28,7 @@ export default function NotificationList({
     plural: 'notifications'
   };
 
-  const bulkActions = [
+  const promotedBulkActions = [
     {
       content: 'Delete All',
       onAction: () => {
@@ -52,7 +53,7 @@ export default function NotificationList({
   console.log('NotificationList items:', items);
 
   return (
-    <Fragment>
+    <div className={styles.notificationList}>
       <Card padding="0">
         <ResourceList
           resourceName={resourceName}
@@ -60,7 +61,7 @@ export default function NotificationList({
           renderItem={renderItem}
           selectedItems={selectedItems}
           onSelectionChange={setSelectedItems}
-          bulkActions={bulkActions}
+          promotedBulkActions={promotedBulkActions}
           sortValue={sortValue}
           sortOptions={[
             {label: 'Newest Update', value: 'DATE_MODIFIED_DESC'},
@@ -79,7 +80,7 @@ export default function NotificationList({
         onConfirm={handleDelete}
         onCancel={() => setDialogOpen(false)}
       />
-    </Fragment>
+    </div>
   );
 }
 

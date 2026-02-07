@@ -1,5 +1,5 @@
-import {insertAfter} from '../helpers/insertHelpers';
-import {render} from 'preact';
+import { insertAfter } from '../helpers/insertHelpers';
+import { render } from 'preact';
 import NotificationPopup from '../components/NotificationPopup/NotificationPopup';
 import React from 'react';
 
@@ -26,7 +26,7 @@ export default class DisplayManager {
     this.notifications = [];
     this.settings = {};
   }
-  async initialize({notifications, settings}) {
+  async initialize({ notifications, settings }) {
     this.notifications = notifications;
     this.settings = settings;
     this.insertContainer();
@@ -35,10 +35,10 @@ export default class DisplayManager {
 
   fadeOut() {
     const container = document.querySelector('#Avada-SalePop');
-    container.innerHTML = '';
+    render(null, container);
   }
 
-  display({notification}) {
+  display({ notification }) {
     if (!notification) {
       this.fadeOut();
       return;
@@ -96,13 +96,7 @@ export default class DisplayManager {
       : items.length;
     const total = Math.min(items.length, Math.max(0, maxPopups));
 
-    console.log('[Avada] displayLoop settings:', settings);
-    console.log('[Avada] displayLoop displaySettings:', displaySettings);
-    console.log('[Avada] displayLoop items length:', items.length);
-    console.log('[Avada] displayLoop maxPopups:', maxPopups, 'total:', total);
-
     if (total === 0) {
-      console.log('[Avada] displayLoop aborted: total is 0');
       return;
     }
 
@@ -113,24 +107,20 @@ export default class DisplayManager {
 
     const showNext = () => {
       if (index >= total) {
-        console.log('[Avada] displayLoop finished at index:', index);
         return;
       }
 
-      console.log('[Avada] displayLoop show index:', index);
-      this.display({notification: items[index]});
+      this.display({ notification: items[index] });
       index += 1;
 
       setTimeout(() => {
         this.fadeOut();
         if (index < total) {
-          console.log('[Avada] displayLoop schedule next after gap:', gapTime);
           setTimeout(showNext, gapTime);
         }
       }, displayDuration);
     };
 
-    console.log('[Avada] displayLoop start after delay:', delay);
     setTimeout(showNext, delay);
   }
 }

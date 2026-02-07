@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import {InlineStack, ResourceItem, Text, Box} from '@shopify/polaris';
 import moment from 'moment';
 import NotificationPopup from '@assets/components/NotificationPopup/NotificationPopup';
-import '../../../pages/Notifications/style.css';
+import '../../../pages/Notifications/style.module.css';
 
 /**
  * @param {Object} props
@@ -24,8 +24,9 @@ export default function Notification({
   const hideTimeAgo = settings?.display?.hideTimeAgo;
   const truncateContent = settings?.display?.truncateContent;
   const timeLabel = hideTimeAgo ? '' : moment(timestamp).fromNow();
-  const fromDate = moment(timestamp).format('MMM DD, YYYY');
-
+  const fromDate = moment(timestamp)
+    .format('MMM DD, YYYY')
+    .split(', ');
   return (
     <ResourceItem id={id}>
       <InlineStack align="space-between" blockAlign="start" gap="400">
@@ -43,8 +44,9 @@ export default function Notification({
           />
         </Box>
         <Box paddingBlockStart="200">
-          <Text variant="bodySm" tone="subdued">
-            {fromDate}
+          <Text variant="bodySm" tone="subdued" as="strong">
+            From {fromDate[0]},<br />
+            <span style={{display: 'block', textAlign: 'right'}}>{fromDate[1]}</span>
           </Text>
         </Box>
       </InlineStack>

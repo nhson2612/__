@@ -1,4 +1,4 @@
-import {Firestore} from '@google-cloud/firestore';
+import { Firestore } from '@google-cloud/firestore';
 
 const firestoreConfig = {
   projectId: 'todo-app-frontend-7ff2'
@@ -14,18 +14,19 @@ const collection = firestore.collection('notifications');
 
 export async function getList(
   shopDomain,
-  {limit = 30, sort = 'timestamp', direction = 'desc', firstElement, lastElement} = {}
+  { limit = 30, sort = 'timestamp', direction = 'desc', firstElement, lastElement } = {}
 ) {
   let query = collection.where('shopId', '==', shopDomain);
   query = query.orderBy(sort, direction);
+
 
   if (firstElement) {
     const e = await collection.doc(firstElement).get();
     if (!e.exists) {
       console.log('>>>>>>>>>>>> RETURN EMPTY LIST CUZ FIRST ELEMENT DOES NOT EXIST');
-      return {data: [], total: 0, pageInfo: {hasNext: false, hasPre: false}};
+      return { data: [], total: 0, pageInfo: { hasNext: false, hasPre: false } };
     }
-    query.startAfter(e);
+    query = query.startAfter(e);
   } else if (lastElement) {
     const e = await collection.doc(lastElement).get();
     if (!e.exists) {
@@ -39,7 +40,7 @@ export async function getList(
   }
 
   const snapshot = await query.get();
-  const data = snapshot.docs.map(doc => ({id: doc.id, ...doc.data()}));
+  const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
   console.log('>>>>>>>>>>>>> NOTIFICATIONS DATA : ', data);
   let hasNext = false;
   let hasPrev = false;
@@ -72,7 +73,7 @@ export async function getList(
   return {
     data,
     total: snapshot.size,
-    pageInfo: {hasNext, hasPre: hasPrev, newFirstElement, newLastElement}
+    pageInfo: { hasNext, hasPrev, nextCursor: newLastElement, prevCursor: newFirstElement }
   };
 }
 
@@ -85,9 +86,9 @@ export async function getLatestByShopId(shopId, limit = 30) {
   const docs = await collection
     .where('shopId', '==', shopId)
     .orderBy('timestamp', 'desc')
-    .limit(1)
+    .limit(limit)
     .get();
-  return docs.docs.map(doc => ({id: doc.id, ...doc.data()}));
+  return docs.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 }
 
 export async function deleteOne(notificationId, shopDomain) {

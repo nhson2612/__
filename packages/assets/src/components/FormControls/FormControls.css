@@ -1,0 +1,64 @@
+.avada-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.avada-field__label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: #202223;
+  text-transform: uppercase;
+}
+
+.avada-field__control {
+  display: flex;
+  align-items: stretch;
+  border: 1px solid #c9cccf;
+  border-radius: 8px;
+  background: #ffffff;
+  transition: border-color 150ms ease;
+  position: relative;
+}
+
+.avada-field__control:focus-within {
+  border-color: rgba(92, 106, 196, 0.8);
+  border-width: 2px;
+}
+
+.avada-field__input,
+.avada-field__select {
+  width: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  padding: 0.65rem 0.75rem;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  color: #202223;
+}
+
+.avada-field__input::placeholder {
+  color: #8c9196;
+}
+
+.avada-field__select {
+  appearance: none;
+  cursor: pointer;
+  padding-right: 2.5rem;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16' fill='none'%3E%3Cpath d='M8 3L11 6H5L8 3Z' fill='%236d7175'/%3E%3Cpath d='M8 13L5 10H11L8 13Z' fill='%236d7175'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 16px 16px;
+}
+
+.avada-field__input[rows] {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.avada-field__help {
+  font-size: 0.75rem;
+  color: #6d7175;
+}

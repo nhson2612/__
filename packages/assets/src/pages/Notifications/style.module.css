@@ -1,0 +1,49 @@
+.notifications :global(.Polaris-Choice Polaris-Choice--labelHidden Polaris-Checkbox__ChoiceLabel) {
+  margin-right: 10px;
+  display: flex !important;
+  align-items: flex-start;
+  padding-top: 2rem;
+}
+
+.notifications :global(.Polaris-ResourceItem .Polaris-Box) {
+  padding: 0 16px;
+}
+
+.notifications :global(.Polaris-Box:has(> .Avava-SP__Wrapper)) {
+  width: 40%;
+  padding-left: 8px;
+  padding-right: 0;
+}
+
+.notifications :global(.Avava-SP__Wrapper) {
+  width: 100%;
+}
+
+.notifications :global(.Avava-SP__Wrapper .Polaris-Icon) {
+  width: 1rem;
+  height: 1rem;
+}
+
+.notifications :global(.Polaris-InlineGrid > .Polaris-InlineStack > .Polaris-Box) {
+  padding: 16px 8px;
+}
+
+.notifications :global(.Polaris-ResourceItem__CheckboxWrapper > label) {
+  display: inline;
+}
+
+.notifications :global(.Polaris-ResourceItem__CheckboxWrapper) {
+  margin: 25px 0px;
+  height: ;
+}
+
+.notifications :global(.Polaris-Checkbox__ChoiceLabel:hover) {
+  border-width: 0.1rem;
+  box-shadow: none;
+  color: #cccccc;
+}
+
+.notifications :global(.Polaris-Checkbox__ChoiceLabel .Polaris-Checkbox__Backdrop) {
+  border-width: 0.125rem;
+  box-shadow: none;
+}

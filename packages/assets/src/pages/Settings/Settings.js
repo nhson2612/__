@@ -92,6 +92,7 @@ export default function Settings() {
     <Page
       fullWidth
       title="Settings"
+      subtitle="Decide how your notifications will display"
       primaryAction={{
         content: 'Save',
         onAction: handleSave,
@@ -100,19 +101,17 @@ export default function Settings() {
     >
       <Layout>
         <Layout.Section variant="oneThird">
-          <LegacyCard sectioned>
-            <BlockStack align="center" inlineAlign="center">
-              <NotificationPopup
-                firstName="John Doe"
-                city="New York"
-                country="United States"
-                productName="Puffer Jacket With Hidden Hood"
-                timestamp={hideTimeAgo ? '' : 'a day ago'}
-                truncateContent={truncateContent}
-                displayCloseBtn={false}
-              />
-            </BlockStack>
-          </LegacyCard>
+          <BlockStack align="center" inlineAlign="center">
+            <NotificationPopup
+              firstName="John Doe"
+              city="New York"
+              country="United States"
+              productName="Puffer Jacket With Hidden Hood"
+              timestamp={hideTimeAgo ? '' : 'a day ago'}
+              truncateContent={truncateContent}
+              displayCloseBtn={true}
+            />
+          </BlockStack>
         </Layout.Section>
 
         <Layout.Section>

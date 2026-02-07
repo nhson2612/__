@@ -29,7 +29,7 @@ const NotificationPopup = ({
             <Button
               icon={XIcon}
               variant="tertiary"
-              size="slim"
+              size="micro"
               onClick={e => {
                 e.preventDefault();
                 e.stopPropagation();
@@ -48,11 +48,11 @@ const NotificationPopup = ({
               <div className={'Avada-SP__Title'}>
                 {firstName} in {city}, {country}
               </div>
-              <div className={'Avada-SP__Subtitle'}>purchased {displayProductName}</div>
+              <div className={'Avada-SP__Subtitle'}>Purchased {displayProductName}</div>
               <div className={'Avada-SP__Footer'}>
                 {timestamp}{' '}
                 <span className="uni-blue">
-                  <i className="fa fa-check" aria-hidden="true" />✔ by Avada
+                  <i className="fa fa-check" aria-hidden="true" />✔ by AVADA
                 </span>
               </div>
             </div>

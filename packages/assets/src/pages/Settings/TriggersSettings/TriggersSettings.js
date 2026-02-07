@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {BlockStack, Select, TextField} from '@shopify/polaris';
+import {BlockStack} from '@shopify/polaris';
+import CustomSelect from '@assets/components/FormControls/CustomSelect';
+import CustomTextField from '@assets/components/FormControls/CustomTextField';
 import './TriggersSettings.css';
 
 /**
@@ -28,7 +30,7 @@ export default function TriggersSettings({
 
   return (
     <BlockStack gap="400">
-      <Select
+      <CustomSelect
         label="PAGES RESTRICTION"
         options={options}
         onChange={onPageRestrictionChange}
@@ -36,7 +38,7 @@ export default function TriggersSettings({
       />
 
       {pageRestriction === 'specific' && (
-        <TextField
+        <CustomTextField
           label="Included Pages"
           value={specificPages}
           onChange={onSpecificPagesChange}
@@ -46,7 +48,7 @@ export default function TriggersSettings({
         />
       )}
 
-      <TextField
+      <CustomTextField
         label="Excluded Pages"
         value={excludedPages}
         onChange={onExcludedPagesChange}
