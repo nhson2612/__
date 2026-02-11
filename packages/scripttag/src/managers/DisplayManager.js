@@ -26,11 +26,33 @@ export default class DisplayManager {
     this.notifications = [];
     this.settings = {};
   }
-  async initialize({ notifications, settings }) {
+  async initialize({notifications, settings}) {
     this.notifications = notifications;
     this.settings = settings;
+
+    if (!this.checkPageRestriction(settings)) {
+      console.log('[Avada] Page restricted, not showing notifications.');
+      return;
+    }
+
     this.insertContainer();
     this.displayLoop(notifications, settings);
+  }
+
+  checkPageRestriction(settings) {
+    const {triggers} = settings;
+    const {pageRestriction, specificPages, excludedPages} = triggers || {};
+    const path = window.location.pathname;
+
+    if (pageRestriction === 'specific') {
+      return specificPages?.some(p => path.includes(p));
+    }
+
+    if (excludedPages?.some(p => path.includes(p))) {
+      return false;
+    }
+
+    return true;
   }
 
   fadeOut() {

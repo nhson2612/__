@@ -13,12 +13,20 @@
   background: #ffffff;
 }
 
+.notificationList :global(.Polaris-ResourceList__PaginationWrapper) {
+    background: #ffffff !important;
+}
+
+.notificationList :global(.Polaris-Pagination__TablePaginationActions) {
+    background: #ffffff !important;
+}
+
 .notificationList :global(.Polaris-Pagination__TablePaginationActions button) {
     background-color: #ffffff !important;
 }
 
 .notificationList :global(.Polaris-Pagination__TablePaginationActions > *) {
-    padding: 4px 8px;
+    padding: 4px 4px;
 }
 
 .notificationList :global(.Polaris-Pagination__TablePaginationActions > *:hover) {

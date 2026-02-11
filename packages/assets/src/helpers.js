@@ -130,7 +130,11 @@ function createApi() {
       }
       const response = await fetchFunction(prefix + uri, options);
       checkHeadersForReauthorization(response.headers, embedApp);
-      return await response.json();
+      const json = await response.json();
+      if (!response.ok) {
+        throw { response: { data: json } };
+      }
+      return json;
     };
   }
 

@@ -1,0 +1,7 @@
+### FAKE WEBHOOK
+POST https://shopify.nhson2612.space/webhook/orders/new
+Content-Type: application/json
+
+{
+  "hello": "world"
+}

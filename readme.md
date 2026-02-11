@@ -184,6 +184,6 @@ Skills documentation is available in `.claude/skills/` for:
 
 ## TODO
 
-- [ ] Add testing
+- [] Add testing
 - [x] CI/CD
-- [ ] Add document
+- [x] Add document

@@ -118,4 +118,6 @@
 
 .displaySettings :global(.Polaris-InlineGrid:has(> .display-position-wrapper)) {
   border-right: 1px solid #ebebeb;
+  margin-right: 2rem;
+  padding: 1rem 0;
 }

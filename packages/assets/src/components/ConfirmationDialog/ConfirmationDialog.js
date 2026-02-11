@@ -1,5 +1,17 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
+/**
+ * @param {boolean} open
+ * @param {string} title
+ * @param {string} message
+ * @param {string} confirmText
+ * @param {string} cancelText
+ * @param {function} onConfirm
+ * @param {function} onCancel
+ * @return {React.JSX.Element|null}
+ * @constructor
+ */
 export default function ConfirmationDialog({
   open,
   title = 'Xác nhận',
@@ -29,6 +41,26 @@ export default function ConfirmationDialog({
     </div>
   );
 }
+
+ConfirmationDialog.propTypes = {
+  open: PropTypes.bool,
+  title: PropTypes.string,
+  message: PropTypes.string,
+  confirmText: PropTypes.string,
+  cancelText: PropTypes.string,
+  onConfirm: PropTypes.func,
+  onCancel: PropTypes.func
+};
+
+ConfirmationDialog.defaultProps = {
+  open: false,
+  title: 'Xác nhận',
+  message: 'Bạn có chắc chắn không?',
+  confirmText: 'Xóa',
+  cancelText: 'Hủy',
+  onConfirm: () => {},
+  onCancel: () => {}
+};
 
 const styles = {
   backdrop: {

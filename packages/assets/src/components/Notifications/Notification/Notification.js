@@ -38,7 +38,7 @@ export default function Notification({
             productName={productName}
             timestamp={timeLabel}
             productImage={productImage}
-            displayCloseBtn={true}
+            displayCloseBtn={false}
             truncateContent={truncateContent}
             onClose={() => onClose(id)}
           />

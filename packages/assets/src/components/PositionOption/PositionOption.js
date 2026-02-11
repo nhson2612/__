@@ -2,6 +2,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {Box, Text} from '@shopify/polaris';
 
+/**
+ * @param {string} label
+ * @param {string} value
+ * @param {boolean} selected
+ * @param {function} onClick
+ * @param {string} positionClass
+ * @return {React.JSX.Element}
+ * @constructor
+ */
 export default function PositionOption({label, value, selected, onClick, positionClass}) {
   const borderColor = selected ? '2px solid #5c6ac4' : '2px solid #e1e3e5';
   const blockColor = selected ? '#5c6ac4' : '#e1e3e5';

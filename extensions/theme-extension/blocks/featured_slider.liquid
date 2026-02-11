@@ -1,0 +1,150 @@
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js" defer></script>
+
+<style>
+  .my-app-slider-container {
+    padding: 40px 0;
+    max-width: 1200px;
+    margin: 0 auto;
+    overflow: hidden; /* Quan trọng để không bị vỡ layout */
+  }
+  .my-app-heading {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 24px;
+    font-weight: bold;
+  }
+  .swiper-slide {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  .product-card-img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 10px;
+  }
+  .product-card-title {
+    font-size: 16px;
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
+  }
+  .product-card-price {
+    color: #e84a4a; /* Màu đỏ cho giá */
+    font-weight: bold;
+    margin-top: 5px;
+  }
+</style>
+
+<div class="my-app-slider-container">
+  {% if block.settings.heading != blank %}
+    <h2 class="my-app-heading" style="color: {{ block.settings.text_color }}">
+      {{ block.settings.heading }}
+    </h2>
+  {% endif %}
+
+  <div class="swiper myProductSwiper">
+    <div class="swiper-wrapper">
+
+      {% comment %} Lấy bộ sưu tập người dùng chọn trong settings {% endcomment %}
+      {% assign chosen_collection = collections[block.settings.collection_id] %}
+
+      {% if chosen_collection != blank %}
+        {% for product in chosen_collection.products limit: block.settings.limit_products %}
+          <div class="swiper-slide">
+            <a href="{{ product.url }}">
+              <img
+                src="{{ product.featured_image | image_url: width: 400 }}"
+                alt="{{ product.title }}"
+                class="product-card-img"
+                loading="lazy"
+              >
+              <div class="product-card-title">{{ product.title }}</div>
+              <div class="product-card-price">{{ product.price | money }}</div>
+            </a>
+          </div>
+        {% endfor %}
+      {% else %}
+        {% for i in (1..5) %}
+          <div class="swiper-slide">
+            {{ 'product-' | append: i | placeholder_svg_tag: 'product-card-img' }}
+            <p>Sản phẩm mẫu {{ i }}</p>
+          </div>
+        {% endfor %}
+      {% endif %}
+
+    </div>
+
+    <div class="swiper-pagination"></div>
+    <div class="swiper-button-next"></div>
+    <div class="swiper-button-prev"></div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    new Swiper(".myProductSwiper", {
+      slidesPerView: 1,      // Mobile hiện 1 cái
+      spaceBetween: 20,
+      loop: true,            // Lặp vô tận
+      pagination: {
+        el: ".swiper-pagination",
+        clickable: true,
+      },
+      navigation: {
+        nextEl: ".swiper-button-next",
+        prevEl: ".swiper-button-prev",
+      },
+      breakpoints: {
+        640: {
+          slidesPerView: 2,  // Tablet nhỏ
+        },
+        768: {
+          slidesPerView: 3,  // Tablet lớn
+        },
+        1024: {
+          slidesPerView: 4,  // Desktop
+        },
+      },
+    });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Featured Product Slider",
+  "target": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Tiêu đề Slider",
+      "default": "Sản phẩm nổi bật"
+    },
+    {
+      "type": "collection",
+      "id": "collection_id",
+      "label": "Chọn bộ sưu tập"
+    },
+    {
+      "type": "range",
+      "id": "limit_products",
+      "min": 4,
+      "max": 20,
+      "step": 1,
+      "label": "Số lượng sản phẩm",
+      "default": 8
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Màu tiêu đề",
+      "default": "#000000"
+    }
+  ]
+}
+{% endschema %}

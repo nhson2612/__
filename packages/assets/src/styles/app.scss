@@ -15,14 +15,14 @@ body[data-lock-scrolling] {
   --p-color-nav-bg: rgba(255, 255, 255, 0);
   --p-color-nav-bg-surface: rgba(255, 255, 255, 0);
   --p-color-bg-fill: rgba(255, 255, 255, 0);
-  --p-font-family-sans: Arial, sans-serif;
+  --p-font-family-sans: Arial, sans-serif !important;
 }
 
 body,
 .Polaris-Frame,
 .Avada-Frame {
-  background-color: rgba(255, 255, 255, 1);
-  font-family: Arial, sans-serif;
+  background-color: rgba(255, 255, 255, 1) !important;
+  font-family: Arial, sans-serif !important;
 }
 
 .Avada-Frame {

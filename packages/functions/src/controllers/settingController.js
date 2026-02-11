@@ -1,22 +1,5 @@
-import * as settingRepository from '../repositories/settingRepository';
-import {getCurrentShop} from '../helpers/auth';
-
-const defaultSettings = {
-  display: {
-    position: 'bottom-left',
-    hideTimeAgo: false,
-    truncateContent: true,
-    displayDuration: 5,
-    firstPopDelay: 10,
-    gapTime: 2,
-    maxPopups: 20
-  },
-  triggers: {
-    pageRestriction: 'all',
-    specificPages: '',
-    excludedPages: ''
-  }
-};
+import * as settingService from '../services/settingService';
+import { getCurrentShop } from '../helpers/auth';
 
 /**
  * @param {Context} ctx
@@ -26,10 +9,10 @@ export async function getSettings(ctx) {
   try {
     const shopId = getCurrentShop(ctx);
     console.log('>>>>>>>>>> getSettings called for shopId:', shopId);
-    const settings = await settingRepository.getSettings(shopId);
+    const settings = await settingService.getSettings(shopId);
     console.log('>>>>>>>>>>>>>> Retrieved settings:', settings);
     ctx.body = {
-      data: settings || defaultSettings
+      data: settings
     };
   } catch (e) {
     console.error('>>>>>>>>>>>>>> getSettings Error:', e);
@@ -50,14 +33,13 @@ export async function updateSettings(ctx) {
     const shopId = getCurrentShop(ctx);
     if (!shopId) {
       ctx.status = 401;
-      ctx.body = {success: false, error: 'Unauthorized'};
+      ctx.body = { success: false, error: 'Unauthorized' };
       return;
     }
     console.log('updateSettings called for shopId:', shopId);
     console.log('Request body:', JSON.stringify(ctx.request.body, null, 2));
 
-    const {display, triggers} = ctx.request.body;
-    await settingRepository.setSettings(shopId, {display, triggers});
+    await settingService.updateSettings(shopId, ctx.request.body);
 
     console.log('Setting saved successfully');
     ctx.body = {

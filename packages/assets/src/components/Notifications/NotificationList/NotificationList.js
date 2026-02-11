@@ -1,4 +1,4 @@
-import React, {Fragment, useState} from 'react';
+import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 import {Card, ResourceList} from '@shopify/polaris';
 import Notification from '../Notification/Notification';
@@ -78,7 +78,10 @@ export default function NotificationList({
         confirmText="Xóa luôn"
         cancelText="Thôi"
         onConfirm={handleDelete}
-        onCancel={() => setDialogOpen(false)}
+        onCancel={() => {
+          setDialogOpen(false);
+          setSelectedItems([]);
+        }}
       />
     </div>
   );

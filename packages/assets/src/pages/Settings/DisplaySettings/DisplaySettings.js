@@ -4,13 +4,10 @@ import {
   BlockStack,
   Box,
   Checkbox,
-  RangeSlider,
   Text,
   InlineGrid,
-  Divider,
-  LegacyCard,
-  InlineStack
 } from '@shopify/polaris';
+import AppRangeSlider from '@assets/components/AppRangeSlider/AppRageSlider';
 import PositionOption from '@assets/components/PositionOption/PositionOption';
 import styles from './DisplaySettings.module.css';
 
@@ -58,10 +55,10 @@ export default function DisplaySettings({
           </Text>
           <Box>
             <BlockStack gap="200">
-              <Text variant="bodyMd" fontWeight="medium" as="label">
+              <Text variant="bodyMd" as="label">
                 Desktop Position
               </Text>
-              <InlineGrid columns={{xs: 2, sm: 5}} gap="400">
+              <InlineGrid columns={{xs: 1, sm: 2, md: 2, lg: 5, xl: 5}} gap="400">
                 <PositionOption
                   value="bottom-left"
                   selected={position === 'bottom-left'}
@@ -90,9 +87,7 @@ export default function DisplaySettings({
                   color="bg-slate-200"
                   positionClass="top-3 right-3"
                 />
-                <div>
-
-                </div>
+                <div></div>
               </InlineGrid>
               <Text variant="bodySm" tone="subdued" as="p">
                 The display position of the pop on your website.
@@ -111,8 +106,6 @@ export default function DisplaySettings({
           </BlockStack>
         </BlockStack>
 
-        <Divider />
-
         {/* TIMING SECTION */}
         <BlockStack gap="400">
           <Text variant="headingSm" as="h3" tone="subdued" textTransform="uppercase">
@@ -120,80 +113,40 @@ export default function DisplaySettings({
           </Text>
 
           <InlineGrid columns={{xs: 1, md: 2}} gap="600">
-            <RangeSlider
+            <AppRangeSlider
               label="Display duration"
               value={displayDuration}
               onChange={onDisplayDurationChange}
               min={1}
               max={60}
-              output
+              unitLabel="second(s)"
               helpText="How long each pop will display on your page."
-              suffix={
-                <LegacyCard>
-                  <Box padding="200" borderRadius="0">
-                    <InlineStack gap="200" blockAlign="center">
-                      <Text as={'h5'}>{displayDuration}</Text>
-                      <Text as={'p'}>second(s)</Text>
-                    </InlineStack>
-                  </Box>
-                </LegacyCard>
-              }
             />
-            <RangeSlider
+            <AppRangeSlider
               label="Time before the first pop"
               value={firstPopDelay}
               onChange={onFirstPopDelayChange}
               min={1}
               max={60}
-              output
-              suffix={
-                <LegacyCard>
-                  <Box padding="200" borderRadius="0">
-                    <InlineStack gap="200" blockAlign="center">
-                      <Text as={'h5'}>{firstPopDelay}</Text>
-                      <Text as={'p'}>second(s)</Text>
-                    </InlineStack>
-                  </Box>
-                </LegacyCard>
-              }
+              unitLabel="second(s)"
               helpText="The delay time before the first notification."
             />
-            <RangeSlider
+            <AppRangeSlider
               label="Gap time between two pops"
               value={gapTime}
               onChange={onGapTimeChange}
-              min={0}
+              min={1}
               max={60}
-              output
-              suffix={
-                <LegacyCard>
-                  <Box padding="200" borderRadius="0">
-                    <InlineStack gap="200" blockAlign="center">
-                      <Text as={'h5'}>{gapTime}</Text>
-                      <Text as={'p'}>second(s)</Text>
-                    </InlineStack>
-                  </Box>
-                </LegacyCard>
-              }
+              unitLabel="second(s)"
               helpText="The time interval between two popup notifications."
             />
-            <RangeSlider
+            <AppRangeSlider
               label="Maximum of popups"
               value={maxPopups}
               onChange={onMaxPopupsChange}
               min={1}
               max={80}
-              output
-              suffix={
-                <LegacyCard>
-                  <Box padding="200" borderRadius="0">
-                    <InlineStack gap="200" blockAlign="center">
-                      <Text as={'h5'}>{maxPopups}</Text>
-                      <Text as={'p'}>pop(s)</Text>
-                    </InlineStack>
-                  </Box>
-                </LegacyCard>
-              }
+              unitLabel="pop(s)"
               helpText="The maximum number of popups allowed to show after page loading. Maximum number is 80."
             />
           </InlineGrid>

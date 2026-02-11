@@ -1,7 +1,8 @@
-import {useEffect, useState} from 'react';
-import {api} from '@assets/helpers';
+import { useEffect, useState } from 'react';
+import { api } from '@assets/helpers';
 import stringify from 'qs-stringify';
-import {handleError} from '@assets/services/errorService';
+import { handleError } from '@assets/services/errorService';
+import { useStore } from '@assets/reducers/storeReducer';
 
 /**
  * useFetchApi hook for fetch data from api with url
@@ -26,6 +27,7 @@ export default function useFetchApi({
   const [pageInfo, setPageInfo] = useState({});
   const [count, setCount] = useState(0);
   const [total, setTotal] = useState(0);
+  const { dispatch } = useStore();
 
   async function fetchApi(apiUrl, params = null, keepPreviousData = false) {
     try {
@@ -40,17 +42,17 @@ export default function useFetchApi({
       if (resp.hasOwnProperty('data')) {
         let newData = presentData ? presentData(resp.data) : resp.data;
         if (!Array.isArray(newData)) {
-          newData = {...defaultData, ...newData};
+          newData = { ...defaultData, ...newData };
         }
         setData(prev => {
           if (!keepPreviousData) {
             return newData;
           }
-          return Array.isArray(newData) ? [...prev, ...newData] : {...prev, ...newData};
+          return Array.isArray(newData) ? [...prev, ...newData] : { ...prev, ...newData };
         });
       }
     } catch (e) {
-      handleError(e);
+      handleError(e, dispatch);
     } finally {
       setLoading(false);
       setFetched(true);
@@ -59,7 +61,7 @@ export default function useFetchApi({
 
   useEffect(() => {
     if (initLoad && !fetched) {
-      fetchApi(url, initQueries).then(() => {});
+      fetchApi(url, initQueries).then(() => { });
     }
   }, []);
 

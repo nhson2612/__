@@ -34,7 +34,7 @@
 
 .notifications :global(.Polaris-ResourceItem__CheckboxWrapper) {
   margin: 25px 0px;
-  height: ;
+  height: auto;
 }
 
 .notifications :global(.Polaris-Checkbox__ChoiceLabel:hover) {
@@ -46,4 +46,8 @@
 .notifications :global(.Polaris-Checkbox__ChoiceLabel .Polaris-Checkbox__Backdrop) {
   border-width: 0.125rem;
   box-shadow: none;
+}
+
+.notifications :global(.Polaris-Page > .Polaris-Box) {
+  margin-bottom: 1.5rem;
 }

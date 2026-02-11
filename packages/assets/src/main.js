@@ -1,8 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import enTranslations from '@shopify/polaris/locales/en.json';
-import {AppProvider, Page, LegacyCard, Button} from '@shopify/polaris';
+import { AppProvider, Page, LegacyCard, Button } from '@shopify/polaris';
 import '@shopify/polaris/build/esm/styles.css';
+import './styles/app.scss';
 
 const loading = document.getElementById('PreLoading');
 if (loading !== null) {

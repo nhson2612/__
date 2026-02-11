@@ -1,0 +1,11 @@
+.settings :global(.Polaris-Layout > .Polaris-Layout__Section:not(.Polaris-Layout__Section--oneThird)) {
+  flex: 21;
+}
+
+.settings :global(.Polaris-Page > .Polaris-Box) {
+    margin-bottom: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+.settings :global(.Polaris-Layout) {
+    gap: 1rem;
+}

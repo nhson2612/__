@@ -8,6 +8,6 @@ export async function getSettings(shopId) {
   return doc.exists ? doc.data() : null;
 }
 
-export async function setSettings(shopId, data) {
+export async function save(shopId, data) {
   return collection.doc(shopId).set({...data, shopId}, {merge: true});
 }

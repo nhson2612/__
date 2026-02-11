@@ -9,7 +9,6 @@ export default {
     'write_themes',
     'read_orders',
     'read_products',
-    'read_script_tags',
     'write_script_tags'
   ],
   accessTokenKey: process.env.SHOPIFY_ACCESS_TOKEN_KEY || 'avada-apps-access-token'

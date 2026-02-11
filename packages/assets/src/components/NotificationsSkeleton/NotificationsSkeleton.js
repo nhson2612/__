@@ -14,7 +14,7 @@ import React from 'react';
  */
 export default function NotificationsSkeleton() {
   return (
-    <SkeletonPage>
+    <SkeletonPage fullWidth>
       <Layout>
         <Layout.Section>
           <LegacyCard sectioned>

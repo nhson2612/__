@@ -1,5 +1,6 @@
-import {getCurrentShop} from '../helpers/auth';
+import { getCurrentShop } from '../helpers/auth';
 import notificationService from '@functions/services/notificationService';
+import { handleError } from '@functions/helpers/errorHandler';
 
 /**
  * Get list of notifications
@@ -8,7 +9,7 @@ import notificationService from '@functions/services/notificationService';
 export async function getList(ctx) {
   try {
     const shopId = getCurrentShop(ctx);
-    const {limit, sort, direction, nextCursor, prevCursor} = ctx.query;
+    const { limit, sort, direction, nextCursor, prevCursor } = ctx.query;
     const parsedLimit = limit ? parseInt(limit, 10) : 10;
 
     ctx.body = await notificationService.getList(shopId, {
@@ -19,24 +20,17 @@ export async function getList(ctx) {
       prevCursor
     });
   } catch (e) {
-    console.error('getNotifications Error:', e);
-    ctx.status = 500;
-    ctx.body = {
-      success: false,
-      error: e.message
-    };
+    handleError(ctx, e);
   }
 }
 
 export async function deleteNotification(ctx) {
   try {
-    const {id} = ctx.params;
+    const { id } = ctx.params;
     const shopId = getCurrentShop(ctx);
     const success = await notificationService.deleteOne(id, shopId);
-    ctx.body = {success};
+    ctx.body = { success };
   } catch (e) {
-    console.error('Fail to delete notification:', e);
-    ctx.status = 500;
-    ctx.body = {success: false, error: e.message};
+    handleError(ctx, e);
   }
 }

@@ -1,12 +1,14 @@
-import getTheme from '@functions/services/themeService';
+import getThemeStatus from '@functions/services/themeService';
+import { getCurrentShop } from '../helpers/auth';
 
-export default async function getThemeStatus(ctx) {
-  const shopDomain = ctx?.query?.shop;
-  await getTheme(shopDomain);
-  return (ctx.body = {
+export default async function getThemeStatusController(ctx) {
+  const shopDomain = getCurrentShop(ctx);
+  console.log('>>>>>>>>>>> shopDomain <<<<<<<<<<<<', shopDomain);
+  const isEnabled = await getThemeStatus(shopDomain);
+  ctx.body = {
     success: true,
     data: {
-      themeStatus: 'enable'
+      themeStatus: isEnabled
     }
-  });
+  };
 }

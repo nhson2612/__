@@ -1,5 +1,5 @@
-import React, {useState, useCallback, useEffect} from 'react';
-import {Page, Layout} from '@shopify/polaris';
+import React, {useState, useEffect} from 'react';
+import {Page} from '@shopify/polaris';
 import NotificationList from '../../components/Notifications/NotificationList/NotificationList';
 import useFetchApi from '@assets/hooks/api/useFetchApi';
 import NotificationsSkeleton from '@assets/components/NotificationsSkeleton/NotificationsSkeleton';
@@ -46,52 +46,48 @@ export default function Notifications() {
     refresh(`/notifications?${query}`);
   }, [cursor, sortValue]);
 
-  const handleSortChange = useCallback(newSortValue => {
+  const handleSortChange = newSortValue => {
     setSortValue(newSortValue);
     setCursor({next: null, prev: null});
-  }, []);
-
-  const handleNextPage = useCallback(() => {
+  };
+  const handleNextPage = () => {
     if (pageInfo.hasNext) {
       setCursor({next: pageInfo.nextCursor, prev: null});
     }
-  }, [pageInfo]);
+  };
 
-  const handlePrevPage = useCallback(() => {
+  const handlePrevPage = () => {
     if (pageInfo.hasPrev) {
       setCursor({next: null, prev: pageInfo.prevCursor});
     }
-  }, [pageInfo]);
+  };
 
-  const handleDismiss = useCallback(
-    id => {
-      setNotifications(prev => prev.filter(item => item.id !== id));
-    },
-    [setNotifications]
-  );
+  const handleDismiss = id => {
+    setNotifications(prev => prev.filter(item => item.id !== id));
+  };
 
   if (loading && !notifications.length) return <NotificationsSkeleton />;
 
   return (
     <div className={styles.notifications}>
-      <Page title="Notifications" subtitle="List of sales notification from Shopify">
-        <Layout>
-          <Layout.Section>
-            <NotificationList
-              items={notifications}
-              settings={settings}
-              sortValue={sortValue}
-              onSortChange={handleSortChange}
-              pagination={{
-                hasNext: pageInfo.hasNext,
-                hasPrevious: pageInfo.hasPrev,
-                onNext: handleNextPage,
-                onPrevious: handlePrevPage
-              }}
-              onDismiss={handleDismiss}
-            />
-          </Layout.Section>
-        </Layout>
+      <Page
+        title="Notifications"
+        subtitle="List of sales notification from Shopify"
+        fullWidth={true}
+      >
+        <NotificationList
+          items={notifications}
+          settings={settings}
+          sortValue={sortValue}
+          onSortChange={handleSortChange}
+          pagination={{
+            hasNext: pageInfo.hasNext,
+            hasPrevious: pageInfo.hasPrev,
+            onNext: handleNextPage,
+            onPrevious: handlePrevPage
+          }}
+          onDismiss={handleDismiss}
+        />
       </Page>
     </div>
   );

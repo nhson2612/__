@@ -7,13 +7,9 @@ import {loadGraphQL} from '@functions/helpers/graphql/graphqlHelpers';
  * @param first
  * @returns {Promise<*>}
  */
-const getLatestOrders = async (shopData, first = 10) => {
+export const getLatestOrders = async (shopData, first = 10) => {
   const shopify = await initShopify(shopData);
   const orderQuery = loadGraphQL('/order.graphql');
 
   return shopify.graphql(orderQuery, {first});
-};
-
-export default {
-  getLatestOrders
 };

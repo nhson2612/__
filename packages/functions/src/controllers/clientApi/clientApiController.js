@@ -1,6 +1,6 @@
-import {getShopByShopifyDomain} from '@functions/services/shopService';
-import {getSettings} from '../../repositories/settingRepository';
-import {getLatestByShopId} from '../../repositories/notificationRepository';
+import { getShopByShopifyDomain } from '@functions/services/shopService';
+import { getSettings } from '../../services/settingService';
+import { getLatestByShopId } from '../../repositories/notificationRepository';
 
 export async function getNotifications(ctx) {
   try {
@@ -20,7 +20,7 @@ export async function getNotifications(ctx) {
     }
 
     const settings = await getSettings(shop.id);
-    const notifications = await getLatestByShopId(shopifyDomain, 20);
+    const notifications = await getLatestByShopId(shopifyDomain, 30);
     console.log('>>>>>>>>>>>>> NOTIFICATIONS', notifications);
     console.log('>>>>>>>>>>>>> EXPECTED RESPONSE', {
       success: true,
@@ -39,6 +39,6 @@ export async function getNotifications(ctx) {
   } catch (e) {
     console.error('getNotifications error:', e);
     ctx.status = 500;
-    ctx.body = {success: false, error: e.message};
+    ctx.body = { success: false, error: e.message };
   }
 }

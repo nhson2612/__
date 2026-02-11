@@ -6,7 +6,7 @@ export default async function verifyWebhook(ctx, next) {
   console.log('>>>>>>>>>>>>>>> VERIFYING WEBHOOK <<<<<<<<<<<<<<<<');
   console.log('>>>>>>>>>>>>>>> CTX HEADERS: ', ctx.headers, ' <<<<<<<<<<<<<<<<');
   const rawBody = ctx.req.rawBody;
-  const hmac = getHmac(ctx);
+  const hmac = ctx.get('X-Shopify-Hmac-Sha256');
 
   const hmac2 = crypto
     .createHmac('sha256', APP_SECRET)
@@ -17,14 +17,10 @@ export default async function verifyWebhook(ctx, next) {
     console.error('>>>>>>>>>>>>>>> Cannot verify webhook');
     ctx.body = {
       success: false,
-      message: 'Cannot verify webhook'
+      message: 'Invalid webhook, u r a bad guy'
     };
     return;
   }
 
   return next();
-}
-
-function getHmac(ctx) {
-  return ctx.get('X-Shopify-Hmac-Sha256');
 }

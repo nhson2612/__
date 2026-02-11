@@ -74,7 +74,7 @@ if (!isProduction && shopifyApiKey) {
 }
 
 /**
- *
+ * Assign BASE_URL
  * @param file
  */
 function updateThemeAppExtFile(file) {
