@@ -1,9 +1,8 @@
 import getThemeStatus from '@functions/services/themeService';
-import { getCurrentShop } from '../helpers/auth';
+import {getCurrentShop} from '../helpers/auth';
 
 export default async function getThemeStatusController(ctx) {
   const shopDomain = getCurrentShop(ctx);
-  console.log('>>>>>>>>>>> shopDomain <<<<<<<<<<<<', shopDomain);
   const isEnabled = await getThemeStatus(shopDomain);
   ctx.body = {
     success: true,

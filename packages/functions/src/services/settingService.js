@@ -14,7 +14,12 @@ const initialState = {
   specificPages: []
 };
 
-function buildDefaultSettings(shopId) {
+/**
+ * Build default settings for a shop
+ * @param {string} shopId - Shop ID
+ * @returns {Object} Default settings object
+ */
+export function buildDefaultSettings(shopId) {
   return {
     ...initialState,
     shopId
@@ -78,17 +83,33 @@ function normalizeSettings(settings, shopId) {
   };
 }
 
+/**
+ * Get settings for a shop
+ * @param {string} shopId - Shop ID
+ * @returns {Promise<Object>} Settings in remote format
+ */
 export async function getSettings(shopId) {
   const settings = await settingRepository.getSettings(shopId);
   return toRemote(settings);
 }
 
+/**
+ * Get settings with defaults applied
+ * @param {string} shopId - Shop ID
+ * @returns {Promise<Object>} Settings with defaults in remote format
+ */
 export async function getSettingsWithDefault(shopId) {
   const settings = await settingRepository.getSettings(shopId);
   const normalized = normalizeSettings(settings, shopId);
   return toRemote(normalized);
 }
 
+/**
+ * Update settings for a shop
+ * @param {string} shopId - Shop ID
+ * @param {Object} data - Settings data to update
+ * @returns {Promise<Object>} Updated settings in remote format
+ */
 export async function updateSettings(shopId, data) {
   const flatData = toLocal(data);
   const normalized = normalizeSettings(flatData, shopId);
@@ -96,22 +117,21 @@ export async function updateSettings(shopId, data) {
   return toRemote(normalized);
 }
 
+/**
+ * Initialize default settings for a shop if not exists
+ * @param {string} shopId - Shop ID
+ * @returns {Promise<Object>} Current or default settings
+ */
 export async function initializeShopSettings(shopId) {
   try {
     const settings = await settingRepository.getSettings(shopId);
     if (settings) {
-      console.log('[AFTER INSTALL] Shop settings already exist');
       return toRemote(normalizeSettings(settings, shopId));
     }
-    console.log('[AFTER INSTALL] Initializing shop settings');
     const defaults = buildDefaultSettings(shopId);
-    console.log('[AFTER INSTALL] Default settings:', defaults);
     await settingRepository.save(shopId, defaults);
-    console.log('[AFTER INSTALL] Shop settings initialized successfully');
     return toRemote(defaults);
   } catch (error) {
-    console.error('Error initializing shop settings:', error);
-    console.log('[AFTER INSTALL] Fallback to default settings');
     return toRemote(buildDefaultSettings(shopId));
   }
 }

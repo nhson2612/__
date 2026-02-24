@@ -12,6 +12,7 @@ import clientApiHandler from './handlers/clientApi';
 import subscribeBackgroundHandler from './handlers/subscribeBackgroundHandler';
 import enqueueHandler from './handlers/enqueueHandler';
 import dailyCronHandler from './handlers/schedule/dailyCron';
+import syncNotificationsForShop from './services/syncNotificationsService';
 
 // ---------------------- Embed App ----------------------
 // Serves the embedded app for theme app extensions
@@ -85,4 +86,18 @@ export const enqueueSubscriber = onTaskDispatched(
 export const dailyCron = onSchedule(
   {schedule: '0 0 * * *', timeoutSeconds: 540, memory: '1GiB'},
   dailyCronHandler
+);
+
+// ---------------------- Sync Notifications handler ----------------------
+export const syncNotifications = onRequest(
+  {timeoutSeconds: 540, memory: '1GiB', invoker: 'public'},
+  async (req, res) => {
+    try {
+      await syncNotificationsForShop();
+      res.status(200).send('Sync completed');
+    } catch (e) {
+      console.error(e);
+      res.status(500).send('Sync failed');
+    }
+  }
 );

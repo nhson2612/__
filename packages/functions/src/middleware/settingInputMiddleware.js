@@ -30,12 +30,9 @@ const settingsSchema = yup.object().shape({
  */
 export default async function settingInputMiddleware(ctx, next) {
   try {
-    console.log('settingInputMiddleware input:', JSON.stringify(ctx.request.body, null, 2));
-    ctx.request.body = await settingsSchema.validate(ctx.request.body);
-    console.log('Validation successful');
+    ctx.req.body = await settingsSchema.validate(ctx.req.body);
     return next();
   } catch (e) {
-    console.error('Validation failed:', e.message);
     ctx.status = 400;
     const error = e.errors ? e.errors[0] : e.message;
     ctx.body = {

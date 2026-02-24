@@ -7,7 +7,10 @@
     "build": "cross-env NODE_ENV=production ENVIRONMENT=production rspack build",
     "build:analyze": "cross-env NODE_ENV=production ENVIRONMENT=production rspack build --analyze",
     "build:dev": "cross-env NODE_ENV=development ENVIRONMENT=development rspack build",
+    "build:chat": "cross-env NODE_ENV=production ENVIRONMENT=production rspack build --config rspack.chat.config.js",
+    "build:chat:dev": "cross-env NODE_ENV=development ENVIRONMENT=development rspack build --config rspack.chat.config.js",
     "watch": "cross-env NODE_ENV=development ENVIRONMENT=development rspack build --watch",
+    "watch:chat": "cross-env NODE_ENV=development ENVIRONMENT=development rspack build --watch --config rspack.chat.config.js",
     "start": "http-server"
   },
   "dependencies": {

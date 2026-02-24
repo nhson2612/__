@@ -17,8 +17,8 @@
 export function makeRequest(url, method = 'GET', data = null, options = {}) {
   return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();
-
-    xhr.onreadystatechange = function () {
+    // There are few xhr state, 0 - just created , 1 - just call oped() , 2 - server returned header , 3 - loading, still waiting for body , 4 - done
+    xhr.onreadystatechange = function() {
       if (xhr.readyState !== 4) return;
 
       if (xhr.status >= 200 && xhr.status < 300) {
@@ -33,7 +33,7 @@ export function makeRequest(url, method = 'GET', data = null, options = {}) {
       }
     };
 
-    xhr.onerror = function () {
+    xhr.onerror = function() {
       reject(new Error('Network error'));
     };
 

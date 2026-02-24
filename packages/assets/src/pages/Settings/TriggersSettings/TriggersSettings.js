@@ -7,22 +7,13 @@ import './TriggersSettings.css';
 
 /**
  * TriggersSettings component for configuring page trigger restrictions.
- * @param {string} pageRestriction - Current page restriction setting ('all' or 'specific')
- * @param {function} onPageRestrictionChange - Callback for page restriction changes
- * @param {string} specificPages - Comma-separated list of specific pages to include
- * @param {function} onSpecificPagesChange - Callback for specific pages changes
- * @param {string} excludedPages - Newline-separated list of pages to exclude
- * @param {function} onExcludedPagesChange - Callback for excluded pages changes
+ * @param {object} settings - The settings object containing all trigger configurations
+ * @param {function} onChange - Callback function to handle setting changes
  * @return {React.JSX.Element} The TriggersSettings component
  */
-export default function TriggersSettings({
-  pageRestriction,
-  onPageRestrictionChange,
-  specificPages,
-  onSpecificPagesChange,
-  excludedPages,
-  onExcludedPagesChange
-}) {
+export default function TriggersSettings({settings, onChange}) {
+  const {pageRestriction, specificPages, excludedPages} = settings;
+
   const options = [
     {label: 'All pages', value: 'all'},
     {label: 'Specific pages', value: 'specific'}
@@ -33,7 +24,7 @@ export default function TriggersSettings({
       <CustomSelect
         label="PAGES RESTRICTION"
         options={options}
-        onChange={onPageRestrictionChange}
+        onChange={value => onChange('pageRestriction', value)}
         value={pageRestriction}
       />
 
@@ -41,7 +32,7 @@ export default function TriggersSettings({
         <CustomTextField
           label="Included Pages"
           value={specificPages}
-          onChange={onSpecificPagesChange}
+          onChange={value => onChange('specificPages', value)}
           placeholder="/products/my-product"
           helpText="Enter the page URLs where you WANT the notification to appear."
           autoComplete="off"
@@ -51,7 +42,7 @@ export default function TriggersSettings({
       <CustomTextField
         label="Excluded Pages"
         value={excludedPages}
-        onChange={onExcludedPagesChange}
+        onChange={value => onChange('excludedPages', value)}
         helpText="Page URLs NOT to show the pop-up (separated by new lines)"
         autoComplete="off"
         multiline={4}
@@ -61,10 +52,6 @@ export default function TriggersSettings({
 }
 
 TriggersSettings.propTypes = {
-  pageRestriction: PropTypes.string.isRequired,
-  onPageRestrictionChange: PropTypes.func.isRequired,
-  specificPages: PropTypes.string.isRequired,
-  onSpecificPagesChange: PropTypes.func.isRequired,
-  excludedPages: PropTypes.string.isRequired,
-  onExcludedPagesChange: PropTypes.func.isRequired
+  settings: PropTypes.object.isRequired,
+  onChange: PropTypes.func.isRequired
 };

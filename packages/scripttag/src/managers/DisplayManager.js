@@ -1,7 +1,8 @@
-import { insertAfter } from '../helpers/insertHelpers';
-import { render } from 'preact';
+import {insertAfter} from '../helpers/insertHelpers';
+import {delay} from '../helpers/delay';
+import {render} from 'preact';
+import {h} from 'preact';
 import NotificationPopup from '../components/NotificationPopup/NotificationPopup';
-import React from 'react';
 
 const MS_IN_SECOND = 1000;
 
@@ -26,6 +27,7 @@ export default class DisplayManager {
     this.notifications = [];
     this.settings = {};
   }
+
   async initialize({notifications, settings}) {
     this.notifications = notifications;
     this.settings = settings;
@@ -36,7 +38,7 @@ export default class DisplayManager {
     }
 
     this.insertContainer();
-    this.displayLoop(notifications, settings);
+    await this.displayLoop(notifications, settings);
   }
 
   checkPageRestriction(settings) {
@@ -60,7 +62,7 @@ export default class DisplayManager {
     render(null, container);
   }
 
-  display({ notification }) {
+  display({notification}) {
     if (!notification) {
       this.fadeOut();
       return;
@@ -87,7 +89,7 @@ export default class DisplayManager {
 
   insertContainer() {
     const popupEl = document.createElement('div');
-    popupEl.id = `Avada-SalePop`;
+    popupEl.id = 'Avada-SalePop';
     popupEl.classList.add('Avada-SalePop__OuterWrapper');
     const targetEl = document.querySelector('body').firstChild;
     const displaySettings = this.settings?.display || this.settings || {};
@@ -110,39 +112,30 @@ export default class DisplayManager {
     return popupEl;
   }
 
-  displayLoop(notifications, settings) {
+  async displayLoop(notifications, settings) {
     const displaySettings = settings?.display || settings || {};
     const items = Array.isArray(notifications) ? notifications : [];
-    const maxPopups = Number.isFinite(displaySettings.maxPopups)
-      ? displaySettings.maxPopups
-      : items.length;
-    const total = Math.min(items.length, Math.max(0, maxPopups));
+    const total = Math.min(items.length, displaySettings.maxPopups);
 
     if (total === 0) {
       return;
     }
 
-    const delay = (displaySettings.firstPopDelay || 0) * MS_IN_SECOND;
+    const firstDelay = (displaySettings.firstPopDelay || 0) * MS_IN_SECOND;
     const displayDuration = (displaySettings.displayDuration || 0) * MS_IN_SECOND;
     const gapTime = (displaySettings.gapTime || 0) * MS_IN_SECOND;
-    let index = 0;
 
-    const showNext = () => {
-      if (index >= total) {
-        return;
+    await delay(firstDelay);
+
+    for (let index = 0; index < total; index++) {
+      this.display({notification: items[index]});
+
+      await delay(displayDuration);
+      this.fadeOut();
+
+      if (index < total - 1) {
+        await delay(gapTime);
       }
-
-      this.display({ notification: items[index] });
-      index += 1;
-
-      setTimeout(() => {
-        this.fadeOut();
-        if (index < total) {
-          setTimeout(showNext, gapTime);
-        }
-      }, displayDuration);
-    };
-
-    setTimeout(showNext, delay);
+    }
   }
 }

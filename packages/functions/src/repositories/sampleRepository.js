@@ -9,27 +9,12 @@ import {
   batchDelete
 } from './helper';
 
-/**
- * @documentation
- *
- * Repository Pattern Guidelines:
- * - One repository connects to ONE collection only
- * - All queries MUST be scoped by shopId (multi-tenant)
- * - Use paginateQuery for list operations with pagination
- * - Use prepareDoc to format Firestore documents
- * - Return {success, data, error} for mutations
- * - Use batch operations for 500+ documents
- */
-
 const firestore = new Firestore();
-/** @type {CollectionReference} */
 const collection = firestore.collection('samples');
 
-// ============================================================================
-// READ OPERATIONS
-// ============================================================================
 
 /**
+ *
  * Get a single document by ID
  * Always validate shopId ownership for security
  *
@@ -89,7 +74,7 @@ export async function getSampleList({shopId, query = {}, pickedFields = []}) {
     }
     if (type) {
       queriedRef = queriedRef.where('type', '==', type);
-    }
+        }
 
     // Apply sorting (default: updatedAt desc)
     const {sortField, direction} = getOrderBy(order);

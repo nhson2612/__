@@ -1,11 +1,10 @@
-import { getShopByShopifyDomain } from '@functions/services/shopService';
-import { getSettings } from '../../services/settingService';
-import { getLatestByShopId } from '../../repositories/notificationRepository';
+import {getShopByShopifyDomain} from '@functions/services/shopService';
+import {buildDefaultSettings, getSettings} from '../../services/settingService';
+import {getLatestByShopId} from '../../repositories/notificationRepository';
 
 export async function getNotifications(ctx) {
   try {
     const {shopifyDomain} = ctx.query;
-    console.log('>>>>>>>>>>> GETTING NOTIFICATIONS FOR SHOP: ', shopifyDomain, ' <<<<<<<<<<<<');
     if (!shopifyDomain) {
       ctx.status = 400;
       ctx.body = {success: false, error: 'Missing shopifyDomain'};
@@ -19,26 +18,21 @@ export async function getNotifications(ctx) {
       return;
     }
 
-    const settings = await getSettings(shop.id);
-    const notifications = await getLatestByShopId(shopifyDomain, 30);
-    console.log('>>>>>>>>>>>>> NOTIFICATIONS', notifications);
-    console.log('>>>>>>>>>>>>> EXPECTED RESPONSE', {
-      success: true,
-      data: {
-        settings: settings || {},
-        notifications: notifications || []
-      }
-    });
+    let settings = await getSettings(shop.id);
+    if (!settings || Object.keys(settings).length === 0) {
+      settings = buildDefaultSettings(shop.id);
+    }
+    const notifications = await getLatestByShopId(shopifyDomain, settings.display.maxPopups || 30);
     ctx.body = {
       success: true,
       data: {
-        settings: settings || {},
+        settings: settings,
         notifications: notifications || []
       }
     };
   } catch (e) {
     console.error('getNotifications error:', e);
     ctx.status = 500;
-    ctx.body = { success: false, error: e.message };
+    ctx.body = {success: false, error: e.message};
   }
 }

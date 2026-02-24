@@ -50,15 +50,19 @@ export default function Notifications() {
     setSortValue(newSortValue);
     setCursor({next: null, prev: null});
   };
+  const hasPrev = pageInfo.hasPrev ?? pageInfo.hasPre;
+
   const handleNextPage = () => {
     if (pageInfo.hasNext) {
-      setCursor({next: pageInfo.nextCursor, prev: null});
+      const lastId = notifications[notifications.length - 1]?.id;
+      if (lastId) setCursor({next: lastId, prev: null});
     }
   };
 
   const handlePrevPage = () => {
-    if (pageInfo.hasPrev) {
-      setCursor({next: null, prev: pageInfo.prevCursor});
+    if (hasPrev) {
+      const firstId = notifications[0]?.id;
+      if (firstId) setCursor({next: null, prev: firstId});
     }
   };
 
@@ -82,7 +86,7 @@ export default function Notifications() {
           onSortChange={handleSortChange}
           pagination={{
             hasNext: pageInfo.hasNext,
-            hasPrevious: pageInfo.hasPrev,
+            hasPrevious: hasPrev,
             onNext: handleNextPage,
             onPrevious: handlePrevPage
           }}

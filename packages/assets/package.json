@@ -8,6 +8,7 @@
     "watch:standalone": "echo 'frontend build running...' && cross-env NODE_ENV=development ENVIRONMENT=development IS_EMBEDDED_APP=no BACKEND_PORT=5000 vite",
     "production": "npm run production:embed && npm run production:standalone",
     "development": "npm run development:embed && npm run development:standalone",
+    "watch": "npm run watch:embed",
     "eslint-fix": "./node_modules/.bin/eslint --fix ."
   },
   "dependencies": {

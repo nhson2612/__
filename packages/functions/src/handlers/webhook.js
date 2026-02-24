@@ -9,7 +9,6 @@ api.proxy = true;
 
 const parseBody = bodyParser();
 api.use(async (ctx, next) => {
-  // Firebase functions framework may already consume the request stream.
   if (ctx.req.body !== undefined && ctx.request.body === undefined) {
     ctx.request.body = ctx.req.body;
     return next();

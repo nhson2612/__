@@ -30,7 +30,10 @@ module.exports = {
     "valid-jsdoc": 0,
     "camelcase": 0,
     "no-invalid-this": 0,
-    "prefer-rest-params": 0
+    "prefer-rest-params": 0,
+    "react/react-in-jsx-scope": 0,
+    "react/prop-types": 0,
+    "react/no-unknown-property": 0
   },
   'settings': {
     'react': {

@@ -4,14 +4,14 @@ import * as path from 'path';
 import fs from 'fs';
 import os from 'os';
 import EnvironmentPlugin from 'vite-plugin-environment';
-import {nodePolyfills} from 'vite-plugin-node-polyfills';
+import { nodePolyfills } from 'vite-plugin-node-polyfills';
 
 const APP_PORT = 1;
 
 const localhost = '127.0.0.1';
 const isProduction = process.env.NODE_ENV === 'production';
 const environmentPath = !process.env.ENVIRONMENT ? '.env' : `.env.${process.env.ENVIRONMENT}`;
-require('dotenv').config({path: path.resolve(__dirname, environmentPath)}); // read file .env.development
+require('dotenv').config({ path: path.resolve(__dirname, environmentPath) }); // read file .env.development
 const host = process.env.HOST ? process.env.HOST.replace(/https?:\/\//, '') : localhost;
 const isEmbed = process.env.IS_EMBEDDED_APP === 'yes';
 const templateOutFile = isEmbed ? 'embed-template.html' : 'standalone.html';
@@ -58,7 +58,7 @@ if (!isProduction && shopifyApiKey) {
       SHOPIFY_SECRET: shopifyApiSecret
     });
 
-    updateThemeAppExtFile('../../extensions/theme-extension/assets/avada-embed.js');
+    // updateThemeAppExtFile('../../extensions/theme-extension/assets/avada-embed.js');
 
     // Update scripttag .env.development with API_URL
     updateEnvFile('../scripttag/.env.development', {
@@ -168,7 +168,8 @@ const serverConfig = {
     origin: true, // Allow all origins in development
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'Cache-Control', 'X-Requested-With']
-  }
+  },
+  allowedHosts: true
 };
 
 /** @type {HttpsServerOptions} */

@@ -1,2 +1,4 @@
-export {makeRequest} from './api/makeRequest';
-export {insertInside, insertBefore, insertAfter} from './insertHelpers';
+export {insertAfter, insertBefore, insertInside} from './insertHelpers';
+export {makeRequest} from './api';
+export {delay} from './delay';
+export {findTargetElement} from './dom';

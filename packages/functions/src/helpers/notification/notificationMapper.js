@@ -1,63 +1,18 @@
 import {loadGraphQL} from '@functions/helpers/graphql/graphqlHelpers';
 
 /**
- *
- * {
- *   "data": {
- *     "order": {
- *       "id": "gid://shopify/Order/6514197037284",
- *       "name": "#1012",
- *       "lineItems": {
- *         "edges": [
- *           {
- *             "node": {
- *               "id": "gid://shopify/LineItem/15594221142244",
- *               "name": "Selling Plans Ski Wax - Selling Plans Ski Wax",
- *               "image": {
- *                 "url": "https://cdn.shopify.com/s/files/1/0793/3044/3492/files/snowboard_wax.png?v=1769735879",
- *                 "altText": "A bar of golden yellow wax"
- *               },
- *               "variant": {
- *                 "id": "gid://shopify/ProductVariant/47520926531812",
- *                 "image": null
- *               },
- *               "product": {
- *                 "id": "gid://shopify/Product/8903349108964",
- *                 "featuredImage": {
- *                   "url": "https://cdn.shopify.com/s/files/1/0793/3044/3492/files/snowboard_wax.png?v=1769735879",
- *                   "altText": "A bar of golden yellow wax"
- *                 }
- *               }
- *             }
- *           }
- *         ]
- *       }
- *     }
- *   },
- *   "extensions": {
- *     "cost": {
- *       "requestedQueryCost": 27,
- *       "actualQueryCost": 6,
- *       "throttleStatus": {
- *         "maximumAvailable": 2000,
- *         "currentlyAvailable": 1994,
- *         "restoreRate": 100
- *       }
- *     }
- *   }
- * }
- *
- * */
-
+ * Get first order line item image and name
+ * @param {Object} shopify - Shopify API client
+ * @param {string} orderId - Order ID (GraphQL format)
+ * @param {number} firstLineItems - Number of line items to fetch
+ * @returns {Promise<{productImageUrl: string, productName: string}>}
+ */
 export async function getOrderLineItemImage(shopify, orderId, firstLineItems = 10) {
-  console.log('[GET-ORDER-LINE-ITEM-IMAGE] START', {orderId});
   try {
     const orderQuery = loadGraphQL('/orderLineItemsImagesWithVariant.graphql');
-    console.log('[GET-ORDER-LINE-ITEM-IMAGE] Query loaded');
     const orderGraphql = await shopify.graphql(orderQuery, {orderId, firstLineItems});
-    console.log('[GET-ORDER-LINE-ITEM-IMAGE] GraphQL executed');
     const firstItemNode = orderGraphql?.order?.lineItems?.edges?.[0]?.node;
-    console.log('[GET-ORDER-LINE-ITEM-IMAGE] firstItemNode: ', firstItemNode, '');
+
     return {
       productImageUrl:
         firstItemNode?.image?.url ||
@@ -67,11 +22,20 @@ export async function getOrderLineItemImage(shopify, orderId, firstLineItems = 1
       productName: firstItemNode?.name || ''
     };
   } catch (e) {
-    console.error('[GET-ORDER-LINE-ITEM-IMAGE] ERROR:', e);
+    console.error('Error getting order line item image:', e);
     throw e;
   }
 }
 
+/**
+ * Convert webhook order to notification
+ * @param {Object} params
+ * @param {string} params.shopifyDomain - Shopify domain
+ * @param {Object} params.order - Order data from webhook
+ * @param {string} params.productName - Product name
+ * @param {string} params.productImageUrl - Product image URL
+ * @returns {{shopId: string, orderId: string, firstName: string, city: string, country: string, productName: string, productImage: string, timestamp: Date}}
+ */
 export function buildNotificationFromWebhookOrder({
   shopifyDomain,
   order,
@@ -87,7 +51,9 @@ export function buildNotificationFromWebhookOrder({
     city: billingAddress.city || '',
     country: billingAddress.country || '',
     productName: productName || 'Product',
-    productImage: productImageUrl || '',
+    productImage:
+      productImageUrl ||
+      'https://product.hstatic.net/200000410665/product/giay-the-thao-l82201-5_8cedfe64846b4bc6bef0f09105c8db3d.jpg',
     timestamp: new Date(order?.created_at || Date.now())
   };
 }

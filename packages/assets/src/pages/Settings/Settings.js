@@ -126,31 +126,9 @@ export default function Settings() {
               <LegacyTabs tabs={tabs} selected={selectedTab} onSelect={handleTabChange}>
                 <LegacyCard.Section>
                   {selectedTab === 0 ? (
-                    <DisplaySettings
-                      position={settings.position}
-                      onPositionChange={value => handleChange('position', value)}
-                      hideTimeAgo={settings.hideTimeAgo}
-                      onHideTimeAgoChange={value => handleChange('hideTimeAgo', value)}
-                      truncateContent={settings.truncateContent}
-                      onTruncateContentChange={value => handleChange('truncateContent', value)}
-                      displayDuration={settings.displayDuration}
-                      onDisplayDurationChange={value => handleChange('displayDuration', value)}
-                      firstPopDelay={settings.firstPopDelay}
-                      onFirstPopDelayChange={value => handleChange('firstPopDelay', value)}
-                      gapTime={settings.gapTime}
-                      onGapTimeChange={value => handleChange('gapTime', value)}
-                      maxPopups={settings.maxPopups}
-                      onMaxPopupsChange={value => handleChange('maxPopups', value)}
-                    />
+                    <DisplaySettings settings={settings} onChange={handleChange} />
                   ) : (
-                    <TriggersSettings
-                      pageRestriction={settings.pageRestriction}
-                      onPageRestrictionChange={value => handleChange('pageRestriction', value)}
-                      specificPages={settings.specificPages}
-                      onSpecificPagesChange={value => handleChange('specificPages', value)}
-                      excludedPages={settings.excludedPages}
-                      onExcludedPagesChange={value => handleChange('excludedPages', value)}
-                    />
+                    <TriggersSettings settings={settings} onChange={handleChange} />
                   )}
                 </LegacyCard.Section>
               </LegacyTabs>

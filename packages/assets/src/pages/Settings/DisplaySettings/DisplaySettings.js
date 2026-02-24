@@ -14,38 +14,21 @@ import styles from './DisplaySettings.module.css';
 /**
  * DisplaySettings component for configuring popup display options.
  *
- * @param {string} position - Current position of popups (e.g., 'bottom-left')
- * @param {function} onPositionChange - Callback for position changes
- * @param {boolean} hideTimeAgo - Whether to hide time ago display
- * @param {function} onHideTimeAgoChange - Callback for hideTimeAgo changes
- * @param {boolean} truncateContent - Whether to truncate content text
- * @param {function} onTruncateContentChange - Callback for truncateContent changes
- * @param {number} displayDuration - Duration to display each popup in seconds
- * @param {function} onDisplayDurationChange - Callback for displayDuration changes
- * @param {number} firstPopDelay - Delay before first popup appears in seconds
- * @param {function} onFirstPopDelayChange - Callback for firstPopDelay changes
- * @param {number} gapTime - Time between popups in seconds
- * @param {function} onGapTimeChange - Callback for gapTime changes
- * @param {number} maxPopups - Maximum number of popups to show
- * @param {function} onMaxPopupsChange - Callback for maxPopups changes
+ * @param {object} settings - The settings object containing all display configurations
+ * @param {function} onChange - Callback function to handle setting changes
  * @return {React.JSX.Element} The DisplaySettings component
  */
-export default function DisplaySettings({
-  position,
-  onPositionChange,
-  hideTimeAgo,
-  onHideTimeAgoChange,
-  truncateContent,
-  onTruncateContentChange,
-  displayDuration,
-  onDisplayDurationChange,
-  firstPopDelay,
-  onFirstPopDelayChange,
-  gapTime,
-  onGapTimeChange,
-  maxPopups,
-  onMaxPopupsChange
-}) {
+export default function DisplaySettings({settings, onChange}) {
+  const {
+    position,
+    hideTimeAgo,
+    truncateContent,
+    displayDuration,
+    firstPopDelay,
+    gapTime,
+    maxPopups
+  } = settings;
+
   return (
     <div className={styles.displaySettings}>
       <BlockStack gap="500">
@@ -62,28 +45,28 @@ export default function DisplaySettings({
                 <PositionOption
                   value="bottom-left"
                   selected={position === 'bottom-left'}
-                  onClick={onPositionChange}
+                  onClick={value => onChange('position', value)}
                   color="bg-primary"
                   positionClass="bottom-3 left-3"
                 />
                 <PositionOption
                   value="bottom-right"
                   selected={position === 'bottom-right'}
-                  onClick={onPositionChange}
+                  onClick={value => onChange('position', value)}
                   color="bg-slate-200"
                   positionClass="bottom-3 right-3"
                 />
                 <PositionOption
                   value="top-left"
                   selected={position === 'top-left'}
-                  onClick={onPositionChange}
+                  onClick={value => onChange('position', value)}
                   color="bg-slate-200"
                   positionClass="top-3 left-3"
                 />
                 <PositionOption
                   value="top-right"
                   selected={position === 'top-right'}
-                  onClick={onPositionChange}
+                  onClick={value => onChange('position', value)}
                   color="bg-slate-200"
                   positionClass="top-3 right-3"
                 />
@@ -96,11 +79,15 @@ export default function DisplaySettings({
           </Box>
 
           <BlockStack gap="200">
-            <Checkbox label="Hide time ago" checked={hideTimeAgo} onChange={onHideTimeAgoChange} />
+            <Checkbox
+              label="Hide time ago"
+              checked={hideTimeAgo}
+              onChange={value => onChange('hideTimeAgo', value)}
+            />
             <Checkbox
               label="Truncate content text"
               checked={truncateContent}
-              onChange={onTruncateContentChange}
+              onChange={value => onChange('truncateContent', value)}
               helpText="If your product name is long for one line, it will be truncated to 'Product na...'"
             />
           </BlockStack>
@@ -116,7 +103,7 @@ export default function DisplaySettings({
             <AppRangeSlider
               label="Display duration"
               value={displayDuration}
-              onChange={onDisplayDurationChange}
+              onChange={value => onChange('displayDuration', value)}
               min={1}
               max={60}
               unitLabel="second(s)"
@@ -125,7 +112,7 @@ export default function DisplaySettings({
             <AppRangeSlider
               label="Time before the first pop"
               value={firstPopDelay}
-              onChange={onFirstPopDelayChange}
+              onChange={value => onChange('firstPopDelay', value)}
               min={1}
               max={60}
               unitLabel="second(s)"
@@ -134,7 +121,7 @@ export default function DisplaySettings({
             <AppRangeSlider
               label="Gap time between two pops"
               value={gapTime}
-              onChange={onGapTimeChange}
+              onChange={value => onChange('gapTime', value)}
               min={1}
               max={60}
               unitLabel="second(s)"
@@ -143,7 +130,7 @@ export default function DisplaySettings({
             <AppRangeSlider
               label="Maximum of popups"
               value={maxPopups}
-              onChange={onMaxPopupsChange}
+              onChange={value => onChange('maxPopups', value)}
               min={1}
               max={80}
               unitLabel="pop(s)"
@@ -157,18 +144,6 @@ export default function DisplaySettings({
 }
 
 DisplaySettings.propTypes = {
-  position: PropTypes.string.isRequired,
-  onPositionChange: PropTypes.func.isRequired,
-  hideTimeAgo: PropTypes.bool.isRequired,
-  onHideTimeAgoChange: PropTypes.func.isRequired,
-  truncateContent: PropTypes.bool.isRequired,
-  onTruncateContentChange: PropTypes.func.isRequired,
-  displayDuration: PropTypes.number.isRequired,
-  onDisplayDurationChange: PropTypes.func.isRequired,
-  firstPopDelay: PropTypes.number.isRequired,
-  onFirstPopDelayChange: PropTypes.func.isRequired,
-  gapTime: PropTypes.number.isRequired,
-  onGapTimeChange: PropTypes.func.isRequired,
-  maxPopups: PropTypes.number.isRequired,
-  onMaxPopupsChange: PropTypes.func.isRequired
+  settings: PropTypes.object.isRequired,
+  onChange: PropTypes.func.isRequired
 };
