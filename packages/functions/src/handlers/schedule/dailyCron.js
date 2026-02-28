@@ -15,17 +15,16 @@
  * @param event - Scheduled event
  * @returns {Promise<void>}
  */
+import {rebuildProductAffinity} from '@functions/services/productAffinityService';
+import {getShopByShopifyDomain} from '@functions/services/shopService';
+
+const DEFAULT_SHOP_DOMAIN = process.env.SHOPIFY_DOMAIN || '';
+
 export default async function dailyCron(event) {
   console.log('Daily cron started at:', new Date().toISOString());
 
   try {
-    await Promise.all([
-      // Add your daily tasks here
-      // cleanExpiredData(),
-      // sendDailyReports(),
-      // syncExternalData(),
-      sampleTask()
-    ]);
+    await Promise.all([rebuildAffinityForDefaultShop()]);
 
     console.log('Daily cron completed successfully');
   } catch (e) {
@@ -34,10 +33,25 @@ export default async function dailyCron(event) {
   }
 }
 
-/**
- * Sample task - remove this and add your own tasks
- */
-async function sampleTask() {
-  console.log('Running sample daily task...');
-  // TODO: Implement your daily task logic
+async function rebuildAffinityForDefaultShop() {
+  if (!DEFAULT_SHOP_DOMAIN) {
+    console.warn('SHOPIFY_DOMAIN not set, skip product affinity rebuild');
+    return;
+  }
+
+  const shop = await getShopByShopifyDomain(DEFAULT_SHOP_DOMAIN);
+  if (!shop) {
+    console.warn('Shop not found for SHOPIFY_DOMAIN, skip product affinity rebuild');
+    return;
+  }
+
+  const result = await rebuildProductAffinity(DEFAULT_SHOP_DOMAIN, {
+    days: 60,
+    first: 100,
+    firstLineItems: 50,
+    maxPages: 20,
+    scoreMode: 'normalized'
+  });
+
+  console.log('Product affinity rebuild result:', result);
 }

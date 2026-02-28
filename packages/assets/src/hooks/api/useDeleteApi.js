@@ -5,19 +5,22 @@ import {setToast} from '@assets/actions/storeActions';
 import {handleError} from '@assets/services/errorService';
 
 /**
- * @param url
- * @param fullResp
- * @param successCallback
- * @returns {{deleting: boolean, handleDelete}}
+ * Delete a resource via DELETE and manage loading/toast state.
+ * @param {string} url
+ * @param {boolean} [fullResp=false]
+ * @param {function(object): void} [successCallback=() => {}]
+ * @returns {{deleting: boolean, handleDelete: function({data?: object, id?: string | number}): Promise<boolean | object | undefined>}}
  */
 export default function useDeleteApi({url, fullResp = false, successCallback = () => {}}) {
   const {dispatch} = useStore();
   const [deleting, setDeleting] = useState(false);
 
   /**
-   * @param data
-   * @param id
-   * @returns {Promise<boolean>}
+   * Send delete request for a resource.
+   * @param {object} params
+   * @param {object} [params.data={}]
+   * @param {string | number} [params.id='']
+   * @returns {Promise<boolean | object | undefined>}
    */
   const handleDelete = async ({data = {}, id = ''}) => {
     try {

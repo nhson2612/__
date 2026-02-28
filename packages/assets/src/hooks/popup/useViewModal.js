@@ -2,13 +2,14 @@ import React, {useState} from 'react';
 import {Modal} from '@shopify/polaris';
 
 /**
- * @param title
- * @param content
- * @param large
- * @param instant
- * @param sectioned
- * @param closeCallback
- * @returns {{openModal: (function(): void), closeModal: (function(): void), modal: *, open: boolean}}
+ * Build a simple view-only modal.
+ * @param {string} title
+ * @param {React.ReactNode} content
+ * @param {boolean} [large=false]
+ * @param {boolean} [instant=true]
+ * @param {boolean} [sectioned=false]
+ * @param {function(): void} [closeCallback=() => {}]
+ * @returns {{openModal: function(): void, closeModal: function(): void, modal: React.JSX.Element, open: boolean}}
  */
 export default function useViewModal({
   title,
@@ -20,8 +21,20 @@ export default function useViewModal({
 }) {
   const [open, setOpen] = useState(false);
 
+  /**
+   * Open the modal.
+   * @returns {void}
+   */
   const openModal = () => setOpen(true);
+  /**
+   * Close the modal.
+   * @returns {void}
+   */
   const closeModal = () => setOpen(false);
+  /**
+   * Close the modal and invoke the close callback.
+   * @returns {void}
+   */
   const handleClose = () => {
     closeModal();
     closeCallback();

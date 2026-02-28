@@ -3,12 +3,12 @@ import {Button, Sheet, Text} from '@shopify/polaris';
 import {XSmallIcon} from '@shopify/polaris-icons';
 
 /**
- * @param Header
- * @param Content
- * @param title
- * @param {'small' | 'large' | string} size
- * @param isNested Check if sheet is opened within other sheet
- * @returns {{openSheet, closeSheet, sheet: JSX.Element, open: boolean}}
+ * Build a confirm sheet with a custom content component.
+ * @param {function(object): React.ReactNode} [Content=() => <></>]
+ * @param {string} [title='']
+ * @param {'small' | 'large' | string} [size='small']
+ * @param {boolean} [isNested=false] Check if sheet is opened within other sheet.
+ * @returns {{openSheet: function(any): void, closeSheet: function(boolean): void, sheet: JSX.Element, open: boolean}}
  */
 export default function useConfirmSheet({
   Content = () => <></>,
@@ -29,12 +29,22 @@ export default function useConfirmSheet({
         return size;
     }
   })();
+  /**
+   * Update the global sheet width variable.
+   * @param {string | null} [width=null]
+   * @returns {void}
+   */
   const setWidth = (width = null) => {
     if (width || !isNested) {
       document.documentElement.style.setProperty('--sheet--width', width);
     }
   };
 
+  /**
+   * Open the sheet and capture the current input context.
+   * @param {any} [currentInput=null]
+   * @returns {void}
+   */
   const openSheet = (currentInput = null) => {
     setWidth(width);
     setOpen(true);
@@ -42,6 +52,11 @@ export default function useConfirmSheet({
     closeCallback.current = () => {};
   };
 
+  /**
+   * Close the sheet and optionally re-open after animation.
+   * @param {boolean} [reOpen=false]
+   * @returns {void}
+   */
   const closeSheet = (reOpen = false) => {
     setOpen(false);
     if (reOpen) setWidth();

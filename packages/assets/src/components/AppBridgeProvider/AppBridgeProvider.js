@@ -5,7 +5,12 @@ import {Link} from 'react-router-dom';
 import {MaxModalContext} from '@assets/contexts/maxModalContext';
 import {navigationLinks} from '@assets/const/navigation';
 
-export default function AppBridgeProvider({children}) {
+/**
+ * @param {JSX.Element} children
+ * @return {JSX.Element}
+ * @constructor
+ */
+export function AppBridgeProvider({children}) {
   const {isFullscreen} = useContext(MaxModalContext);
   if (isFullscreen) return children; // hide navigation when open max modal
 

@@ -9,8 +9,8 @@ import useAdvancedIndexTable from '@assets/hooks/table/useAdvancedIndexTable';
 export default function SimpleTable() {
   /**
    * @param {*} item
-   * @param index
-   * @returns {React.JSX.Element[]}
+   * @param {String} index
+   * @return {React.JSX.Element[]}
    */
   const itemCols = (item, index) => {
     const {plan, startsAt, endsAt, createdAt} = item;

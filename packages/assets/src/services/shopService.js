@@ -1,3 +1,4 @@
+// eslint-disable-next-line valid-jsdoc
 /**
  * @param {Shop} shop
  * @param {ShopInfo} shopInfo
@@ -15,6 +16,10 @@ export function collectActiveShopData({shop, shopInfo}) {
   };
 }
 
+/**
+ * @param {*} _shop
+ * @return {boolean}
+ */
 export function isShopUpgradable(_shop) {
   return false;
 }

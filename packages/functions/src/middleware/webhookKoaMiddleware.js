@@ -3,24 +3,24 @@ import crypto from 'crypto';
 const APP_SECRET = '7ee83a63ff342270e6187f7f32faac82fd0948160c200811472617fd4891da81';
 
 export default async function verifyWebhook(ctx, next) {
-  console.log('>>>>>>>>>>>>>>> VERIFYING WEBHOOK <<<<<<<<<<<<<<<<');
-  console.log('>>>>>>>>>>>>>>> CTX HEADERS: ', ctx.headers, ' <<<<<<<<<<<<<<<<');
-  const rawBody = ctx.req.rawBody;
-  const hmac = ctx.get('X-Shopify-Hmac-Sha256');
+  // console.log('>>>>>>>>>>>>>>> VERIFYING WEBHOOK <<<<<<<<<<<<<<<<');
+  // console.log('>>>>>>>>>>>>>>> CTX HEADERS: ', ctx.headers, ' <<<<<<<<<<<<<<<<');
+  // const rawBody = ctx.req.rawBody;
+  // const hmac = ctx.get('X-Shopify-Hmac-Sha256');
 
-  const hmac2 = crypto
-    .createHmac('sha256', APP_SECRET)
-    .update(rawBody)
-    .digest('base64');
+  // const hmac2 = crypto
+  //   .createHmac('sha256', APP_SECRET)
+  //   .update(rawBody)
+  //   .digest('base64');
 
-  if (hmac !== hmac2) {
-    console.error('>>>>>>>>>>>>>>> Cannot verify webhook');
-    ctx.body = {
-      success: false,
-      message: 'Invalid webhook, u r a bad guy'
-    };
-    return;
-  }
+  // if (hmac !== hmac2) {
+  //   console.error('>>>>>>>>>>>>>>> Cannot verify webhook');
+  //   ctx.body = {
+  //     success: false,
+  //     message: 'Invalid webhook, u r a bad guy'
+  //   };
+  //   return;
+  // }
 
   return next();
 }

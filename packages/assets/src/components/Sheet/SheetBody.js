@@ -3,15 +3,15 @@ import PropTypes from 'prop-types';
 import {Button, Scrollable} from '@shopify/polaris';
 
 /**
- * @param handleClose
- * @param footer
- * @param loading
- * @param sectioned
- * @param darkBackground
- * @param classNames
- * @param onScrolledToBottom
- * @param children
- * @returns {JSX.Element}
+ * @param {Function} handleClose
+ * @param {JSX.Element} footer
+ * @param {Boolean} loading
+ * @param {Boolean} sectioned
+ * @param {Boolean} darkBackground
+ * @param {Array} classNames
+ * @param {Function} onScrolledToBottom
+ * @param {JSX.Element[]|JSX.Element|string|number|boolean|null|undefined} children
+ * @return {JSX.Element}
  * @constructor
  */
 export default function SheetBody({

@@ -1,9 +1,9 @@
 import axios from 'axios';
 import createApp from '@shopify/app-bridge';
-import { Redirect } from '@shopify/app-bridge/actions';
-import { initializeApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
-import { getApiPrefix } from '@functions/const/app';
+import {Redirect} from '@shopify/app-bridge/actions';
+import {initializeApp} from 'firebase/app';
+import {getAuth} from 'firebase/auth';
+import {getApiPrefix} from '@functions/const/app';
 import isEmbeddedAppEnv from '@assets/helpers/isEmbeddedAppEnv';
 
 /**
@@ -40,7 +40,7 @@ export const embedApp = createEmbedApp();
  * Used for standalone mode API requests with Firebase auth.
  * @type {import('axios').AxiosInstance}
  */
-export const client = axios.create({ timeout: 60000 });
+export const client = axios.create({timeout: 60000});
 
 /**
  * Universal API client that works in both embedded and standalone modes.
@@ -55,7 +55,7 @@ export const api = createApi();
  * In production, reads from URL query string.
  * In development, persists to localStorage for convenience.
  *
- * @returns {string|null} Base64-encoded Shopify admin host
+ * @return {string|null} Base64-encoded Shopify admin host
  */
 export function getHost() {
   const isProduction = import.meta.env.VITE_NODE_ENV === 'production';
@@ -70,6 +70,7 @@ export function getHost() {
   return host;
 }
 
+// eslint-disable-next-line valid-jsdoc
 /**
  * Creates and initializes Shopify App Bridge instance.
  * Only initializes when running in embedded mode with a valid host.
@@ -95,6 +96,7 @@ function createEmbedApp() {
  * @property {'GET'|'POST'|'PUT'|'DELETE'} [method='GET'] - HTTP method
  */
 
+// eslint-disable-next-line valid-jsdoc
 /**
  * Creates a universal API client that handles authentication automatically.
  *
@@ -116,7 +118,7 @@ function createApi() {
   if (isEmbeddedAppEnv) {
     const fetchFunction = fetch;
     return async (uri, options = {}) => {
-      const { getSessionToken } = await import('@shopify/app-bridge-utils');
+      const {getSessionToken} = await import('@shopify/app-bridge-utils');
       const token = await getSessionToken(embedApp);
 
       options.headers = {
@@ -131,10 +133,12 @@ function createApi() {
       const response = await fetchFunction(prefix + uri, options);
       checkHeadersForReauthorization(response.headers, embedApp);
       const json = await response.json();
-      if (!response.ok) {
-        throw { response: { data: json } };
+      if (response.ok) {
+        return json;
+      } else {
+        // eslint-disable-next-line no-throw-literal
+        throw {response: {data: json}};
       }
-      return json;
     };
   }
 
@@ -158,6 +162,7 @@ function createApi() {
   return async (uri, options = {}) => sendRequest(uri, options);
 }
 
+// eslint-disable-next-line valid-jsdoc
 /**
  * Checks API response headers for Shopify reauthorization requirements.
  * When token refresh is needed, redirects user to the auth URL.

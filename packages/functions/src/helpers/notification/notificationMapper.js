@@ -19,7 +19,9 @@ export async function getOrderLineItemImage(shopify, orderId, firstLineItems = 1
         firstItemNode?.variant?.image?.url ||
         firstItemNode?.product?.featuredImage?.url ||
         '',
-      productName: firstItemNode?.name || ''
+      productName: firstItemNode?.name || '',
+      productHandle: firstItemNode?.product?.handle || '',
+      productId: firstItemNode?.product?.id || ''
     };
   } catch (e) {
     console.error('Error getting order line item image:', e);
@@ -40,7 +42,9 @@ export function buildNotificationFromWebhookOrder({
   shopifyDomain,
   order,
   productName,
-  productImageUrl
+  productImageUrl,
+  productHandle,
+  productId
 }) {
   const billingAddress = order?.billing_address || {};
 
@@ -54,6 +58,8 @@ export function buildNotificationFromWebhookOrder({
     productImage:
       productImageUrl ||
       'https://product.hstatic.net/200000410665/product/giay-the-thao-l82201-5_8cedfe64846b4bc6bef0f09105c8db3d.jpg',
+    productHandle: productHandle || '',
+    productId: productId || '',
     timestamp: new Date(order?.created_at || Date.now())
   };
 }

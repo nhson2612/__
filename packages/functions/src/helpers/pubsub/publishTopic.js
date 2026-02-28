@@ -1,4 +1,4 @@
-import { PubSub } from '@google-cloud/pubsub';
+import {PubSub} from '@google-cloud/pubsub';
 
 // Reuse PubSub client across calls to avoid connection overhead
 console.log('[PUBSUB DEBUG] Initializing PubSub. Env:', {
@@ -7,7 +7,10 @@ console.log('[PUBSUB DEBUG] Initializing PubSub. Env:', {
   NODE_ENV: process.env.NODE_ENV
 });
 
-if (!process.env.PUBSUB_EMULATOR_HOST && (process.env.NODE_ENV === 'development' || process.env.FUNCTIONS_EMULATOR === 'true')) {
+if (
+  !process.env.PUBSUB_EMULATOR_HOST &&
+  (process.env.NODE_ENV === 'development' || process.env.FUNCTIONS_EMULATOR === 'true')
+) {
   console.log('[PUBSUB DEBUG] forcing PUBSUB_EMULATOR_HOST=localhost:8085');
   process.env.PUBSUB_EMULATOR_HOST = 'localhost:8085';
 }
@@ -19,7 +22,7 @@ const topicCache = new Map();
 
 const getTopic = name => {
   if (!topicCache.has(name)) {
-    topicCache.set(name, pubSub.topic(name, { gaxOpts: { timeout: 540000 } }));
+    topicCache.set(name, pubSub.topic(name, {gaxOpts: {timeout: 540000}}));
   }
   return topicCache.get(name);
 };

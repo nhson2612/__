@@ -2,6 +2,10 @@ import React from 'react';
 import {Button, FooterHelp, Layout} from '@shopify/polaris';
 import './Footer.css';
 
+/**
+ * @return {React.JSX.Element}
+ * @constructor
+ */
 export default function Footer() {
   return (
     <Layout.Section fullWidth>

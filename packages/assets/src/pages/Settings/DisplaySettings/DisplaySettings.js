@@ -1,12 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {
-  BlockStack,
-  Box,
-  Checkbox,
-  Text,
-  InlineGrid,
-} from '@shopify/polaris';
+import {BlockStack, Box, Checkbox, Text, InlineGrid} from '@shopify/polaris';
 import AppRangeSlider from '@assets/components/AppRangeSlider/AppRageSlider';
 import PositionOption from '@assets/components/PositionOption/PositionOption';
 import styles from './DisplaySettings.module.css';

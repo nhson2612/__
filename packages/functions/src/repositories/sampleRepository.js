@@ -12,7 +12,6 @@ import {
 const firestore = new Firestore();
 const collection = firestore.collection('samples');
 
-
 /**
  *
  * Get a single document by ID
@@ -74,7 +73,7 @@ export async function getSampleList({shopId, query = {}, pickedFields = []}) {
     }
     if (type) {
       queriedRef = queriedRef.where('type', '==', type);
-        }
+    }
 
     // Apply sorting (default: updatedAt desc)
     const {sortField, direction} = getOrderBy(order);

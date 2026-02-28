@@ -7,7 +7,7 @@ process.env.FIRESTORE_EMULATOR_HOST = 'localhost:8080';
 // Initialize Firebase Admin SDK for emulator
 if (admin.apps.length === 0) {
   admin.initializeApp({
-    projectId: 'demo-test-project', // Default project ID for emulator
+    projectId: 'demo-test-project' // Default project ID for emulator
   });
 }
 
@@ -24,15 +24,19 @@ async function verifySeededData() {
     const shopId = process.env.SHOP_ID || 'test-shop.myshopify.com';
 
     // Get the list of notifications
-    const result = await getList(shopId, { limit: 20 });
-    
+    const result = await getList(shopId, {limit: 20});
+
     console.log(`Found ${result.data.length} notifications for shop: ${shopId}`);
     console.log('\nNotification details:');
-    
+
     result.data.forEach((notification, index) => {
-      console.log(`${index + 1}. Order: ${notification.orderId}, Customer: ${notification.firstName}, Product: ${notification.productName}, Time: ${notification.timestamp}`);
+      console.log(
+        `${index + 1}. Order: ${notification.orderId}, Customer: ${
+          notification.firstName
+        }, Product: ${notification.productName}, Time: ${notification.timestamp}`
+      );
     });
-    
+
     console.log('\nVerification completed successfully!');
   } catch (error) {
     console.error('Error verifying seeded data:', error);
@@ -47,10 +51,10 @@ if (require.main === module) {
       console.log('Verification process completed.');
       process.exit(0);
     })
-    .catch((error) => {
+    .catch(error => {
       console.error('Verification process failed:', error);
       process.exit(1);
     });
 }
 
-export { verifySeededData };
+export {verifySeededData};

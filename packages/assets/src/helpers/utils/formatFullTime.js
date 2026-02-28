@@ -13,10 +13,20 @@ const fullMonthList = [
   'December'
 ];
 
+/**
+ * @param {Date} datetime
+ * @param {String} timeZone
+ * @return {string}
+ */
 export function formatBothDateTime(datetime = new Date(), timeZone = '') {
   return formatDateOnly(datetime, timeZone) + ' ' + formatTimeOnly(datetime, timeZone);
 }
 
+/**
+ * @param {Date} datetime
+ * @param {String} timeZone
+ * @return {string}
+ */
 export function formatDateOnly(datetime = new Date(), timeZone = '') {
   let result = new Date(datetime);
   if (timeZone !== '') {
@@ -25,6 +35,11 @@ export function formatDateOnly(datetime = new Date(), timeZone = '') {
   return fullMonthList[result.getMonth()] + ' ' + result.getDate() + ', ' + result.getFullYear();
 }
 
+/**
+ * @param {Date} datetime
+ * @param {String} timeZone
+ * @return {string}
+ */
 export function formatDateRaw(datetime = new Date(), timeZone = '') {
   let result = new Date(datetime);
   if (timeZone !== '') {
@@ -37,6 +52,11 @@ export function formatDateRaw(datetime = new Date(), timeZone = '') {
   ].join('/');
 }
 
+/**
+ * @param {Date} datetime
+ * @param {String} timeZone
+ * @return {string}
+ */
 export function formatTimeOnly(datetime = new Date(), timeZone = '') {
   let result = new Date(datetime);
   if (timeZone !== '') {
@@ -45,6 +65,10 @@ export function formatTimeOnly(datetime = new Date(), timeZone = '') {
   return [zeroSuffix(result.getHours()), zeroSuffix(result.getMinutes())].join(':');
 }
 
+/**
+ * @param {String} str
+ * @return {string}
+ */
 function zeroSuffix(str) {
   return ('0' + str).slice(-2);
 }

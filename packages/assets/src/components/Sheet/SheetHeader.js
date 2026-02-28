@@ -4,11 +4,11 @@ import * as PropTypes from 'prop-types';
 import {XIcon} from '@shopify/polaris-icons';
 
 /**
- * @param handleClose
- * @param title
- * @param loading
- * @param children
- * @returns {JSX.Element}
+ * @param {Function} handleClose
+ * @param {String} title
+ * @param {Boolean} loading
+ * @param {JSX.Element} children
+ * @return {JSX.Element}
  * @constructor
  */
 export default function SheetHeader({handleClose, title = '', loading = false, children}) {

@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Button, Card, InlineStack, Text, Page, Layout, BlockStack } from '@shopify/polaris';
+import React, {useEffect, useState} from 'react';
+import {Button, Card, InlineStack, Text, Page, Layout, BlockStack} from '@shopify/polaris';
 import './Home.css';
 import useFetchApi from '@assets/hooks/api/useFetchApi';
 import HomeLoadingSkeleton from '@assets/components/HomeLoadingSkeleton/HomeLoadingSkeleton';
@@ -12,7 +12,7 @@ import HomeLoadingSkeleton from '@assets/components/HomeLoadingSkeleton/HomeLoad
  */
 export default function Home() {
   const [enabled, setEnabled] = useState(false);
-  const {data: statusData, loading, fetchApi} = useFetchApi({url: '/theme/status'});
+  const {data: statusData, loading} = useFetchApi({url: '/theme/status'});
   useEffect(() => {
     if (statusData && !loading) setEnabled(statusData.themeStatus);
   }, [statusData, loading]);

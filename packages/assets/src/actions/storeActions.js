@@ -29,18 +29,49 @@ export const reducer = (state, {type, payload}) => {
   }
 };
 
+/**
+ * @param {Function} dispatch
+ * @param {Boolean} payload
+ */
 export function setLoading(dispatch, payload = true) {
   dispatch(storeTypes.SET_LOADING, payload);
 }
 
+/**
+ * @param {Function} dispatch
+ * @param {String} content
+ * @param {Error} error
+ */
 export function setToast(dispatch, content, error = false) {
   dispatch(storeTypes.SET_TOAST, {content, error});
 }
 
+/**
+ * @param {Function} dispatch
+ */
 export function closeToast(dispatch) {
   dispatch(storeTypes.CLOSE_TOAST);
 }
 
+/**
+ * @param {Function} dispatch
+ * @param {Object} payload
+ */
+export function setUser(dispatch, payload = null) {
+  dispatch(storeTypes.SET_USER, payload);
+}
+
+/**
+ * @param {Function} dispatch
+ * @param {Object} payload
+ */
+export function setShop(dispatch, payload = null) {
+  dispatch(storeTypes.SET_SHOP, payload);
+}
+
+/**
+ * @param {Function} dispatch
+ */
 export async function logout(dispatch) {
   try {
     setLoading(dispatch, true);
@@ -53,10 +84,18 @@ export async function logout(dispatch) {
   }
 }
 
+/**
+ * @param {Function} dispatch
+ * @param {Object} payload
+ */
 export function setSubscription(dispatch, payload = null) {
   dispatch(storeTypes.SET_SUBSCRIPTION, payload);
 }
 
+/**
+ * @param {Function} dispatch
+ * @return {Promise<*>}
+ */
 export async function getSubscription(dispatch) {
   try {
     setLoading(dispatch, true);

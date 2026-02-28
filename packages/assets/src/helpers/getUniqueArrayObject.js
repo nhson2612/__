@@ -1,7 +1,7 @@
 /**
- * @param array
- * @param key
- * @returns {array}
+ * @param {Array} array
+ * @param {*} key
+ * @return {array}
  */
 export function getUniqueArrayObject(array, key) {
   const uniqueIds = new Set();

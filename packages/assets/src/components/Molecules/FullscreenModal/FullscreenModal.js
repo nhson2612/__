@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import {history} from '@assets/history';
 
 /**
- * @returns {JSX.Element}
+ * @return {JSX.Element}
  * @constructor
  */
 const FullscreenModal = ({

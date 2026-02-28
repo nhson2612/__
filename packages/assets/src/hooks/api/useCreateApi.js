@@ -5,12 +5,13 @@ import {setToast} from '@assets/actions/storeActions';
 import {handleError} from '@assets/services/errorService';
 
 /**
- * @param url
- * @param fullResp
- * @param successCallback
- * @param successMsg
- * @param errorMsg
- * @returns {{creating: boolean, handleCreate}}
+ * Create a resource via POST and manage loading/toast state.
+ * @param {string} url
+ * @param {boolean} [fullResp=false]
+ * @param {function(object): void} [successCallback=() => {}]
+ * @param {string} [successMsg='Saved successfully']
+ * @param {string} [errorMsg='Failed to save']
+ * @returns {{creating: boolean, handleCreate: function(object): Promise<boolean | object>}}
  */
 export default function useCreateApi({
   url,
@@ -23,8 +24,9 @@ export default function useCreateApi({
   const [creating, setCreating] = useState(false);
 
   /**
-   * @param data
-   * @returns {Promise<{success: boolean, error}>}
+   * Send create request with payload.
+   * @param {object} data
+   * @returns {Promise<boolean | {success: boolean, error?: string}>}
    */
   const handleCreate = async data => {
     try {

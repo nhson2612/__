@@ -2,23 +2,23 @@ import React, {useCallback, useRef, useState} from 'react';
 import {Form, Modal} from '@shopify/polaris';
 
 /**
- *
- * @param confirmAction
- * @param cancelAction
- * @param title
- * @param {string | Element } content
- * @param ComponentContent
- * @param buttonTitle
- * @param closeTitle
- * @param footer
- * @param loading
- * @param disabled
- * @param destructive
- * @param setValidations
- * @param closeCallback
- * @param canCloseAfterFinished
- * @param useForm
- * @returns {{openModal: openModal, closeModal: closeModal, modal: React.JSX.Element, open: boolean}}
+ * Build a confirmation modal with optional form content.
+ * @param {function(string | number | null): (boolean | Promise<boolean>)} confirmAction
+ * @param {function(): void} [cancelAction]
+ * @param {string} [title='Are you sure to delete?']
+ * @param {string | Element} [content='Please be careful because you cannot undo this action.']
+ * @param {function(object): React.ReactNode} [ComponentContent=(_p) => <></>]
+ * @param {string} [buttonTitle='Confirm']
+ * @param {string} [closeTitle='Cancel']
+ * @param {React.ReactNode} [footer=null]
+ * @param {boolean} [loading=false]
+ * @param {boolean} [disabled=false]
+ * @param {boolean} [destructive=false]
+ * @param {function(object): void} [setValidations=() => {}]
+ * @param {function(): void} [closeCallback=() => {}]
+ * @param {boolean} [canCloseAfterFinished=true]
+ * @param {boolean} [useForm=false]
+ * @returns {{openModal: function(string | number | null): void, closeModal: function(): void, modal: React.JSX.Element, open: boolean}}
  */
 export default function useConfirmModal({
   confirmAction,

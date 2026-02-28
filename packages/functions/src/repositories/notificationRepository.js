@@ -33,6 +33,12 @@ export async function create(notification) {
   return doc.id;
 }
 
+export async function getById(notificationId) {
+  if (!notificationId) return null;
+  const doc = await collection.doc(notificationId).get();
+  return doc.exists ? {id: doc.id, ...doc.data()} : null;
+}
+
 export async function getLatestByShopId(shopId, limit = 30) {
   const docs = await collection
     .where('shopId', '==', shopId)

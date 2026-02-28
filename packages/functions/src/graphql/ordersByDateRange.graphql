@@ -1,0 +1,22 @@
+query OrdersByDateRange($first: Int! = 100, $after: String, $firstLineItems: Int! = 50, $query: String!) {
+  orders(first: $first, after: $after, sortKey: CREATED_AT, reverse: true, query: $query) {
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+    edges {
+      node {
+        id
+        createdAt
+        lineItems(first: $firstLineItems) {
+          nodes {
+            product {
+              id
+              handle
+            }
+          }
+        }
+      }
+    }
+  }
+}

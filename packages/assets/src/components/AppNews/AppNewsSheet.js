@@ -28,8 +28,8 @@ const APP_NEWS_URL = 'https://blog.avada.io/resources';
 const DEFAULT_SEARCH = {openSearch: false, searchValue: ''};
 
 /**
- * @param closeSheet
- * @returns {JSX.Element}
+ * @param {Function} closeSheet
+ * @return {JSX.Element}
  * @constructor
  */
 export default function AppNewsSheet({closeSheet}) {

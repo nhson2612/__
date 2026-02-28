@@ -2,6 +2,17 @@ import React, {useId} from 'react';
 import PropTypes from 'prop-types';
 import './FormControls.css';
 
+/**
+ * @param {String} label
+ * @param {String} value
+ * @param {Function} onChange
+ * @param {String} placeholder
+ * @param {String} helpText
+ * @param {Boolean} autoComplete
+ * @param {Boolean|Number} multiline
+ * @return {React.JSX.Element}
+ * @constructor
+ */
 export default function CustomTextField({
   label,
   value,

@@ -2,6 +2,14 @@ import React, {useId} from 'react';
 import PropTypes from 'prop-types';
 import './FormControls.css';
 
+/**
+ * @param {String} label
+ * @param {String} options
+ * @param {String} value
+ * @param {Function} onChange
+ * @return {React.JSX.Element}
+ * @constructor
+ */
 export default function CustomSelect({label, options, value, onChange}) {
   const id = useId();
   return (

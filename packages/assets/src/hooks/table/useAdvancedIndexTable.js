@@ -17,6 +17,11 @@ import {commonItemPages} from '@assets/const/paginationOptions';
 import useFetchApi from '../api/useFetchApi';
 import './useAdvancedIndexTable.scss';
 
+/**
+ * Normalize and format query params for API requests.
+ * @param {Record<string, any>} [value={}]
+ * @return {Record<string, any>}
+ */
 function convertQueriesParams(value = {}) {
   const cloned = structuredClone(value);
   if (cloned.start) cloned.start = formatDateTime(cloned.start);
@@ -25,31 +30,31 @@ function convertQueriesParams(value = {}) {
 }
 
 /**
- * @param fetchUrl
- * @param columns
- * @param defaultData
- * @param renderItemCols
- * @param prepareItems
- * @param onClickRow
- * @param defaultOrder
- * @param defaultLimit
- * @param customKey
- * @param emptyState
- * @param customKeys
- * @param formatParams
- * @param initQueries
- * @param orderField
- * @param limitField
- * @param loadMore
- * @param initLoad
- * @param selection
- * @param resourceData
- * @param setSelection
- * @param selectable
- * @param searchable
- * @param searchPlaceholder
- * @param amount
- * @returns {{data: (*[]|*), setData: ((function(((function(*[]): *[])|*[])): void)|*), dataLength: number, dataTable: React.JSX.Element, refetchData: (function(): Promise<void>|*), loading: (boolean|*), table: React.JSX.Element, fetched: (boolean|*)}}
+ * @param {string} fetchUrl
+ * @param {Array<object>} [columns=[]]
+ * @param {Array<object>} [defaultData=[]]
+ * @param {function(any): any} [renderItemCols=(val) => val]
+ * @param {function(any): any} [prepareItems=(val) => val]
+ * @param {function(object): void} [onClickRow=(_)=>{}]
+ * @param {string} [defaultOrder='createdAt desc']
+ * @param {string} [defaultLimit='10']
+ * @param {string} [customKey='']
+ * @param {React.ReactNode} [emptyState=null]
+ * @param {Record<string, any>} [customKeys={}]
+ * @param {function(object): object} [formatParams=(params) => params]
+ * @param {Record<string, any>} [initQueries={}]
+ * @param {string} [orderField='sort']
+ * @param {string} [limitField='limit']
+ * @param {boolean} [loadMore=false]
+ * @param {boolean} [initLoad=true]
+ * @param {Array<object>} [selection=[]]
+ * @param {Array<{singular: string, plural: string}>} [resourceData=[{singular: 'data', plural: 'data'}]]
+ * @param {function(Array<object>): void} [setSelection=(_)=>{}]
+ * @param {boolean} [selectable=false]
+ * @param {boolean} [searchable=false]
+ * @param {string} [searchPlaceholder='Search by name or email']
+ * @param {number} [amount=5]
+ * @return {{data: (*[]|*), setData: ((function(((function(*[]): *[])|*[])): void)|*), dataLength: number, dataTable: React.JSX.Element, refetchData: (function(): Promise<void>|*), loading: (boolean|*), table: React.JSX.Element, fetched: (boolean|*)}}
  */
 export default function useAdvancedIndexTable({
   fetchUrl,
@@ -105,6 +110,11 @@ export default function useAdvancedIndexTable({
     [limitField]: defaultLimit
   });
 
+  /**
+   * Sync header cell widths to match body cell widths during scroll.
+   * @param {number} amount
+   * @return {void}
+   */
   const handleTableHeadingWhenScroll = amount => {
     for (let i = 1; i <= amount; i++) {
       const cell = document.querySelector(`.Polaris-IndexTable__TableCell:nth-child(${i})`);
@@ -135,6 +145,14 @@ export default function useAdvancedIndexTable({
     totalCount
   ]);
 
+  /**
+   * Build a new selection array based on selection type and toggle behavior.
+   * @param {object} params
+   * @param {'single' | 'page'} [params.selectionType='single']
+   * @param {string | number} params.selectedValue
+   * @param {boolean} [params.toggleType=false]
+   * @return {Array<object>}
+   */
   function getDataSelectedObject({selectionType = 'single', selectedValue, toggleType = false}) {
     const allData = data;
     const allDataId = data.map(item => item.id);
@@ -150,6 +168,13 @@ export default function useAdvancedIndexTable({
     return selection.filter(isRemove);
   }
 
+  /**
+   * Update selection state from the IndexTable.
+   * @param {'single' | 'page'} selectionType
+   * @param {boolean} toggleType
+   * @param {string | number} selection
+   * @return {void}
+   */
   const handleSelectionChange = (selectionType, toggleType, selection) => {
     const itemSelectedObject = getDataSelectedObject({
       selectionType,
@@ -159,6 +184,13 @@ export default function useAdvancedIndexTable({
     setSelection(itemSelectedObject);
   };
 
+  /**
+   * Update a query value and optionally trigger a fetch.
+   * @param {string} key
+   * @param {any} value
+   * @param {boolean} [isFetch=false]
+   * @return {void}
+   */
   const handleQueryChange = (key, value, isFetch = false) => {
     const customQueries = {[key]: value};
     setQueries(prev => ({...prev, ...customQueries}));
@@ -181,10 +213,11 @@ export default function useAdvancedIndexTable({
   }, [queries.search]);
 
   /**
-   * @param {'prev' | 'next' | ''} paginate
-   * @param customQueries
-   * @param endpoint
-   * @returns {Promise<void>}
+   * Fetch data for the table with pagination and custom query overrides.
+   * @param {object} [params={}]
+   * @param {'prev' | 'next' | ''} [params.paginate='']
+   * @param {Record<string, any>} [params.customQueries={}]
+   * @return {Promise<void>}
    */
   const handleFetchApi = async ({paginate = '', customQueries = {}} = {}) => {
     setTyping(false);

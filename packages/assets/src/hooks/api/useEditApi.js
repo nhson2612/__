@@ -5,14 +5,15 @@ import {setToast} from '@assets/actions/storeActions';
 import {handleError} from '@assets/services/errorService';
 
 /**
- * @param url
- * @param defaultState
- * @param fullResp
- * @param useToast
- * @param successCallback
- * @param successMsg
- * @param errorMsg
- * @returns {{editing: boolean, handleEdit}}
+ * Update a resource via PUT and manage loading/toast state.
+ * @param {string} url
+ * @param {boolean | object} [defaultState=false]
+ * @param {boolean} [fullResp=false]
+ * @param {boolean} [useToast=true]
+ * @param {function(object): void} [successCallback=(_p) => {}]
+ * @param {string} [successMsg='Saved successfully']
+ * @param {string} [errorMsg='Failed to save']
+ * @returns {{editing: boolean, handleEdit: function(object, boolean | string): Promise<boolean | object>}}
  */
 export default function useEditApi({
   url,
@@ -27,9 +28,10 @@ export default function useEditApi({
   const [editing, setEditing] = useState(defaultState);
 
   /**
-   * @param data
-   * @param newEditing
-   * @returns {Promise<boolean>}
+   * Send update request with payload and control editing state.
+   * @param {object} data
+   * @param {boolean | string} [newEditing=true]
+   * @returns {Promise<boolean | {success: boolean, error?: string}>}
    */
   const handleEdit = async (data, newEditing = true) => {
     try {

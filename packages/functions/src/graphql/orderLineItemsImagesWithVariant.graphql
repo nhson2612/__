@@ -20,6 +20,7 @@ query OrderLineItemsImagesWithVariant($orderId: ID!, $firstLineItems: Int! = 10)
           }
           product {
             id
+            handle
             featuredImage {
               url
               altText

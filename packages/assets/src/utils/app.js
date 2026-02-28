@@ -14,7 +14,7 @@ export const relativeTime = (value, now = new Date()) => {
     {unit: 'second', ms: 1000}
   ];
 
-  const {unit, ms} = units.find((item) => absMs >= item.ms) || units[units.length - 1];
+  const {unit, ms} = units.find(item => absMs >= item.ms) || units[units.length - 1];
   const valueInUnit = Math.round(diffMs / ms);
 
   if (typeof Intl !== 'undefined' && Intl.RelativeTimeFormat) {

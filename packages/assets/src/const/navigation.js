@@ -10,6 +10,10 @@ export const navigationLinks = [
   {
     label: 'Notifications',
     destination: '/notifications'
+  },
+  {
+    label: 'Analytics',
+    destination: '/analytics'
   }
 ].map(item => ({
   ...item,

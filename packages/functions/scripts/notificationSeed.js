@@ -1,4 +1,4 @@
-import { create } from '../repositories/notificationRepository';
+import {create} from '../repositories/notificationRepository';
 
 // Configure Firestore to use emulator if in development
 const configureFirestoreEmulator = () => {
@@ -18,9 +18,9 @@ async function seedNotifications() {
   console.log('Seeding notification data...');
 
   // Fetch the first shop from Firestore
-  const { Firestore } = require('@google-cloud/firestore');
+  const {Firestore} = require('@google-cloud/firestore');
   const firestoreSettings = {
-    projectId: 'todo-app-frontend-7ff2',
+    projectId: 'todo-app-frontend-7ff2'
   };
   if (process.env.FIRESTORE_EMULATOR_HOST) {
     firestoreSettings.host = process.env.FIRESTORE_EMULATOR_HOST;
@@ -32,7 +32,10 @@ async function seedNotifications() {
 
   if (!shopId) {
     console.log('Fetching shop ID from Firestore...');
-    const shopsSnapshot = await firestore.collection('shops').limit(1).get();
+    const shopsSnapshot = await firestore
+      .collection('shops')
+      .limit(1)
+      .get();
     if (!shopsSnapshot.empty) {
       shopId = shopsSnapshot.docs[0].id;
       console.log(`Found shop ID: ${shopId}`);
@@ -149,10 +152,10 @@ if (require.main === module) {
       console.log('Seeding process completed.');
       process.exit(0);
     })
-    .catch((error) => {
+    .catch(error => {
       console.error('Seeding process failed:', error);
       process.exit(1);
     });
 }
 
-export { seedNotifications };
+export {seedNotifications};

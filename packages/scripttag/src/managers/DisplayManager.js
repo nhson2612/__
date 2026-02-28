@@ -1,8 +1,9 @@
-import {insertAfter} from '../helpers/insertHelpers';
-import {delay} from '../helpers/delay';
-import {render} from 'preact';
-import {h} from 'preact';
+import { render } from 'preact';
+import { h } from 'preact';
 import NotificationPopup from '../components/NotificationPopup/NotificationPopup';
+import { delay } from '../helpers/delay';
+import DomManager from './DomManager';
+import ApiManager from './ApiManager';
 
 const MS_IN_SECOND = 1000;
 
@@ -26,92 +27,83 @@ export default class DisplayManager {
   constructor() {
     this.notifications = [];
     this.settings = {};
+    this.domManager = new DomManager();
+    this.apiManager = new ApiManager();
   }
 
   async initialize({notifications, settings}) {
     this.notifications = notifications;
     this.settings = settings;
 
-    if (!this.checkPageRestriction(settings)) {
+    if (!this.domManager.checkPageRestriction(settings)) {
       console.log('[Avada] Page restricted, not showing notifications.');
       return;
     }
 
-    this.insertContainer();
+    this._setupContainer(settings);
     await this.displayLoop(notifications, settings);
   }
 
-  checkPageRestriction(settings) {
-    const {triggers} = settings;
-    const {pageRestriction, specificPages, excludedPages} = triggers || {};
-    const path = window.location.pathname;
-
-    if (pageRestriction === 'specific') {
-      return specificPages?.some(p => path.includes(p));
-    }
-
-    if (excludedPages?.some(p => path.includes(p))) {
-      return false;
-    }
-
-    return true;
+  _setupContainer(settings) {
+    const container = this.domManager.insertContainer();
+    const displaySettings = settings?.display || settings || {};
+    this.domManager.applyPositionStyles(container, displaySettings);
   }
 
+  /**
+   * Fade out and remove the popup
+   */
   fadeOut() {
-    const container = document.querySelector('#Avada-SalePop');
+    const container = this.domManager.getContainer();
     render(null, container);
   }
 
+  /**
+   * Display a notification popup
+   * @param {Object} notification
+   */
   display({notification}) {
+    const container = this.domManager.getContainer();
+
     if (!notification) {
       this.fadeOut();
       return;
     }
 
-    const container = document.querySelector('#Avada-SalePop');
+    this.apiManager.trackEvent('view', notification.id, notification.productId);
+
     const displaySettings = this.settings?.display || this.settings || {};
+    const productUrl = notification.productHandle ? `/products/${notification.productHandle}` : '#';
+
     render(
       <NotificationPopup
-        firstName={notification.firstName}
-        city={notification.city}
-        country={notification.country}
-        productName={notification.productName}
-        productImage={notification.productImage}
+        {...notification}
         timestamp={displaySettings.hideTimeAgo ? '' : timeAgo(notification.timestamp)}
         truncateContent={displaySettings.truncateContent}
+        productUrl={productUrl}
         onClose={() => {
           this.fadeOut();
+        }}
+        onClick={e => {
+          if (e?.preventDefault) e.preventDefault();
+          if (e?.stopPropagation) e.stopPropagation();
+
+          this.apiManager.trackEvent('click', notification.id, notification.productId);
+
+          if (productUrl !== '#') {
+            window.location.href = productUrl;
+          }
         }}
       />,
       container
     );
   }
 
-  insertContainer() {
-    const popupEl = document.createElement('div');
-    popupEl.id = 'Avada-SalePop';
-    popupEl.classList.add('Avada-SalePop__OuterWrapper');
-    const targetEl = document.querySelector('body').firstChild;
-    const displaySettings = this.settings?.display || this.settings || {};
-    const position = displaySettings.position || 'bottom-left';
-    const [yAxis, xAxis] = position.split('-');
-
-    Object.assign(popupEl.style, {
-      position: 'fixed',
-      zIndex: '999999',
-      [yAxis || 'bottom']: '20px',
-      [xAxis || 'left']: '20px'
-    });
-
-    if (targetEl) {
-      insertAfter(popupEl, targetEl);
-    } else {
-      document.body.appendChild(popupEl);
-    }
-
-    return popupEl;
-  }
-
+  /**
+   * Loop through notifications and display them sequentially
+   * @param {Array} notifications
+   * @param {Object} settings
+   */
   async displayLoop(notifications, settings) {
     const displaySettings = settings?.display || settings || {};
     const items = Array.isArray(notifications) ? notifications : [];

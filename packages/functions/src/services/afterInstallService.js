@@ -4,6 +4,7 @@ import {initShopify} from '@functions/services/shopifyService';
 import isWebhookExists from '@functions/helpers/webhook/webhookChecker';
 import {create as createNotification} from '@functions/repositories/notificationRepository';
 import appConfig from '@functions/config/app';
+import {initializeShopSettings} from '../../lib/services/settingService';
 
 const NECESSARY_WEBHOOKS = ['orders/create'];
 const WEBHOOK_ADDRESS = `https://${appConfig.baseUrl}/webhook/orders/new`;
@@ -21,14 +22,11 @@ export default async function afterInstallService(ctx) {
       initShopify(shop),
       orderService.getLatestOrders(shop)
     ]);
-
     const orderEdges = orderResponse?.orders?.edges || [];
-
-    await registerWebhooks(shopify);
-
     const notifications = buildNotifications(orderEdges, shopDomain);
 
     await Promise.all(notifications.map(notification => createNotification(notification)));
+    await Promise.all([await registerWebhooks(shopify), initializeShopSettings(shop.shopId)]);
   } catch (error) {
     console.error('[AFTER INSTALL ERROR]', error);
   }
@@ -66,6 +64,8 @@ function buildNotifications(orderEdges, shopDomain) {
         country: billing.country || '',
         productName: firstItem?.name || 'Product',
         productImage: firstItem?.product?.featuredImage?.url || '',
+        productHandle: firstItem?.product?.handle || '',
+        productId: firstItem?.product?.id || '',
         timestamp: new Date(order.createdAt || Date.now())
       };
     });

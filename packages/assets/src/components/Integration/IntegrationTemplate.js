@@ -15,6 +15,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {getRawSupport} from '@assets/services/crispService';
 
+/**
+ * @param {Object} app
+ * @param {React.ReactNode} children
+ * @return {JSX.Element}
+ * @constructor
+ */
 export default function IntegrationTemplate({app, children}) {
   return (
     <Page

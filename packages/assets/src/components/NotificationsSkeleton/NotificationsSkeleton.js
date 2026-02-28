@@ -9,7 +9,7 @@ import {
 import React from 'react';
 
 /**
- * @returns {React.JSX.Element}
+ * @return {React.JSX.Element}
  * @constructor
  */
 export default function NotificationsSkeleton() {

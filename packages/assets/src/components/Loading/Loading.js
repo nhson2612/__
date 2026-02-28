@@ -7,7 +7,7 @@ import '@assets/styles/preloader.scss';
 /**
  * Global loading component
  *
- * @returns {JSX.Element|null}
+ * @return {JSX.Element|null}
  * @constructor
  */
 export default function Loading({error, pastDelay = true}) {

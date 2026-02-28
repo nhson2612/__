@@ -1,18 +1,17 @@
-import { useEffect, useState } from 'react';
-import { api } from '@assets/helpers';
+import {useEffect, useState} from 'react';
+import {api} from '@assets/helpers';
 import stringify from 'qs-stringify';
-import { handleError } from '@assets/services/errorService';
-import { useStore } from '@assets/reducers/storeReducer';
+import {handleError} from '@assets/services/errorService';
+import {useStore} from '@assets/reducers/storeReducer';
 
 /**
- * useFetchApi hook for fetch data from api with url
- *
+ * useFetchApi hook for fetch data from api with url.
  * @param {string} url
- * @param defaultData
- * @param {boolean} initLoad
- * @param presentData
- * @param initQueries
- * @returns {{pageInfo: {}, data, setData, count, setCount, fetchApi, loading, fetched}}
+ * @param {Array<any> | object} [defaultData=[]]
+ * @param {boolean} [initLoad=true]
+ * @param {function(any): any} [presentData=null]
+ * @param {Record<string, any>} [initQueries={}]
+ * @returns {{pageInfo: object, data: any, setData: function(any): void, count: number, setCount: function(number): void, fetchApi: function(string, object | null, boolean): Promise<void>, loading: boolean, fetched: boolean, total: number, setTotal: function(number): void, setFetched: function(boolean): void}}
  */
 export default function useFetchApi({
   url,
@@ -27,8 +26,15 @@ export default function useFetchApi({
   const [pageInfo, setPageInfo] = useState({});
   const [count, setCount] = useState(0);
   const [total, setTotal] = useState(0);
-  const { dispatch } = useStore();
+  const {dispatch} = useStore();
 
+  /**
+   * Fetch data from API with optional query params.
+   * @param {string} apiUrl
+   * @param {object | null} [params=null]
+   * @param {boolean} [keepPreviousData=false]
+   * @return {Promise<void>}
+   */
   async function fetchApi(apiUrl, params = null, keepPreviousData = false) {
     try {
       setLoading(true);
@@ -42,13 +48,13 @@ export default function useFetchApi({
       if (resp.hasOwnProperty('data')) {
         let newData = presentData ? presentData(resp.data) : resp.data;
         if (!Array.isArray(newData)) {
-          newData = { ...defaultData, ...newData };
+          newData = {...defaultData, ...newData};
         }
         setData(prev => {
           if (!keepPreviousData) {
             return newData;
           }
-          return Array.isArray(newData) ? [...prev, ...newData] : { ...prev, ...newData };
+          return Array.isArray(newData) ? [...prev, ...newData] : {...prev, ...newData};
         });
       }
     } catch (e) {
@@ -61,7 +67,7 @@ export default function useFetchApi({
 
   useEffect(() => {
     if (initLoad && !fetched) {
-      fetchApi(url, initQueries).then(() => { });
+      fetchApi(url, initQueries).then(() => {});
     }
   }, []);
 

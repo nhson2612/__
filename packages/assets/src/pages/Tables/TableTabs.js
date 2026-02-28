@@ -9,6 +9,11 @@ const tabs = [
   {id: 'action', content: 'Action table'}
 ];
 
+/**
+ * @param {String} tab
+ * @return {React.JSX.Element}
+ * @constructor
+ */
 export default function TableTabs({tab}) {
   const history = useHistory();
   const selectedTab = useMemo(() => tabs.findIndex(x => x.id === tab), [tab]);

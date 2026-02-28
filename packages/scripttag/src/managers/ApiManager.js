@@ -5,7 +5,7 @@
  * Uses XMLHttpRequest for maximum browser compatibility.
  */
 
-import { makeRequest } from '../helpers/api';
+import {makeRequest} from '../helpers/api';
 
 export default class ApiManager {
   constructor() {
@@ -30,7 +30,7 @@ export default class ApiManager {
     }
 
     try {
-      const url =`https://demanding-alive-allied-limited.trycloudflare.com/clientApi/widget?shopifyDomain=${this.shopDomain}`;
+      const url = `https://charms-cheaper-sic-istanbul.trycloudflare.com/clientApi/widget?shopifyDomain=${this.shopDomain}`;
       const response = await makeRequest(url);
       return response;
     } catch (error) {
@@ -42,22 +42,22 @@ export default class ApiManager {
   /**
    * Track an event (e.g., widget displayed, clicked)
    */
-  async trackEvent(eventType, eventData = {}) {
-    if (!this.apiUrl) return;
+  async trackEvent(eventType, notificationId, productId = '') {
+    if (!notificationId) return;
 
     try {
       await makeRequest(
-        `${this.apiUrl}/clientApi/track`,
+        `${this.apiUrl}/clientApi/events`,
         'POST',
         {
-          shopDomain: this.shopDomain,
-          eventType,
-          ...eventData
+          shopifyDomain: this.shopDomain,
+          notificationId,
+          productId,
+          type: eventType
         },
-        { contentType: 'application/json' }
+        {contentType: 'application/json'}
       );
     } catch (error) {
-      // Silent fail for tracking
       console.warn('[Avada] Tracking failed:', error);
     }
   }
@@ -73,8 +73,7 @@ export default class ApiManager {
 
     try {
       const url = `${this.apiUrl}/clientApi/notifications?shopifyDomain=${this.shopDomain}`;
-      const response = await makeRequest(url);
-      return response;
+      return await makeRequest(url);
     } catch (error) {
       console.error('[Avada] Failed to get notifications:', error);
       return null;

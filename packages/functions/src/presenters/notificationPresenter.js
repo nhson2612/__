@@ -1,5 +1,3 @@
-import moment from 'moment';
-
 /**
  * Format date fields for presentation
  * @param {Object} data

@@ -6,15 +6,7 @@ import React from 'react';
  * @return {React.JSX.Element}
  * @constructor
  */
-function AppRangeSlider({
-  label,
-  value,
-  onChange,
-  min,
-  max,
-  unitLabel,
-  helpText
-}) {
+function AppRangeSlider({label, value, onChange, min, max, unitLabel, helpText}) {
   return (
     <RangeSlider
       label={label}

@@ -1,3 +1,3 @@
-import AppBridgeProvider from './AppBridgeProvider';
+import {AppBridgeProvider} from './AppBridgeProvider';
 
 export default AppBridgeProvider;

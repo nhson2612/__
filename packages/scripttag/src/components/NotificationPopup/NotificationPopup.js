@@ -2,12 +2,14 @@ import {h} from 'preact';
 import './NotificationPopup.scss';
 
 const NotificationPopup = ({
-  firstName = 'John Doe',
-  city = 'New York',
-  country = 'United States',
-  productName = 'Puffer Jacket',
-  timestamp = 'just now',
-  productImage = '',
+  firstName,
+  city,
+  country,
+  productName,
+  productImage,
+  timestamp,
+  productUrl = '#',
+  onClick = () => {},
   onClose = () => {},
   truncateContent = false
 }) => {
@@ -15,10 +17,10 @@ const NotificationPopup = ({
     truncateContent && productName.length > 16 ? `${productName.substring(0, 16)}...` : productName;
 
   return (
-    <div class="Avava-SP__Wrapper fadeInUp animated">
-      <div class="Avava-SP__Inner">
-        <div class="Avava-SP__Container">
-          <div class="Avada-SP__CloseButton">
+    <div className="Avada-Notif Avava-SP__Wrapper fadeInUp animated">
+      <div className="Avava-SP__Inner">
+        <div className="Avava-SP__Container">
+          <div className="Avada-SP__CloseButton">
             <button
               onClick={e => {
                 e.preventDefault();
@@ -37,21 +39,21 @@ const NotificationPopup = ({
               </svg>
             </button>
           </div>
-          <a href="#" class="Avava-SP__LinkWrapper">
+          <a href={productUrl} className="Avava-SP__LinkWrapper" onClick={onClick}>
             <div
-              class="Avava-SP__Image"
+              className="Avava-SP__Image"
               style={{
                 backgroundImage: `url(${productImage || 'https://via.placeholder.com/150'})`
               }}
             ></div>
-            <div class="Avada-SP__Content">
-              <div class="Avada-SP__Title">
+            <div className="Avada-SP__Content">
+              <div className="Avada-SP__Title">
                 {firstName} in {city}, {country}
               </div>
-              <div class="Avada-SP__Subtitle">purchased {displayProductName}</div>
-              <div class="Avada-SP__Footer">
+              <div className="Avada-SP__Subtitle">purchased {displayProductName}</div>
+              <div className="Avada-SP__Footer">
                 {timestamp}{' '}
-                <span class="uni-blue">
+                <span className="uni-blue">
                   <span style={{marginRight: '4px'}}>✓</span> by Avada
                 </span>
               </div>

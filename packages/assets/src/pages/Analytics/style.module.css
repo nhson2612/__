@@ -1,0 +1,84 @@
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  margin-top: 0.5rem;
+}
+
+.statCard :global(.Polaris-LegacyCard) {
+  height: 100%;
+}
+
+.statCard :global(.Polaris-LegacyCard__Section) {
+  height: 100%;
+}
+
+.emptyState {
+  margin: 1rem;
+}
+
+.hesitationGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 12px;
+}
+
+.hesitationCard {
+  padding: 12px 16px;
+}
+
+.metricItem {
+  display: grid;
+  gap: 4px;
+}
+
+.hesitationRow {
+  display: grid;
+  grid-template-columns: auto 1fr auto auto;
+  align-items: center;
+  gap: 16px;
+}
+
+.hesitationImage {
+  display: grid;
+  place-items: center;
+}
+
+.hesitationContent {
+  min-width: 0;
+}
+
+.hesitationMetricsInline {
+  display: grid;
+  grid-auto-flow: column;
+  gap: 16px;
+}
+
+.metricItemInline {
+  display: grid;
+  gap: 2px;
+  text-align: right;
+}
+
+.hesitationStatus {
+  display: grid;
+  place-items: center;
+}
+
+@media (max-width: 640px) {
+  .hesitationRow {
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto auto;
+    gap: 12px;
+  }
+
+  .hesitationMetricsInline {
+    grid-column: 1 / -1;
+    justify-content: space-between;
+  }
+
+  .hesitationStatus {
+    grid-column: 1 / -1;
+    justify-items: start;
+  }
+}

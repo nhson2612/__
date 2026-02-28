@@ -10,8 +10,8 @@ export const useStore = () => useContext(StoreReducer);
 
 /**
  * @param {object} props
- * @param props.children
- * @param props.user
+ * @param {JSX.Element} props.children
+ * @param {*} props.user
  * @param {Shop} props.activeShop
  * @return {JSX.Element}
  */

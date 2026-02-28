@@ -2,6 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {Button, Card, Icon, LegacyStack, Text} from '@shopify/polaris';
 
+/**
+ * @param {Object} app
+ * @param {Function} handleOpenLink
+ * @return {JSX.Element}
+ * @constructor
+ */
 export default function IntegrationCard({app, handleOpenLink}) {
   return (
     <Card sectioned>

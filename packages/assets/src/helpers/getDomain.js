@@ -1,8 +1,8 @@
 /**
  * Return shop domain, if empty or blank return shopifyDomain instead
  *
- * @param shop
- * @returns {*}
+ * @param {Object} shop
+ * @return {*}
  */
 export default function getDomain(shop = {}) {
   const {domain, shopifyDomain} = shop;
