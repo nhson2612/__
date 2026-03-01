@@ -39,7 +39,7 @@ export async function getStats(shopifyDomain) {
   const stats = await notificationEventRepository.getStatsByShopId(shopifyDomain);
 
   const ctr = stats.view > 0 ? (stats.click / stats.view) * 100 : 0;
-  const conversionRate = stats.view > 0 ? (stats.conversion / stats.view) * 100 : 0;
+  const conversionRate = stats.view > 0 ? (stats.conversion / stats.click) * 100 : 0;
 
   return {
     ...stats,

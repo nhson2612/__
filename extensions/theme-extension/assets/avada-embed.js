@@ -1,5 +1,5 @@
-(function() {
-  const BASE_URL = 'https://shopify.nhson2612.space/scripttag';
+(function () {
+  const BASE_URL = 'https://work-result-committee-hook.trycloudflare.com/scripttag';
 
   const scriptElement = document.createElement('script');
   scriptElement.type = 'text/javascript';

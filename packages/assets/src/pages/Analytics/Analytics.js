@@ -7,7 +7,8 @@ import {
   InlineStack,
   BlockStack,
   Badge,
-  Thumbnail
+  Thumbnail,
+  IndexTable
 } from '@shopify/polaris';
 import useFetchApi from '@assets/hooks/api/useFetchApi';
 import styles from './style.module.css';
@@ -34,34 +35,7 @@ export default function Analytics() {
     defaultData: []
   });
 
-  const productCards = productReport.map(item => {
-    const { productId, product, click, conversion, conversionRate } = item;
-    const title = product?.title || productId?.split('/').pop() || 'Unknown product';
-    const imageUrl = product?.imageUrl || '';
-    const imageAlt = product?.imageAlt || title;
 
-    return (
-      <LegacyCard key={productId || title}>
-        <div className={styles.hesitationCard}>
-          <div className={styles.hesitationRow}>
-            <div className={styles.hesitationImage}>
-              <Thumbnail source={imageUrl} alt={imageAlt} size="large" />
-            </div>
-            <div className={styles.hesitationContent}>
-              <Text variant="bodyMd" fontWeight="bold" as="span">
-                {title}
-              </Text>
-            </div>
-            <div className={styles.hesitationMetricsInline}>
-              <MetricItem label="Clicks" value={click} inline />
-              <MetricItem label="Conversions" value={conversion} inline />
-              <MetricItem label="CR" value={`${conversionRate}%`} inline />
-            </div>
-          </div>
-        </div>
-      </LegacyCard>
-    );
-  });
 
   return (
     <Page title="Analytics" subtitle="Product performance from notification interactions">
@@ -102,18 +76,28 @@ export default function Analytics() {
                 </Text>
                 <Badge tone="success">{stats.conversionRate}%</Badge>
               </InlineStack>
+              <InlineStack align="space-between">
+                <Text variant="bodyMd" as="span">
+                  Click Through Rate
+                </Text>
+                <Text variant="bodyMd" fontWeight="bold" as="span">
+                  {stats.ctr}%
+                </Text>
+              </InlineStack>
             </BlockStack>
           </LegacyCard>
         </Layout.Section>
 
         <Layout.Section>
           <LegacyCard title="Product Performance">
-            <BlockStack gap="4">
-              {reportLoading ? (
+            {reportLoading ? (
+              <BlockStack gap="4" padding="4">
                 <Text variant="bodySm" as="p" color="subdued">
                   Loading report...
                 </Text>
-              ) : productReport.length === 0 ? (
+              </BlockStack>
+            ) : productReport.length === 0 ? (
+              <BlockStack gap="4" padding="4">
                 <div className={styles.emptyState}>
                   <Text variant="bodyMd" as="p">
                     No product data yet.
@@ -122,10 +106,43 @@ export default function Analytics() {
                     Once users start clicking notifications, product insights will appear here.
                   </Text>
                 </div>
-              ) : (
-                <div className={styles.hesitationGrid}>{productCards}</div>
-              )}
-            </BlockStack>
+              </BlockStack>
+            ) : (
+              <IndexTable
+                resourceName={{ singular: 'product', plural: 'products' }}
+                itemCount={productReport.length}
+                headings={[
+                  { title: '' },
+                  { title: 'Clicks' },
+                  { title: 'Conversions' },
+                  { title: 'Conversion Rate' }
+                ]}
+                selectable={false}
+              >
+                {productReport.map((item, index) => {
+                  const { productId, product, click, conversion, conversionRate } = item;
+                  const title = product?.title || productId?.split('/').pop() || 'Unknown product';
+                  const imageUrl = product?.imageUrl || '';
+                  const imageAlt = product?.imageAlt || title;
+
+                  return (
+                    <IndexTable.Row id={productId || String(index)} key={productId || String(index)} position={index}>
+                      <IndexTable.Cell>
+                        <InlineStack gap="4" blockAlign="center">
+                          <Thumbnail source={imageUrl} alt={imageAlt} size="small" />
+                          <Text variant="bodyMd" fontWeight="bold" as="span">
+                            {title}
+                          </Text>
+                        </InlineStack>
+                      </IndexTable.Cell>
+                      <IndexTable.Cell>{click}</IndexTable.Cell>
+                      <IndexTable.Cell>{conversion}</IndexTable.Cell>
+                      <IndexTable.Cell>{`${conversionRate}%`}</IndexTable.Cell>
+                    </IndexTable.Row>
+                  );
+                })}
+              </IndexTable>
+            )}
           </LegacyCard>
         </Layout.Section>
       </Layout>
@@ -156,33 +173,4 @@ function StatCard({ title, value, loading }) {
   );
 }
 
-/**
- * @param {String} label
- * @param {String} value
- * @param {Boolean} inline
- * @return {React.JSX.Element}
- */
-function MetricItem({ label, value, inline = false }) {
-  return (
-    <div className={inline ? styles.metricItemInline : styles.metricItem}>
-      <Text variant="bodySm" as="span" color="subdued">
-        {label}
-      </Text>
-      <Text variant="headingMd" as="span">
-        {value}
-      </Text>
-    </div>
-  );
-}
 
-StatCard.propTypes = {
-  title: PropTypes.string.isRequired,
-  value: PropTypes.string.isRequired,
-  loading: PropTypes.bool.isRequired
-};
-
-MetricItem.propTypes = {
-  label: PropTypes.string.isRequired,
-  value: PropTypes.string.isRequired,
-  inline: PropTypes.bool
-};

@@ -1,7 +1,7 @@
-import { render } from 'preact';
-import { h } from 'preact';
+import {render} from 'preact';
+import {h} from 'preact';
 import NotificationPopup from '../components/NotificationPopup/NotificationPopup';
-import { delay } from '../helpers/delay';
+import {delay} from '../helpers/delay';
 import DomManager from './DomManager';
 import ApiManager from './ApiManager';
 
@@ -89,6 +89,13 @@ export default class DisplayManager {
           if (e?.stopPropagation) e.stopPropagation();
 
           this.apiManager.trackEvent('click', notification.id, notification.productId);
+
+          if (window.Shopify && window.Shopify.analytics) {
+            window.Shopify.analytics.publish('avada_notif_clicked', {
+              notif_id: notification.id,
+              product_id: notification.productId
+            });
+          }
 
           if (productUrl !== '#') {
             window.location.href = productUrl;

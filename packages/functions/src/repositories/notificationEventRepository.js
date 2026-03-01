@@ -1,4 +1,4 @@
-import { Firestore } from '@google-cloud/firestore';
+import {Firestore} from '@google-cloud/firestore';
 
 const firestoreConfig = {
   projectId: 'todo-app-frontend-7ff2'
@@ -37,11 +37,9 @@ export async function getStatsByShopId(shopId) {
 
   snapshot.forEach(doc => {
     const data = doc.data();
-    if (stats.hasOwnProperty(data.type)) {
-      stats[data.type]++;
-      if (data.type === 'conversion' && data.revenue) {
-        stats.totalRevenue += Number(data.revenue);
-      }
+    stats[data.type]++;
+    if (data.type === 'conversion' && data.revenue) {
+      stats.totalRevenue += Number(data.revenue);
     }
   });
 
@@ -102,7 +100,7 @@ export async function getConversionByOrderId(orderId) {
     .get();
 
   if (snapshot.empty) return null;
-  return { id: snapshot.docs[0].id, ...snapshot.docs[0].data() };
+  return {id: snapshot.docs[0].id, ...snapshot.docs[0].data()};
 }
 
 /**
@@ -160,4 +158,3 @@ export async function hasClicksForProduct(shopId, productId) {
     return String(pid).includes(productId);
   });
 }
-

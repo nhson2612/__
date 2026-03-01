@@ -5,12 +5,12 @@
  * Uses XMLHttpRequest for maximum browser compatibility.
  */
 
-import {makeRequest} from '../helpers/api';
+import { makeRequest } from '../helpers/api';
 
 export default class ApiManager {
   constructor() {
     this.shopDomain = window.Shopify?.shop || '';
-    this.apiUrl = process.env.API_URL || '';
+    this.apiUrl = 'https://work-result-committee-hook.trycloudflare.com';
   }
 
   /**
@@ -18,19 +18,17 @@ export default class ApiManager {
    * Falls back to window data if available (set by Liquid)
    */
   async getWidgetData() {
-    // Option 1: Use data embedded in page by Liquid (faster, no API call)
     if (window.__avadaWidgetData) {
       return window.__avadaWidgetData;
     }
 
-    // Option 2: Fetch from API (when data can't be embedded)
     if (!this.shopDomain) {
       console.warn('[Avada] Shop domain not found');
       return null;
     }
 
     try {
-      const url = `https://charms-cheaper-sic-istanbul.trycloudflare.com/clientApi/widget?shopifyDomain=${this.shopDomain}`;
+      const url = `${this.apiUrl}/clientApi/widget?shopifyDomain=${this.shopDomain}`;
       const response = await makeRequest(url);
       return response;
     } catch (error) {
@@ -55,7 +53,7 @@ export default class ApiManager {
           productId,
           type: eventType
         },
-        {contentType: 'application/json'}
+        { contentType: 'application/json' }
       );
     } catch (error) {
       console.warn('[Avada] Tracking failed:', error);

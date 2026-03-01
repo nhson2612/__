@@ -62,41 +62,6 @@ const processWebhookOrder = async (shopifyDomain, order) => {
     return {success: true};
   }
 
-  try {
-    const orderedProductIds = (order.line_items || []).map(item => String(item.product_id));
-    const revenue = parseFloat(order.total_price);
-    const revenuePerItem = orderedProductIds.length > 0 ? revenue / orderedProductIds.length : 0;
-
-    // Deduplicate product IDs in case of multiple quantities
-    const uniqueProductIds = [...new Set(orderedProductIds)];
-
-    for (const productId of uniqueProductIds) {
-      const hasClicks = await notificationEventRepository.hasClicksForProduct(
-        shopifyDomain,
-        productId
-      );
-      if (!hasClicks) continue;
-
-      const allNotifications = await notificationRepository.getLatestByShopId(shopifyDomain);
-      const matchedNotif = allNotifications.find(n => {
-        if (!n.productId) return false;
-        return String(n.productId).includes(productId);
-      });
-
-      if (matchedNotif) {
-        await eventService.recordEvent(shopifyDomain, matchedNotif.id, 'conversion', {
-          orderId: order.id.toString(),
-          productId: matchedNotif.productId,
-          totalPrice: order.total_price,
-          currency: order.currency,
-          revenue: revenuePerItem
-        });
-      }
-    }
-  } catch (error) {
-    console.error('Failed to record conversion event:', error);
-  }
-
   const shop = await shopService.getShopByShopifyDomain(shopifyDomain);
   if (!shop) {
     console.error('Shop not found for domain:', shopifyDomain);

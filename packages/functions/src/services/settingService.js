@@ -7,6 +7,7 @@ const initialState = {
   hideTimeAgo: false,
   maxPopups: 80,
   position: 'bottom-left',
+  displayStrategy: 'click_based',
   truncateContent: true,
   shopId: 'random_string',
   excludedPages: [],
@@ -35,6 +36,7 @@ function toRemote(flatSettings) {
     hideTimeAgo,
     maxPopups,
     position,
+    displayStrategy,
     truncateContent,
     excludedPages,
     pageRestriction,
@@ -51,6 +53,7 @@ function toRemote(flatSettings) {
       hideTimeAgo,
       maxPopups,
       position,
+      displayStrategy,
       truncateContent
     },
     triggers: {

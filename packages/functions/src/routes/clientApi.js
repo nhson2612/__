@@ -9,6 +9,7 @@ const router = new Router({
 
 router.get('/notifications', clientApiController.getNotifications);
 router.post('/events', eventController.track);
+router.post('/pixel-conversion', eventController.pixelConversion);
 router.get('/recommendations', recommendationController.getRecommendations);
 
 export default router;

@@ -2,11 +2,11 @@
 
 client_id = "26b38db3da5235f34604ef2a02220f31"
 name = "final"
-application_url = "https://medicare-optics-recipe-intelligent.trycloudflare.com"
+application_url = "https://work-result-committee-hook.trycloudflare.com"
 embedded = true
 
 [build]
-automatically_update_urls_on_dev = true
+automatically_update_urls_on_dev = false
 
 [webhooks]
 api_version = "2026-01"
@@ -17,11 +17,11 @@ api_version = "2026-01"
 
 [access_scopes]
 # Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
-scopes = "read_orders,read_products,read_script_tags,write_script_tags,read_themes,write_themes"
+scopes = "read_customer_events,read_orders,read_products,read_script_tags,read_themes,write_pixels,write_script_tags,write_themes"
 optional_scopes = [ ]
 use_legacy_install_flow = false
 
 [auth]
 redirect_urls = [
-  "https://medicare-optics-recipe-intelligent.trycloudflare.com/callback"
+  "https://work-result-committee-hook.trycloudflare.com"
 ]
