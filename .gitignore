@@ -23,3 +23,24 @@ pubsub-debug.log
 STRUCTURE.md
 #docs/
 
+.agent/
+.claude/
+.codex/
+.cursor/
+.gemini/
+.opencode/
+.shopify/
+.vscode/
+.windsurf/
+_bmad
+.cursorignore
+.cursorrules
+.firebaserc
+.gitattributes
+app-name.zip
+cloudflared
+firebase-debug.log
+firestore-debug.log
+tunnel.log
+
+docs/

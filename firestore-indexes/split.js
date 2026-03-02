@@ -10,6 +10,11 @@ const path = require('path');
 const INPUT_FILE = path.join(__dirname, '..', 'firestore.indexes.json');
 const OUTPUT_DIR = __dirname;
 
+/**
+ * Strip comments from JSON string
+ * @param {string} jsonString
+ * @return {string}
+ */
 function stripComments(jsonString) {
   // Remove single-line comments (// ...)
   return jsonString
@@ -18,6 +23,9 @@ function stripComments(jsonString) {
     .join('\n');
 }
 
+/**
+ * Split firestore.indexes.json into separate files by collection
+ */
 function split() {
   const rawContent = fs.readFileSync(INPUT_FILE, 'utf8');
   const cleanContent = stripComments(rawContent);

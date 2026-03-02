@@ -42,3 +42,28 @@ export const getOrdersByDateRange = async (
     query
   });
 };
+
+/**
+ * Get orders by custom Shopify search query
+ * @param shopData
+ * @param {Object} options
+ * @param {string} options.query - Shopify order search query
+ * @param {number} [options.first=100]
+ * @param {string|null} [options.after=null]
+ * @param {number} [options.firstLineItems=50]
+ * @returns {Promise<*>}
+ */
+export const getOrdersByQuery = async (
+  shopData,
+  {query, first = 100, after = null, firstLineItems = 50} = {}
+) => {
+  const shopify = initShopify(shopData);
+  const orderQuery = loadGraphQL('/ordersByDateRange.graphql');
+
+  return shopify.graphql(orderQuery, {
+    first,
+    after,
+    firstLineItems,
+    query
+  });
+};

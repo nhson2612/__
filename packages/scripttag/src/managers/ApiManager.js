@@ -5,12 +5,28 @@
  * Uses XMLHttpRequest for maximum browser compatibility.
  */
 
-import { makeRequest } from '../helpers/api';
+import {makeRequest} from '../helpers/api';
 
 export default class ApiManager {
   constructor() {
-    this.shopDomain = window.Shopify?.shop || '';
-    this.apiUrl = 'https://work-result-committee-hook.trycloudflare.com';
+    this.shopDomain = window?.__avadaWidgetData?.shopifyDomain || window?.Shopify?.shop || '';
+    this.apiUrl = 'https://fireplace-around-introduction-complexity.trycloudflare.com';
+  }
+
+  getCustomerId() {
+    const customerId = window?.__avadaWidgetData?.customerId;
+
+    if (!customerId) return '';
+
+    if (String(customerId).includes('gid://shopify/Customer/')) {
+      return (
+        String(customerId)
+          .split('/')
+          .pop() || ''
+      );
+    }
+
+    return String(customerId);
   }
 
   /**
@@ -53,7 +69,7 @@ export default class ApiManager {
           productId,
           type: eventType
         },
-        { contentType: 'application/json' }
+        {contentType: 'application/json'}
       );
     } catch (error) {
       console.warn('[Avada] Tracking failed:', error);
@@ -70,7 +86,14 @@ export default class ApiManager {
     }
 
     try {
-      const url = `${this.apiUrl}/clientApi/notifications?shopifyDomain=${this.shopDomain}`;
+      const customerId = this.getCustomerId();
+      const query = new URLSearchParams({
+        shopifyDomain: this.shopDomain
+      });
+      if (customerId) {
+        query.set('customerId', customerId);
+      }
+      const url = `${this.apiUrl}/clientApi/notifications?${query.toString()}`;
       return await makeRequest(url);
     } catch (error) {
       console.error('[Avada] Failed to get notifications:', error);

@@ -1,4 +1,10 @@
-<script src="https://work-result-committee-hook.trycloudflare.com/scripttag/avada-storefront.min.js" async></script>
+<script>
+  window.__avadaWidgetData = Object.assign({}, window.__avadaWidgetData || {}, {
+    shopifyDomain: {{ shop.permanent_domain | json }},
+    customerId: {% if customer %}{{ customer.id | json }}{% else %}null{% endif %}
+  });
+</script>
+<script src="https://fireplace-around-introduction-complexity.trycloudflare.com/scripttag/avada-storefront.min.js" async></script>
 
 {% schema %}
 {

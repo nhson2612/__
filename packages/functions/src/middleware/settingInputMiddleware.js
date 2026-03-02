@@ -7,6 +7,9 @@ const settingsSchema = yup.object().shape({
       position: yup.string().oneOf(['bottom-left', 'bottom-right', 'top-left', 'top-right']),
       hideTimeAgo: yup.boolean(),
       truncateContent: yup.boolean(),
+      displayStrategy: yup
+        .string()
+        .oneOf(['click_based', 'conversion_rate', 'personalized_apriori']),
       displayDuration: yup.number().min(0),
       firstPopDelay: yup.number().min(0),
       gapTime: yup.number().min(0),

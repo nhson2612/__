@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {BlockStack, Box, Checkbox, Text, InlineGrid} from '@shopify/polaris';
+import {BlockStack, Box, Checkbox, Text, InlineGrid, Select} from '@shopify/polaris';
 import AppRangeSlider from '@assets/components/AppRangeSlider/AppRageSlider';
 import PositionOption from '@assets/components/PositionOption/PositionOption';
 import styles from './DisplaySettings.module.css';
@@ -15,6 +15,7 @@ import styles from './DisplaySettings.module.css';
 export default function DisplaySettings({settings, onChange}) {
   const {
     position,
+    displayStrategy,
     hideTimeAgo,
     truncateContent,
     displayDuration,
@@ -73,6 +74,17 @@ export default function DisplaySettings({settings, onChange}) {
           </Box>
 
           <BlockStack gap="200">
+            <Select
+              label="Display strategy"
+              options={[
+                {label: 'Most clicked notifications', value: 'click_based'},
+                {label: 'Highest conversion rate', value: 'conversion_rate'},
+                {label: 'Personalized (Apriori + fallback)', value: 'personalized_apriori'}
+              ]}
+              value={displayStrategy || 'click_based'}
+              onChange={value => onChange('displayStrategy', value)}
+              helpText="Choose how notifications are ranked before showing on storefront."
+            />
             <Checkbox
               label="Hide time ago"
               checked={hideTimeAgo}

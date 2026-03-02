@@ -10,6 +10,9 @@ const path = require('path');
 const INDEXES_DIR = path.join(__dirname);
 const OUTPUT_FILE = path.join(__dirname, '..', 'firestore.indexes.json');
 
+/**
+ * Merge all collection index files into firestore.indexes.json
+ */
 function build() {
   const result = {
     indexes: [],

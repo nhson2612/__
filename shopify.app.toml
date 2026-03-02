@@ -2,7 +2,7 @@
 
 client_id = "26b38db3da5235f34604ef2a02220f31"
 name = "final"
-application_url = "https://work-result-committee-hook.trycloudflare.com"
+application_url = "https://fireplace-around-introduction-complexity.trycloudflare.com"
 embedded = true
 
 [build]
@@ -23,5 +23,5 @@ use_legacy_install_flow = false
 
 [auth]
 redirect_urls = [
-  "https://work-result-committee-hook.trycloudflare.com"
+  "https://fireplace-around-introduction-complexity.trycloudflare.com"
 ]

@@ -1,5 +1,5 @@
-(function () {
-  const BASE_URL = 'https://work-result-committee-hook.trycloudflare.com/scripttag';
+(function() {
+  const BASE_URL = 'https://fireplace-around-introduction-complexity.trycloudflare.com/scripttag';
 
   const scriptElement = document.createElement('script');
   scriptElement.type = 'text/javascript';
