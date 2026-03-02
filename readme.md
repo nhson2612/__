@@ -187,3 +187,59 @@ Skills documentation is available in `.claude/skills/` for:
 - [ ] Add testing
 - [x] CI/CD
 - [ ] Add document
+
+mutation {
+  webPixelUpdate(
+    id: "gid://shopify/WebPixel/2063761636",
+    webPixel: {
+      settings: "{\"appUrl\":\"https://existing-vat-fastest-independence.trycloudflare.com\"}"
+    }
+  ) {
+    webPixel {
+      id
+      settings
+    }
+    userErrors {
+      message
+    }
+  }
+}
+mutation {
+  webPixelUpdate(id: "gid://shopify/WebPixel/2063761636", webPixel: { settings: "{\"appUrl\":\"https://work-result-committee-hook.trycloudflare.com\"}" }) {
+    webPixel { id settings }
+    userErrors { message }
+  }
+}
+query OrdersByDateRange(
+  $first: Int!
+  $after: String
+  $firstLineItems: Int!
+  $query: String!
+) {
+  orders(
+    first: $first
+    after: $after
+    sortKey: CREATED_AT
+    reverse: true
+    query: $query
+  ) {
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+    edges {
+      node {
+        id
+        createdAt
+        lineItems(first: $firstLineItems) {
+          nodes {
+            product {
+              id
+              handle
+            }
+          }
+        }
+      }
+    }
+  }
+}
